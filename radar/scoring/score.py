@@ -109,6 +109,8 @@ def score_companies(session: Session, companies: Iterable[Company], as_of: date,
 
 
 def _persist(session: Session, results: list[Scored], as_of: date, gw: dict[str, float]) -> None:
+    from radar.scoring.explain import explain  # local import: explain depends on this module
+
     ids = [r.company_id for r in results]
     session.execute(delete(Feature).where(Feature.as_of == as_of, Feature.company_id.in_(ids)))
     session.execute(delete(Score).where(Score.as_of == as_of, Score.company_id.in_(ids)))
@@ -120,7 +122,8 @@ def _persist(session: Session, results: list[Scored], as_of: date, gw: dict[str,
                                 evidence_json=ev))
         session.add(Score(company_id=r.company_id, as_of=as_of, total=r.total, rank=r.rank,
                           breakdown_json={"groups": r.groups, "group_weights": gw,
-                                          "percentiles": r.percentiles}))
+                                          "percentiles": r.percentiles,
+                                          "top_evidence": explain(r).top_evidence}))
     session.flush()
 
 

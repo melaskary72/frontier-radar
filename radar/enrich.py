@@ -105,9 +105,9 @@ def materialize_paper_repos(session: Session, gh: GitHubCollector, budget: Budge
     return added
 
 
-def thesis_probs(session: Session, companies: list[Company]) -> dict[int, tuple[float, str]]:
+def thesis_probs(session: Session, companies: list[Company], judge=None) -> dict[int, tuple[float, str]]:  # type: ignore[no-untyped-def]
     texts = [company_text(session, c) for c in companies]
-    return {c.id: pm for c, pm in zip(companies, thesis_probability(texts), strict=True)}
+    return {c.id: pm for c, pm in zip(companies, thesis_probability(texts, judge), strict=True)}
 
 
 def prescore(session: Session, companies: list[Company], as_of: date,

@@ -37,11 +37,15 @@ months of data (3,601 companies, 600 scored in 517 seconds).
 
 ## Phase 3: agents, tracing, cost cap, prompts, verifier
 
-- [ ] `agents/base.py`: pydantic output, one retry, heuristic fallback, cost check, trace
-- [ ] Spend cap ($15) with `cost_log`; prices verified against Anthropic's published pricing
-- [ ] Sourcing (Haiku), Research (Sonnet), Verifier (Sonnet, isolated), Digest (Haiku)
-- [ ] Versioned prompts in `radar/agents/prompts/`
-- [ ] Commit
+- [x] `agents/base.py`: pydantic output, one retry, heuristic fallback, cost check, trace
+- [x] Spend cap ($15) with `cost_log` and a durable ledger; prices from Anthropic's published rates
+- [x] Sourcing (Haiku), Research (Sonnet), Verifier (Sonnet, isolated), Digest (Haiku), entity and thesis judges
+- [x] Versioned prompts in `radar/agents/prompts/`
+- [x] Wired into the live pipeline (`radar score`, `radar memo`)
+- [x] Commit
+
+Verified: 2026-11-01. 48 tests passing; ruff and mypy clean; live memo with 18 of 20 facts
+supported on first draft; spend to date $0.063.
 
 ## Phase 4: backtest and eval gates (stop and review with Mohamed)
 

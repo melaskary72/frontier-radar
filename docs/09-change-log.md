@@ -2,6 +2,26 @@
 
 Newest first. Every corrective run, deviation, and gate change is recorded here.
 
+## 2026-11-01: Phase 3
+
+- Agent base: JSON-schema output validated with pydantic plus semantic checks, one retry
+  that shows the model its error, deterministic fallback on a second failure, refusal,
+  spend cap, or missing key; one `agent_runs` row per run with prompt version, tokens,
+  cost, latency, and status. Em dashes are stripped from model output.
+- Spend cap: worst-case check before every call; actual cost to `cost_log` and to an
+  append-only ledger (`data/cost_ledger.jsonl`) so rebuilding the database cannot reset it.
+- Agents: Sourcing (Haiku 5.5), Research (Sonnet 5.5), Verifier (Sonnet 5.5, isolated),
+  Digest (Haiku 5.5), plus entity and thesis judges (Haiku 5.5). Versioned prompts in
+  `radar/agents/prompts/`. Sonnet 5.5 calls use the server-side refusal fallback
+  (`fallbacks: "default"`).
+- Evidence packs cut each citation's excerpt from the raw snapshot, not derived tables.
+- Bug caught by tests before any live run: `strict_schema` dropped every field name inside
+  `properties`, which would have sent empty schemas.
+- Live check (as of 2026-11-01): four why-now lines (all `ok`, $0.0017 total) and one
+  full memo for a robotics vision repository. Verifier: 18 of 20 facts supported on the
+  first draft, 2 partial claims rewritten to match the source, 0 unsupported published.
+  Spend to date $0.063 including a 22-token setup check.
+
 ## 2026-11-01: Phase 2
 
 - Entity resolution in three tiers (deterministic, fuzzy, LLM or review queue) with human

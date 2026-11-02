@@ -1,6 +1,6 @@
 # Design
 
-Verified: 2026-11-01 (Phases 1 and 2). Later sections are filled as each phase lands.
+Verified: 2026-11-01 (Phases 1 to 3). Later sections are filled as each phase lands.
 
 ## Data flow
 
@@ -76,3 +76,18 @@ then the GitHub login, then the name, so reruns keep ids stable.
 4. Percentile within (sector, T); zero or missing is 0. Group score is the mean of its
    available features; group weights renormalize over available groups.
 5. Explanations list group contributions and the top three evidence items.
+
+## Agents (Phase 3)
+
+| Agent | Model | Input | Output | Fallback |
+|---|---|---|---|---|
+| Sourcing | Haiku 5.5, effort low | score breakdown, evidence pack | why now (3 sentences max), sector, confidence, evidence ids (must be from the pack) | top evidence labels |
+| Research | Sonnet 5.5, effort medium | evidence pack | seven fixed sections of fact and analysis sentences; facts cite snapshot ids; 8 to 10 founder-call questions | one cited fact per evidence item |
+| Verifier | Sonnet 5.5, effort medium | each claim with only its cited excerpts | supported, partial (with rewrite), or unsupported per claim | strict heuristic: every number and proper noun must appear in the excerpt |
+| Digest | Haiku 5.5, effort low | top new, movers, verifier stats, spend | subject, email markdown, 240 to 320 word audio script | template |
+| Entity judge | Haiku 5.5 | two mention labels | same entity, confidence, rationale | queue for review |
+| Thesis judge | Haiku 5.5 | company text | probability, rationale | classifier probability stands |
+
+Publishing rule: supported claims are kept; partial claims are replaced by the verifier's
+rewrite only when the rewrite passes the strict heuristic against the same excerpts;
+everything else is removed and recorded in `claims` with its verdict and note.

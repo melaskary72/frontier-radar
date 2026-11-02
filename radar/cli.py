@@ -61,8 +61,21 @@ def cmd_score(args: argparse.Namespace) -> None:
     create_all()
     with session_scope() as s:
         report = run(s, RunConfig(as_of=args.as_of, pit_only=args.pit_only, enrich_top=args.enrich_top,
-                                  github_budget=args.github_budget))
+                                  github_budget=args.github_budget, agents=not args.no_agents))
         print(describe(s, report))
+
+
+def cmd_memo(args: argparse.Namespace) -> None:
+    from radar.agents.research import write_memo
+    from radar.store.models import Company
+
+    with session_scope() as s:
+        company = s.get(Company, args.company_id)
+        if company is None:
+            raise SystemExit(f"no company {args.company_id}")
+        pub = write_memo(s, company, args.as_of)
+        print(pub.memo.body_md)
+        print(f"verifier: {pub.summary}")
 
 
 def cmd_refit(args: argparse.Namespace) -> None:
@@ -112,7 +125,12 @@ def main(argv: list[str] | None = None) -> None:
     sc.add_argument("--pit-only", action="store_true", help="backtest mode: point-in-time features only")
     sc.add_argument("--enrich-top", type=int, default=150)
     sc.add_argument("--github-budget", type=int, default=3000)
+    sc.add_argument("--no-agents", action="store_true", help="skip LLM judges, why-now lines, and memos")
     sc.set_defaults(func=cmd_score)
+    mm = sub.add_parser("memo", help="write and verify a memo for one company")
+    mm.add_argument("company_id", type=int)
+    mm.add_argument("--as-of", type=_date, default=date.today())
+    mm.set_defaults(func=cmd_memo)
     rf = sub.add_parser("refit", help="propose new group weights from feedback (never applied)")
     rf.set_defaults(func=cmd_refit)
     rv = sub.add_parser("review", help="list pending entity matches, or decide one")
