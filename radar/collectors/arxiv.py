@@ -12,7 +12,7 @@ from typing import Any
 import feedparser
 
 from radar.collectors.base import HttpCollector
-from radar.collectors.common import parse_dt, text_has_any, upsert
+from radar.collectors.common import parse_dt, record_discovery, text_has_any, upsert
 from radar.config import sources, thesis
 from radar.store.models import Paper
 
@@ -73,10 +73,13 @@ class ArxivCollector(HttpCollector):
             # Broad categories (cs.LG, cs.CV) only count with a thesis keyword in the abstract.
             keywords: list[str | None] = list(s.keywords) if cat in s.arxiv_filtered else [None]
             for kw in keywords:
-                for e, snap in self.search(build_query(cat, kw, since, until), max_results=max_results):
+                q = build_query(cat, kw, since, until)
+                for e, snap in self.search(q, max_results=max_results):
                     if text_has_any(f"{e['title']} {e['abstract']}", s.negative_keywords):
                         continue
-                    papers[e["arxiv_id"]] = self.upsert_paper(e, snap)
+                    paper = self.upsert_paper(e, snap)
+                    record_discovery(self.session, "papers", paper.id, sector, q)
+                    papers[e["arxiv_id"]] = paper
         return list(papers.values())
 
     def upsert_paper(self, e: dict[str, Any], snapshot_id: int) -> Paper:

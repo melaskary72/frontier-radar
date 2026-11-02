@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SKIP_DIRS = {".git", ".venv", "node_modules", ".next", "__pycache__", ".pytest_cache",
-             ".ruff_cache", ".mypy_cache", "fixtures"}
+             ".ruff_cache", ".mypy_cache", "fixtures", "data"}  # data/: gitignored db and model cache
 SKIP_FILES = {"Anti_Fund_Master_Brief.md"}  # private, gitignored
 SUFFIXES = {".py", ".md", ".yaml", ".yml", ".toml", ".ts", ".tsx", ".js", ".mjs", ".json",
             ".css", ".html", ".txt", ".csv", ".ini", ".cfg", ".sh", ""}

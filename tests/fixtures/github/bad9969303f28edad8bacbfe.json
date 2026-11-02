@@ -1,0 +1,14 @@
+{
+ "request": {
+  "method": "POST",
+  "url": "https://api.github.com/graphql"
+ },
+ "status": 200,
+ "headers": {
+  "content-type": "application/json; charset=utf-8",
+  "x-ratelimit-remaining": "4991",
+  "x-ratelimit-reset": "1793604325",
+  "x-ratelimit-resource": "graphql"
+ },
+ "body": "{\"data\":{\"r0\":{\"nameWithOwner\":\"huggingface/lerobot\",\"description\":\"\ud83e\udd17 LeRobot: Making AI for Robotics more accessible with end-to-end learning\",\"homepageUrl\":\"https://huggingface.co/docs/lerobot\",\"createdAt\":\"2024-01-26T15:50:41Z\",\"pushedAt\":\"2026-11-02T03:32:05Z\",\"stargazerCount\":28638,\"forkCount\":5995,\"isFork\":false,\"isArchived\":false,\"licenseInfo\":{\"spdxId\":\"Apache-2.0\"},\"primaryLanguage\":{\"name\":\"Python\"},\"languages\":{\"edges\":[{\"size\":12198050,\"node\":{\"name\":\"Python\"}},{\"size\":6283,\"node\":{\"name\":\"Makefile\"}}]},\"repositoryTopics\":{\"nodes\":[]},\"readme\":{\"byteSize\":14778},\"owner\":{\"login\":\"huggingface\",\"__typename\":\"Organization\"}},\"r1\":{\"nameWithOwner\":\"ros2/ros2\",\"description\":\"The Robot Operating System, is a meta operating system for robots.\",\"homepageUrl\":\"https://docs.ros.org\",\"createdAt\":\"2015-02-24T22:46:55Z\",\"pushedAt\":\"2026-10-20T18:12:35Z\",\"stargazerCount\":6269,\"forkCount\":976,\"isFork\":false,\"isArchived\":false,\"licenseInfo\":null,\"primaryLanguage\":null,\"languages\":{\"edges\":[]},\"repositoryTopics\":{\"nodes\":[]},\"readme\":{\"byteSize\":2297},\"owner\":{\"login\":\"ros2\",\"__typename\":\"Organization\"}}}}"
+}

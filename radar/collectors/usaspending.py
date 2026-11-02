@@ -6,7 +6,7 @@ from datetime import date
 from typing import Any
 
 from radar.collectors.base import HttpCollector
-from radar.collectors.common import parse_date, text_has_any, upsert
+from radar.collectors.common import parse_date, record_discovery, text_has_any, upsert
 from radar.config import sources, thesis
 from radar.store.models import Award
 
@@ -51,11 +51,13 @@ class USAspendingCollector(HttpCollector):
         for codes in (CONTRACT_CODES, GRANT_CODES):
             for r, snap in self.search(kws, since, until, award_codes=codes):
                 row = self.upsert_award(r, snap)
+                record_discovery(self.session, "awards", row.id, sector, f"usaspending:{kws}")
                 awards[row.external_id] = row
             # SBIR and STTR awards, kept only if the description also hits a thesis keyword.
             for r, snap in self.search(["SBIR", "STTR"], since, until, award_codes=codes):
                 if text_has_any(r.get("Description") or "", kws + thesis().sectors[sector].keywords):
                     row = self.upsert_award(r, snap, program="SBIR/STTR")
+                    record_discovery(self.session, "awards", row.id, sector, "usaspending:SBIR,STTR")
                     awards[row.external_id] = row
         return list(awards.values())
 

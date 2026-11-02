@@ -49,6 +49,7 @@ def parse_form_d_xml(text: str) -> dict[str, Any]:
     }
 
 
+CIK_SUFFIX = re.compile(r"\s*\(CIK \d+\)\s*$")
 INDEX_LINE = re.compile(r"^(D|D/A)\s{2,}(.+?)\s{2,}(\d+)\s+(\d{8})\s+(edgar/data/\S+)$")
 
 
@@ -83,9 +84,10 @@ class EdgarCollector(HttpCollector):
             src = h.get("_source", {})
             adsh = src.get("adsh") or h.get("_id", "").split(":")[0]
             ciks = src.get("ciks") or [""]
+            display = (src.get("display_names") or [name])[0]
             out.append({
                 "accession": adsh, "cik": ciks[0].lstrip("0"),
-                "company_name": (src.get("display_names") or [name])[0],
+                "company_name": CIK_SUFFIX.sub("", display).strip(),
                 "form_type": src.get("form") or src.get("file_type") or "D",
                 "filed_at": src.get("file_date"), "snapshot_id": f.snapshot_id,
             })

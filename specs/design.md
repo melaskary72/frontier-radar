@@ -1,7 +1,6 @@
 # Design
 
-Verified: 2026-11-01 (Phase 1: storage and collectors). Later sections are filled as each
-phase lands.
+Verified: 2026-11-01 (Phases 1 and 2). Later sections are filled as each phase lands.
 
 ## Data flow
 
@@ -49,3 +48,31 @@ marked unavailable in the backtest. See BUILD_CONTRACT.md, deviations D1 to D3.
 One SQLAlchemy schema (`radar/store/models.py`) for SQLite locally and Neon Postgres for
 the deployed dashboard; Alembic migrations in `migrations/`. `tests/test_migrations.py`
 asserts the migration head matches the models exactly.
+
+## Entity resolution (Phase 2)
+
+Mentions: GitHub owners, Launch HN and Show HN posts, award recipients (one mention per
+recipient), Form D filers (one per CIK). Blocking on domain, GitHub login, and the first
+token of the loose name keeps comparisons near-linear. Tiers:
+
+1. Deterministic: same domain, same GitHub login, or the same distinctive strict name.
+2. Fuzzy: `token_sort_ratio` on loose names; 93 or more merges when both names are
+   distinctive and nothing conflicts; 85 to 93 is ambiguous.
+3. Ambiguous pairs go to the LLM judge (0.8 confidence to act) or the review queue.
+
+Different domains or different GitHub accounts always mean different entities. Domains
+claimed by two GitHub owners are generic. Company identity (`entity_key`) is the domain,
+then the GitHub login, then the name, so reruns keep ids stable.
+
+## Scoring (Phase 2)
+
+1. Prescore every company with hindsight-free signals (thesis probability, distinct thesis
+   queries that found it, organization or launch, award or launch on or before T).
+2. Enrich the top N under a request budget: forks, issues, pull requests, releases, commits,
+   the tree at the last commit on or before T, OpenAlex affiliations, Form D by exact name;
+   live mode adds Events API stars, job boards, and Tranco rank.
+3. Features (radar/scoring/features.py) read only rows timestamped on or before T. Each
+   has a `pit` flag; backtests drop the ones without history.
+4. Percentile within (sector, T); zero or missing is 0. Group score is the mean of its
+   available features; group weights renormalize over available groups.
+5. Explanations list group contributions and the top three evidence items.

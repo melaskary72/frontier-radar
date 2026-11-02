@@ -48,6 +48,28 @@ def upsert[T: Base](session: Session, model: type[T], where: dict[str, Any], val
     return row
 
 
+EM_DASH = chr(0x2014)
+
+
+def clean_text(text: str | None) -> str:
+    """Normalize third-party text for storage and display: em dashes become commas (house
+    style), whitespace collapses."""
+    if not text:
+        return ""
+    return " ".join(text.replace(f" {EM_DASH} ", ", ").replace(EM_DASH, ", ").split())
+
+
 def text_has_any(text: str, terms: list[str]) -> bool:
     low = text.lower()
     return any(t.lower() in low for t in terms)
+
+
+def record_discovery(session: Session, table: str, row_id: int, sector: str, query: str) -> None:
+    """Log which thesis query surfaced a row (the backtest query audit trail)."""
+    from radar.store.models import Discovery
+
+    exists = session.scalars(select(Discovery.id).filter_by(
+        table_name=table, row_id=row_id, sector=sector, query=query)).first()
+    if exists is None:
+        session.add(Discovery(table_name=table, row_id=row_id, sector=sector, query=query,
+                              discovered_at=datetime.now(UTC)))

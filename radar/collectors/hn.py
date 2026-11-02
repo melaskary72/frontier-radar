@@ -7,7 +7,7 @@ from datetime import UTC, date, datetime, time
 from typing import Any
 
 from radar.collectors.base import HttpCollector
-from radar.collectors.common import text_has_any, upsert
+from radar.collectors.common import record_discovery, text_has_any, upsert
 from radar.config import sources, thesis
 from radar.store.models import HNPost
 
@@ -61,7 +61,9 @@ class HNCollector(HttpCollector):
                 kind = classify(title)
                 if kind is None or not pattern.search(title) or text_has_any(title, s.negative_keywords):
                     continue
-                posts[h["objectID"]] = self.upsert_post(h, kind, snap)
+                post = self.upsert_post(h, kind, snap)
+                record_discovery(self.session, "hn_posts", post.id, sector, f"hn:{term}")
+                posts[h["objectID"]] = post
         return list(posts.values())
 
     def upsert_post(self, h: dict[str, Any], kind: str, snap: int) -> HNPost:

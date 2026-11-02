@@ -5,7 +5,7 @@ rate_limits:            # minimum seconds between requests, per source
   github_search: 2.2    # search API: 30 requests per minute authenticated
   github: 0.25
   github_hourly_budget: 4000
-  arxiv: 3.1            # arXiv API terms: one request every 3 seconds
+  arxiv: 4.0            # arXiv API terms: one request every 3 seconds (429s seen at 3.1)
   semantic_scholar: 1.1 # shared unauthenticated pool: about 1 request per second
   openalex: 0.2
   hn: 0.3
@@ -66,6 +66,18 @@ top_labs:
   - ETH Zurich
   - Caltech
   - Princeton Plasma Physics Laboratory
+
+# Academic markers: organizations matching these are research groups, kept in the founder
+# graph but left out of the default company ranking (see radar/entities/resolve.py).
+academic_markers:
+  words: [university, universitat, universität, université, universidad, universita, college,
+          institute of technology, school of, academy of sciences, research group, research lab]
+  # Whole tokens only. Place names companies also use (Oxford, Cambridge, Imperial) and
+  # ambiguous tokens (bit, eth) are deliberately absent.
+  acronyms: [mit, cmu, ucb, ucla, ucsd, uiuc, umich, gatech, ethz, epfl, tum, kaist, postech, snu,
+             nus, ntu, hkust, hku, cuhk, sjtu, zju, thu, pku, ustc, hust, nju, sustech, utokyo,
+             iisc, iit, kth, ucl, tsinghua, stanford, berkeley, caltech, cornell, purdue]
+  domain_suffixes: [".edu", ".ac.uk", ".ac.jp", ".ac.kr", ".edu.cn", ".ac.cn", ".edu.sg", ".edu.hk", ".edu.au"]
 
 # SEC Form D industry groups treated as in-thesis for discovery from the daily index.
 form_d_industry_groups:

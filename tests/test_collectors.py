@@ -183,3 +183,11 @@ def test_snapshots_have_provenance(session: Session) -> None:
     snap = session.scalars(select(RawSnapshot)).one()
     assert len(snap.content_sha256) == 64 and snap.fetched_at is not None
     assert snap.http_status == 200 and snap.source == "tranco"
+
+
+def test_paper_code_links() -> None:
+    from radar.entities.graph import arxiv_ids_in, github_repos_in
+
+    abstract = "We release code at https://github.com/acme-lab/grasp-net. and github.com/topics/robotics"
+    assert github_repos_in(abstract) == ["acme-lab/grasp-net"]
+    assert arxiv_ids_in("see arxiv.org/abs/2304.13705v2") == ["2304.13705"]

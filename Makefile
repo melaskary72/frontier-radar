@@ -3,7 +3,7 @@ SINCE ?= $(shell date -v-30d +%F 2>/dev/null || date -d '30 days ago' +%F)
 UV := uv run
 SHELL := /bin/bash
 
-.PHONY: help setup migrate collect test lint typecheck check-dashes fixtures ci
+.PHONY: help setup migrate collect score refit review test lint typecheck check-dashes fixtures ci
 
 help:
 	@grep -E '^[a-z-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-14s %s\n", $$1, $$2}'
@@ -20,6 +20,15 @@ collect: ## run every collector over the last 30 days (override SINCE=YYYY-MM-DD
 	for s in github arxiv hn usaspending sbir; do $(UV) radar collect $$s --since $(SINCE) || exit 1; done
 	$(UV) radar collect edgar --since $(SINCE)
 
+score: ## resolve, enrich, and score as of today (live mode)
+	$(UV) radar score
+
+refit: ## propose new weights from thumbs up and down (writes docs/weights-history.md, never applies)
+	$(UV) radar refit
+
+review: ## list ambiguous entity matches waiting for a person
+	$(UV) radar review
+
 test: ## unit tests, leakage guard, style rules
 	$(UV) pytest
 
@@ -30,7 +39,7 @@ typecheck: ## mypy
 	$(UV) mypy radar
 
 check-dashes: ## house rule: no em dashes anywhere (also enforced by tests/test_style.py)
-	@! grep -rn "$$(printf '\342\200\224')" --exclude-dir={node_modules,.venv,.git,fixtures} --exclude=Anti_Fund_Master_Brief.md . || (echo "em dash found" && exit 1)
+	@! grep -rn "$$(printf '\342\200\224')" --exclude-dir={node_modules,.venv,.git,fixtures,data} --exclude=Anti_Fund_Master_Brief.md . || (echo "em dash found" && exit 1)
 	@echo "no em dashes"
 
 fixtures: ## re-record API cassettes from live sources (network required)

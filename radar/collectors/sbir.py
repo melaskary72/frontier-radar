@@ -14,7 +14,7 @@ from datetime import date
 from typing import Any
 
 from radar.collectors.base import HttpCollector
-from radar.collectors.common import parse_date, upsert
+from radar.collectors.common import parse_date, record_discovery, upsert
 from radar.config import sources, thesis
 from radar.store.models import Award
 
@@ -61,6 +61,7 @@ class SBIRCollector(HttpCollector):
                         if d is None or not (since <= d <= until):
                             continue
                         row = self.upsert_award(a, snap)
+                        record_discovery(self.session, "awards", row.id, sector, f"sbir:{kw}")
                         awards[row.external_id] = row
         return list(awards.values())
 

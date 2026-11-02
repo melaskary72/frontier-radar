@@ -18,21 +18,21 @@ import logging
 import os
 import subprocess
 import time
-from datetime import date
+from datetime import date, datetime
 from typing import Any
 
 import httpx
 
 from radar.collectors.base import HttpCollector, RateLimiter
-from radar.collectors.common import parse_dt, text_has_any, upsert
+from radar.collectors.common import parse_dt, record_discovery, text_has_any, upsert
 from radar.config import sources, thesis
-from radar.store.models import Repo, RepoEvent
+from radar.store.models import Repo, RepoEvent, RepoTree
 
 log = logging.getLogger(__name__)
 
 REPO_FRAGMENT = """
 fragment R on Repository {
-  nameWithOwner createdAt pushedAt stargazerCount forkCount isFork isArchived
+  nameWithOwner description homepageUrl createdAt pushedAt stargazerCount forkCount isFork isArchived
   licenseInfo { spdxId }
   primaryLanguage { name }
   languages(first: 10, orderBy: {field: SIZE, direction: DESC}) { edges { size node { name } } }
@@ -41,6 +41,35 @@ fragment R on Repository {
   owner { login __typename }
 }
 """
+
+
+HARDWARE_EXT = (".c", ".h", ".cc", ".cpp", ".hpp", ".cxx", ".cu", ".cuh", ".rs", ".v", ".sv",
+                ".svh", ".vhd", ".vhdl", ".ino", ".urdf", ".xacro", ".sdf", ".kicad_pcb",
+                ".kicad_sch", ".step", ".stp", ".stl", ".f90", ".m4", ".ld")
+CODE_EXT = (*HARDWARE_EXT, ".py", ".js", ".ts", ".tsx", ".go", ".java", ".kt", ".swift", ".rb",
+                           ".cs", ".scala", ".jl", ".m", ".r", ".lua", ".zig")
+
+
+def tree_signals(tree: list[dict[str, Any]]) -> dict[str, Any]:
+    """Quality and hardware signals from a git tree listing."""
+    blobs = [t for t in tree if t.get("type") == "blob"]
+    paths = [t["path"].lower() for t in blobs]
+    code = [p for p in paths if p.endswith(CODE_EXT)]
+    hw = [p for p in code if p.endswith(HARDWARE_EXT)]
+    readme = max((t.get("size", 0) for t in blobs
+                  if t["path"].lower().split("/")[-1].startswith("readme") and "/" not in t["path"]),
+                 default=0)
+    return {
+        "has_tests": any(p.startswith(("test/", "tests/")) or "/tests/" in p or "/test/" in p
+                         or p.split("/")[-1].startswith("test_") for p in paths),
+        "has_ci": any(p.startswith((".github/workflows/", ".gitlab-ci", ".circleci/")) for p in paths),
+        "has_license": any(p.split("/")[-1].startswith(("license", "copying")) for p in paths),
+        "has_ros_package": any(p.endswith("package.xml") for p in paths),
+        "readme_bytes": int(readme),
+        "code_files": len(code),
+        "hardware_files": len(hw) + sum(1 for p in paths if p.endswith("package.xml")),
+        "file_count": len(paths),
+    }
 
 
 class BudgetExhausted(RuntimeError):
@@ -141,6 +170,7 @@ class GitHubCollector(HttpCollector):
                 if item.get("fork") or text_has_any(text, negatives):
                     continue
                 repo = self.upsert_repo(item, snap_id)
+                record_discovery(self.session, "repos", repo.id, sector, q)
                 seen[repo.full_name] = repo
         return list(seen.values())
 
@@ -279,20 +309,18 @@ class GitHubCollector(HttpCollector):
         f = self.fetch(f"{self.api}/users/{login}", ok_statuses=(200, 404))
         return (f.payload if f.status == 200 else None), f.snapshot_id
 
-    def repo_tree_signals(self, full_name: str, default_branch: str = "HEAD") -> dict[str, Any]:
-        """Repo quality inputs: tests present, CI present, license, README length."""
-        f = self.fetch(f"{self.api}/repos/{full_name}/git/trees/{default_branch}",
-                       params={"recursive": 1}, ok_statuses=(200, 404, 409))
-        paths = [t["path"] for t in (f.payload or {}).get("tree", [])] if f.status == 200 else []
-        low = [p.lower() for p in paths]
-        return {
-            "snapshot_id": f.snapshot_id,
-            "has_tests": any(p.startswith(("test", "tests/")) or "/test" in p for p in low),
-            "has_ci": any(p.startswith((".github/workflows/", ".gitlab-ci", ".circleci/")) for p in low),
-            "has_license": any(p.split("/")[-1].startswith(("license", "copying")) for p in low),
-            "has_ros_package": any(p.endswith("package.xml") for p in low),
-            "file_count": len(paths),
-        }
+    def tree_at(self, full_name: str, sha: str, committed_at: datetime) -> RepoTree | None:
+        """File tree at one commit. Pick the last commit on or before T for point-in-time
+        quality and hardware-share features."""
+        f = self.fetch(f"{self.api}/repos/{full_name}/git/trees/{sha}", params={"recursive": 1},
+                       ok_statuses=(200, 404, 409, 422))
+        if f.status != 200 or not f.payload:
+            return None
+        signals = tree_signals(f.payload.get("tree", []))
+        signals["truncated"] = bool(f.payload.get("truncated"))
+        return upsert(self.session, RepoTree, {"repo_full_name": full_name, "sha": sha},
+                      {"committed_at": committed_at, "signals_json": signals,
+                       "snapshot_id": f.snapshot_id})
 
     def languages(self, full_name: str) -> tuple[dict[str, int], int]:
         f = self.fetch(f"{self.api}/repos/{full_name}/languages", ok_statuses=(200, 404))

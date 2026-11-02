@@ -82,7 +82,7 @@ def _wait_with_retry_after(state: RetryCallState) -> float:
         ra = exc.response.headers.get("retry-after")
         if ra and ra.isdigit():
             return min(float(ra), 120.0)
-    return wait_exponential_jitter(initial=2, max=60)(state)
+    return wait_exponential_jitter(initial=5, max=120)(state)
 
 
 def full_url(url: str, params: dict[str, Any] | None) -> str:
@@ -169,7 +169,7 @@ class HttpCollector:
     @retry(
         retry=retry_if_exception(_is_retryable),
         wait=_wait_with_retry_after,
-        stop=stop_after_attempt(5),
+        stop=stop_after_attempt(6),
         reraise=True,
     )
     def _send(self, method: str, url: str, body: Any, headers: dict[str, str]) -> httpx.Response:

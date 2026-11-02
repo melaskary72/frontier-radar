@@ -66,11 +66,11 @@ sectors:
       - grid storage
       - geothermal
       - power electronics
-    title_terms: [fusion, reactor, nuclear, fission, battery, grid, geothermal, inverter, power electronics, enrichment, transmission line]
+    title_terms: [fusion energy, fusion reactor, reactor, nuclear, fission, battery, power grid, grid-scale, geothermal, inverter, power electronics, enrichment, transmission line]
     github_topics: [fusion, tokamak, plasma-physics, nuclear-engineering, battery, energy-storage, power-electronics, geothermal, grid]
     arxiv_categories: [physics.plasm-ph, nucl-ex, eess.SY]
     arxiv_filtered: [eess.SY]
-    sbir_keywords: [fusion, small modular reactor, enrichment, solid-state battery, grid storage, geothermal, power electronics]
+    sbir_keywords: [fusion energy, small modular reactor, enrichment, solid-state battery, grid storage, geothermal, power electronics]
     negative_keywords: [homework, tutorial, crypto mining, energy drink]
 
   space:
@@ -82,7 +82,7 @@ sectors:
       - orbital compute
       - satellite constellation
       - earth observation
-    title_terms: [satellite, spacecraft, rocket, orbit, orbital, CubeSat, launch vehicle, space station, lunar]
+    title_terms: [satellite, spacecraft, rocket, orbital, CubeSat, launch vehicle, space station, lunar]
     github_topics: [spacecraft, satellite, cubesat, orbital-mechanics, earth-observation, rocket, propulsion, gnc]
     arxiv_categories: [physics.space-ph, astro-ph.IM]
     arxiv_filtered: []
@@ -113,7 +113,7 @@ sectors:
       - chiplet
       - photonic interconnect
       - inference accelerator
-    title_terms: [ASIC, RISC-V, FPGA, chip, chiplet, silicon, photonic, accelerator, Verilog, tape-out, EDA]
+    title_terms: [ASIC, RISC-V, FPGA, chiplet, silicon, photonic, AI accelerator, inference chip, Verilog, tape-out, EDA]
     github_topics: [risc-v, asic, fpga, chiplet, verilog, systemverilog, photonics, hardware-accelerator]
     arxiv_categories: [cs.AR]
     arxiv_filtered: []

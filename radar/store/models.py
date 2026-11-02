@@ -49,12 +49,36 @@ class Person(Base):
     openalex_id: Mapped[str | None] = mapped_column(String(32), unique=True)
     orcid: Mapped[str | None] = mapped_column(String(32), unique=True)
     affiliations_json: Mapped[list[Any]] = mapped_column(JSON, default=list)
+    bio: Mapped[str | None] = mapped_column(Text)
+    # Current Semantic Scholar metrics: live radar only (not observable point-in-time).
+    citation_count: Mapped[int | None] = mapped_column(Integer)
+    h_index: Mapped[int | None] = mapped_column(Integer)
     first_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class PersonAffiliation(Base):
+    """Dated affiliation from an OpenAlex authorship (publication date, institution)."""
+
+    __tablename__ = "person_affiliations"
+    __table_args__ = (UniqueConstraint("person_id", "at", "institution"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    person_id: Mapped[int] = mapped_column(ForeignKey("persons.id"), index=True)
+    at: Mapped[date] = mapped_column(Date)
+    institution: Mapped[str] = mapped_column(String(300))
+    snapshot_id: Mapped[int | None] = mapped_column(ForeignKey("raw_snapshots.id"))
+
+
 class Company(Base):
+    """A candidate entity: a startup, an organization on GitHub, an awardee, or a filer.
+
+    `entity_key` is the stable identity chosen by entity resolution (domain, then GitHub
+    login, then normalized name) so reruns keep the same id.
+    """
+
     __tablename__ = "companies"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    entity_key: Mapped[str] = mapped_column(String(300), unique=True)
+    kind: Mapped[str] = mapped_column(String(16), default="org")  # org | user | launch | awardee | filer
     name: Mapped[str] = mapped_column(String(256), index=True)
     domain: Mapped[str | None] = mapped_column(String(256), unique=True)
     github_org: Mapped[str | None] = mapped_column(String(128), unique=True)
@@ -104,6 +128,20 @@ class RepoEvent(Base):
     actor: Mapped[str | None] = mapped_column(String(128))
     is_external: Mapped[bool | None] = mapped_column()  # actor outside owner/members
     at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    snapshot_id: Mapped[int | None] = mapped_column(ForeignKey("raw_snapshots.id"))
+
+
+class RepoTree(Base):
+    """Repository file tree at the last commit on or before `as_of`: point-in-time repo
+    quality (tests, CI, license, README) and hardware-adjacent code share."""
+
+    __tablename__ = "repo_trees"
+    __table_args__ = (UniqueConstraint("repo_full_name", "sha"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    repo_full_name: Mapped[str] = mapped_column(String(256), index=True)
+    sha: Mapped[str] = mapped_column(String(40))
+    committed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    signals_json: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
     snapshot_id: Mapped[int | None] = mapped_column(ForeignKey("raw_snapshots.id"))
 
 
@@ -207,6 +245,39 @@ class Edge(Base):
     method: Mapped[str] = mapped_column(String(16))  # deterministic | fuzzy | llm | human
 
 
+class Discovery(Base):
+    """Which thesis query surfaced which row. Doubles as the backtest's query audit log:
+    every candidate in a universe must trace to a row here, never to a name lookup."""
+
+    __tablename__ = "discoveries"
+    __table_args__ = (UniqueConstraint("table_name", "row_id", "sector", "query"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    table_name: Mapped[str] = mapped_column(String(32), index=True)
+    row_id: Mapped[int] = mapped_column(Integer, index=True)
+    sector: Mapped[str] = mapped_column(String(32), index=True)
+    query: Mapped[str] = mapped_column(Text)
+    discovered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class EntityCandidate(Base):
+    """An ambiguous match between two mentions, waiting for an LLM or a person."""
+
+    __tablename__ = "entity_candidates"
+    __table_args__ = (UniqueConstraint("a_key", "b_key"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    a_key: Mapped[str] = mapped_column(String(300))
+    b_key: Mapped[str] = mapped_column(String(300))
+    a_label: Mapped[str] = mapped_column(Text)
+    b_label: Mapped[str] = mapped_column(Text)
+    score: Mapped[float] = mapped_column(Float)
+    status: Mapped[str] = mapped_column(String(16), default="pending")  # pending | approved | rejected
+    decided_by: Mapped[str | None] = mapped_column(String(32))  # llm | human
+    confidence: Mapped[float | None] = mapped_column(Float)
+    rationale: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    decided_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 class Feature(Base):
     __tablename__ = "features"
     company_id: Mapped[int] = mapped_column(ForeignKey("companies.id"), primary_key=True)
@@ -214,6 +285,7 @@ class Feature(Base):
     name: Mapped[str] = mapped_column(String(64), primary_key=True)
     value: Mapped[float | None] = mapped_column(Float)
     evidence_snapshot_ids_json: Mapped[list[Any]] = mapped_column(JSON, default=list)
+    evidence_json: Mapped[list[Any]] = mapped_column(JSON, default=list)  # [{snapshot_id, label, url, at}]
 
 
 class Score(Base):
