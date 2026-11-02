@@ -1,0 +1,11 @@
+{
+ "request": {
+  "method": "GET",
+  "url": "https://api.semanticscholar.org/graph/v1/author/145914976?fields=name%2Caffiliations%2CcitationCount%2ChIndex%2CpaperCount%2CexternalIds"
+ },
+ "status": 200,
+ "headers": {
+  "content-type": "application/json"
+ },
+ "body": "{\"authorId\": \"145914976\", \"externalIds\": {}, \"name\": \"Tony Zhao\", \"affiliations\": [], \"paperCount\": 17, \"citationCount\": 10632, \"hIndex\": 16}\n"
+}

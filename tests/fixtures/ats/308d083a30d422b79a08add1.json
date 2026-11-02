@@ -1,0 +1,11 @@
+{
+ "request": {
+  "method": "GET",
+  "url": "https://boards-api.greenhouse.io/v1/boards/this-board-does-not-exist-frontier-radar/jobs"
+ },
+ "status": 404,
+ "headers": {
+  "content-type": "application/json"
+ },
+ "body": "{\"status\":404,\"error\":\"Job not found\"}"
+}

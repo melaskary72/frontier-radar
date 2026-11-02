@@ -1,0 +1,31 @@
+# Private planning material: never publish
+Anti_Fund_Master_Brief.md
+materials/
+application/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Local data
+data/*.db*
+data/cache/
+!data/.gitkeep
+
+# Node
+web/node_modules/
+web/.next/
+web/.vercel/
+
+# OS
+.DS_Store

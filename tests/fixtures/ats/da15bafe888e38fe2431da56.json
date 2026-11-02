@@ -1,0 +1,12 @@
+{
+ "request": {
+  "method": "GET",
+  "url": "https://boards-api.greenhouse.io/v1/boards/figureai/jobs"
+ },
+ "status": 200,
+ "headers": {
+  "content-type": "application/json"
+ },
+ "body": "{\"jobs\": [{\"absolute_url\": \"https://job-boards.greenhouse.io/figureai/jobs/4720359006\", \"data_compliance\": [{\"type\": \"gdpr\", \"requires_consent\": false, \"requires_processing_consent\": false, \"requires_retention_consent\": false, \"retention_period\": null, \"demographic_data_consent_applies\": false}], \"internal_job_id\": 4567498006, \"location\": {\"name\": \"Brazil, CDMX\"}, \"metadata\": null, \"id\": 4720359006, \"updated_at\": \"2026-10-28T19:45:56-04:00\", \"requisition_id\": \"554\", \"title\": \"Accounts Payable Specialist\", \"company_name\": \"Figure\", \"first_published\": \"2026-10-08T17:06:57-04:00\", \"language\": \"en\", \"application_deadline\": null}, {\"absolute_url\": \"https://job-boards.greenhouse.io/figureai/jobs/4717486006\", \"data_compliance\": [{\"type\": \"gdpr\", \"requires_consent\": false, \"requires_processing_consent\": false, \"requires_retention_consent\": false, \"retention_period\": null, \"demographic_data_consent_applies\": false}], \"internal_job_id\": 4565984006, \"location\": {\"name\": \"San Jose, CA\"}, \"metadata\": null, \"id\": 4717486006, \"updated_at\": \"2026-10-28T19:46:26-04:00\", \"requisition_id\": \"543\", \"title\": \"AV Operations Specialist\", \"company_name\": \"Figure\", \"first_published\": \"2026-09-29T11:13:33-04:00\", \"language\": \"en\", \"application_deadline\": null}, {\"absolute_url\": \"https://job-boards.greenhouse.io/figureai/jobs/4719239006\", \"data_compliance\": [{\"type\": \"gdpr\", \"requires_consent\": false, \"requires_processing_consent\": false, \"requires_retention_consent\": false, \"retention_period\": null, \"demographic_data_consent_applies\": false}], \"internal_job_id\": 4566896006, \"location\": {\"name\": \"San Jose, CA\"}, \"metadata\": null, \"id\": 4719239006, \"updated_at\": \"2026-10-28T19:46:47-04:00\", \"requisition_id\": \"549\", \"title\": \"Commercial Operations Associate\", \"company_name\": \"Figure\", \"first_published\": \"2026-10-05T17:23:36-04:00\", \"language\": \"en\", \"application_deadline\": null}], \"meta\": {\"total\": 99}}",
+ "trimmed": "first 3 postings kept, long text fields dropped"
+}

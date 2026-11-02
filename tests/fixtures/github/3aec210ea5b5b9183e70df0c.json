@@ -1,0 +1,14 @@
+{
+ "request": {
+  "method": "GET",
+  "url": "https://api.github.com/repos/huggingface/lerobot/languages"
+ },
+ "status": 200,
+ "headers": {
+  "content-type": "application/json; charset=utf-8",
+  "x-ratelimit-remaining": "4973",
+  "x-ratelimit-reset": "1793603597",
+  "x-ratelimit-resource": "core"
+ },
+ "body": "{\"Python\":12198050,\"Makefile\":6283}"
+}

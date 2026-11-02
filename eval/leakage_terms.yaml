@@ -1,0 +1,78 @@
+# Anti Fund portfolio companies as listed on antifund.com (brief Part 1.4). The backtest
+# must never look these up by name, so tests/test_leakage.py fails if any of them appears
+# in radar/ or config/. This file is the only place the names may live outside eval/.
+#
+# mode:
+#   word     case-insensitive whole-word match on the name
+#   phrase   case-insensitive match on the full multi-word name
+#   domain   the name is an ordinary English word (merge, natural, orbital); matching it
+#            would flag normal code, so the guard matches its domains instead
+# backtest: true marks the primary and secondary test sets (Part 5.11). Their domains are
+# filled in Phase 4 from the sourced rounds.csv.
+
+companies:
+  # Backtest primary set
+  - {name: Efference, mode: word, backtest: true}
+  - {name: Westmag, mode: word, backtest: true}
+  - {name: Trajectory, mode: domain, backtest: true, domains: []}
+  - {name: Merge Labs, mode: phrase, backtest: true, domains: []}
+  - {name: Aeon, mode: word, backtest: true}
+  - {name: Enigma, mode: word, backtest: true}
+  - {name: General Galactic, mode: phrase, backtest: true}
+  - {name: Orbital, mode: domain, backtest: true, domains: []}
+  # Backtest secondary set (applied AI)
+  - {name: Catalyst, mode: domain, backtest: true, domains: []}
+  - {name: Natural, mode: domain, backtest: true, domains: []}
+  - {name: Melius, mode: word, backtest: true}
+  - {name: Pensive, mode: word, backtest: true}
+  # Headline
+  - {name: Anduril, mode: word}
+  - {name: OpenAI, mode: word}
+  - {name: Cognition, mode: word}
+  - {name: Physical Intelligence, mode: phrase}
+  - {name: Etched, mode: word}
+  - {name: Modal, mode: domain, domains: [modal.com]}
+  - {name: General Matter, mode: phrase}
+  - {name: Saronic, mode: word}
+  - {name: Helion, mode: word}
+  - {name: Ramp, mode: domain, domains: [ramp.com]}
+  - {name: ElevenLabs, mode: word}
+  # AI, infrastructure and national resilience
+  - {name: Kela Systems, mode: phrase}
+  - {name: The Boring Company, mode: phrase}
+  # Software, finance and applied AI
+  - {name: Polymarket, mode: word}
+  - {name: Archive, mode: domain, domains: [archive.com]}
+  - {name: WithCoverage, mode: word}
+  - {name: Lighter, mode: domain, domains: [lighter.xyz]}
+  - {name: Whop, mode: word}
+  - {name: Erebor, mode: word}
+  - {name: Monaco, mode: domain, domains: []}
+  - {name: Liquid, mode: domain, domains: []}
+  - {name: Entropy, mode: domain, domains: []}
+  # Consumer
+  - {name: Eight Sleep, mode: phrase}
+  - {name: Betr, mode: word}
+  - {name: Olipop, mode: word}
+  - {name: Oats Overnight, mode: phrase}
+  - {name: Wander, mode: domain, domains: []}
+  - {name: Ketone-IQ, mode: phrase}
+  - {name: Palm Tree Crew, mode: phrase}
+  - {name: Kings League, mode: phrase}
+  - {name: Sesh, mode: domain, domains: []}
+  - {name: SipMargs, mode: word}
+  - {name: Happy Dad, mode: phrase}
+  - {name: Khloud, mode: word}
+  # Exits
+  - {name: Chronosphere, mode: word}
+  - {name: Rail, mode: domain, domains: []}
+  - {name: Aerodome, mode: word}
+  - {name: Metis, mode: domain, domains: []}
+  - {name: Poke.com, mode: phrase}
+  - {name: SpaceX, mode: word}
+  - {name: xAI, mode: word}
+
+# Talent-source exceptions: these names may appear only inside config/sources.yaml's
+# top_labs list (people who left these employers are a founder signal).
+allowlist:
+  - {file: config/sources.yaml, block: top_labs, names: [OpenAI, SpaceX, Anduril]}

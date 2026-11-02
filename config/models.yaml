@@ -1,0 +1,12 @@
+# Model routing for agents. Prices (USD per million tokens) feed the hard spend cap in
+# radar/agents/cost.py; they are verified against Anthropic's published pricing in Phase 3.
+version: 1
+spend_cap_usd: 15.0
+prompt_caching: true
+roles:
+  sourcing: claude-haiku-5-5
+  research: claude-sonnet-5-5
+  verifier: claude-sonnet-5-5
+  digest: claude-haiku-5-5
+  entity_resolution: claude-haiku-5-5
+  thesis_fallback: claude-haiku-5-5

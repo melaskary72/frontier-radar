@@ -1,0 +1,12 @@
+{
+ "request": {
+  "method": "GET",
+  "url": "https://api.ashbyhq.com/posting-api/job-board/replit?includeCompensation=false"
+ },
+ "status": 200,
+ "headers": {
+  "content-type": "application/json; charset=utf-8"
+ },
+ "body": "{\"jobs\": [{\"id\": \"659a8e1e-69ba-44c0-a632-96665051a3e8\", \"title\": \"Senior Software Engineer, Compute Platform\", \"department\": \"Engineering\", \"team\": \"Platform\", \"employmentType\": \"FullTime\", \"location\": \"Foster City, CA\", \"secondaryLocations\": [], \"publishedAt\": \"2026-10-23T19:16:55.670+00:00\", \"isListed\": true, \"isRemote\": true, \"workplaceType\": \"Hybrid\", \"address\": {\"postalAddress\": {\"addressRegion\": \"California\", \"addressCountry\": \"USA\", \"addressLocality\": \"Foster City\"}}, \"jobUrl\": \"https://jobs.ashbyhq.com/replit/659a8e1e-69ba-44c0-a632-96665051a3e8\", \"applyUrl\": \"https://jobs.ashbyhq.com/replit/659a8e1e-69ba-44c0-a632-96665051a3e8/application\"}, {\"id\": \"0170f630-f7c9-4471-8d2f-8c55fb184206\", \"title\": \"Engineering Manager, Mobile\", \"department\": \"Engineering\", \"team\": \"Design Engineering & Mobile\", \"employmentType\": \"FullTime\", \"location\": \"Foster City, CA\", \"secondaryLocations\": [], \"publishedAt\": \"2026-10-27T19:09:26.254+00:00\", \"isListed\": true, \"isRemote\": true, \"workplaceType\": \"Hybrid\", \"address\": {\"postalAddress\": {\"addressRegion\": \"California\", \"addressCountry\": \"USA\", \"addressLocality\": \"Foster City\"}}, \"jobUrl\": \"https://jobs.ashbyhq.com/replit/0170f630-f7c9-4471-8d2f-8c55fb184206\", \"applyUrl\": \"https://jobs.ashbyhq.com/replit/0170f630-f7c9-4471-8d2f-8c55fb184206/application\"}, {\"id\": \"234c9a82-2857-4691-af83-308100806df3\", \"title\": \"Senior/Product Marketing Manager\", \"department\": \"GTM\", \"team\": \"Marketing\", \"employmentType\": \"FullTime\", \"location\": \"Foster City, CA\", \"secondaryLocations\": [], \"publishedAt\": \"2025-11-11T00:28:14.432+00:00\", \"isListed\": true, \"isRemote\": true, \"workplaceType\": \"Hybrid\", \"address\": {\"postalAddress\": {\"addressRegion\": \"California\", \"addressCountry\": \"USA\", \"addressLocality\": \"Foster City\"}}, \"jobUrl\": \"https://jobs.ashbyhq.com/replit/234c9a82-2857-4691-af83-308100806df3\", \"applyUrl\": \"https://jobs.ashbyhq.com/replit/234c9a82-2857-4691-af83-308100806df3/application\"}], \"apiVersion\": \"1\"}",
+ "trimmed": "first 3 postings kept, long text fields dropped"
+}

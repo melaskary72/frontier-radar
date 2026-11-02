@@ -1,0 +1,70 @@
+# Tasks
+
+The build plan, phase by phase. Each phase closes with a dated verification stamp: tests
+green, lint clean, no em dashes, committed.
+
+## Phase 1: scaffold, specs, contract, configs, schema, collectors
+
+- [x] Repository layout, `pyproject.toml` (Python 3.12, uv), `.env.example`, `.gitignore`
+- [x] `BUILD_CONTRACT.md` with canonical sources, scope, out of scope, deviations
+- [x] `specs/requirements.md`, `specs/design.md`, `specs/tasks.md`
+- [x] `config/thesis.yaml`, `weights.yaml`, `models.yaml`, `sources.yaml`
+- [x] SQLAlchemy models for every table in the data model; Alembic initial migration
+- [x] Snapshot cache with `fetched_at` and SHA-256; offline mode; cassette record and replay
+- [x] Collectors: GitHub, arXiv, Semantic Scholar, OpenAlex, Hacker News, ATS (Greenhouse,
+      Lever, Ashby), SEC EDGAR Form D, SBIR.gov, USAspending, Tranco
+- [x] Real recorded fixtures and a unit test per collector
+- [x] Leakage guard test, no-em-dash test, migration test
+- [x] CI workflow (ruff, mypy, pytest)
+- [x] Commit
+
+Verified: 2026-11-01. 23 tests passing; ruff and mypy clean; live smoke runs of the Hacker
+News and USAspending collectors.
+
+## Phase 2: entity resolution, features, scoring, explainability
+
+- [ ] Deterministic, fuzzy, and LLM entity resolution; review queue
+- [ ] 100 hand-labeled entity pairs; precision gate (at least 90%)
+- [ ] Point-in-time feature builder (`as_of`) for all six feature groups
+- [ ] Thesis classifier (embedding plus logistic regression on 100 labels, LLM fallback); gate at least 85%
+- [ ] Percentile normalization within sector and window; weighted score; `explain.py`
+- [ ] Feedback table and `make refit` writing `docs/weights-history.md`
+- [ ] Commit
+
+## Phase 3: agents, tracing, cost cap, prompts, verifier
+
+- [ ] `agents/base.py`: pydantic output, one retry, heuristic fallback, cost check, trace
+- [ ] Spend cap ($15) with `cost_log`; prices verified against Anthropic's published pricing
+- [ ] Sourcing (Haiku), Research (Sonnet), Verifier (Sonnet, isolated), Digest (Haiku)
+- [ ] Versioned prompts in `radar/agents/prompts/`
+- [ ] Commit
+
+## Phase 4: backtest and eval gates (stop and review with Mohamed)
+
+- [ ] `eval/backtest/rounds.csv` with sourced announcement dates; exclusions with reasons
+- [ ] Name-free universe per window from thesis queries; query audit log
+- [ ] Features at T minus 30 and T minus 90; coverage, rank, recall@25, recall@100, lead time
+- [ ] Baseline and lift (see BUILD_CONTRACT D5)
+- [ ] `docs/backtest-report.md` with limitations
+- [ ] All eval gates computed
+- [ ] **Stop. Show Mohamed the results.** Apply any approved corrective run and log it
+
+## Phase 5: dashboard, deploy, cron, digest, audio, docs, README
+
+- [ ] Next.js dashboard (eight pages), access code middleware, disclaimer footer
+- [ ] Vercel deploy with Neon Postgres
+- [ ] GitHub Actions weekly cron (Monday 13:00 UTC)
+- [ ] Resend digest and ElevenLabs audio briefing
+- [ ] Screenshots (phone and desktop), docs 00 to 09, architecture diagram
+- [ ] README; push public
+
+## Phase 6: application documents
+
+- [ ] Send Mohamed the Part 3 claims ledger in one message and wait
+- [ ] Resume (one page), Builder Dossier (up to four pages), cover letter (one page), PDF and DOCX
+
+## Phase 7: demo script, shot list, outreach pack, interview prep
+
+- [ ] `docs/demo-script.md`, `docs/shot-list.md`
+- [ ] `application/outreach.md`, `application/interview-prep.md`
+- [ ] Final QA checklist

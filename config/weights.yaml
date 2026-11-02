@@ -1,0 +1,25 @@
+# Score weights. Total = sum(weight * feature_group_score). Each feature is a 0 to 1
+# percentile within (sector, window). `make refit` proposes new weights in
+# docs/weights-history.md and never edits this file.
+version: 1
+groups:
+  technical_depth:
+    weight: 0.25
+    features: [log_citations, h_index, repo_quality, hardware_code_share]
+  momentum:
+    weight: 0.25
+    features: [star_velocity_7d, star_velocity_30d, star_velocity_90d, contributor_growth, commit_cadence, hiring_velocity]
+  founder_signal:
+    weight: 0.20
+    features: [left_top_lab_18m, repeat_collaborators, prior_exit]
+  thesis_fit:
+    weight: 0.15
+    features: [thesis_probability]
+  pre_consensus:
+    weight: 0.10
+    features: [no_form_d, no_major_press, hn_points_below_threshold]
+  federal_signal:
+    weight: 0.05
+    features: [federal_award_present]
+pre_consensus:
+  hn_points_threshold: 300

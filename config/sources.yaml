@@ -1,0 +1,98 @@
+# Source configuration: endpoints, polite rate limits, and reference lists.
+version: 1
+
+rate_limits:            # minimum seconds between requests, per source
+  github_search: 2.2    # search API: 30 requests per minute authenticated
+  github: 0.25
+  github_hourly_budget: 4000
+  arxiv: 3.1            # arXiv API terms: one request every 3 seconds
+  semantic_scholar: 1.1 # shared unauthenticated pool: about 1 request per second
+  openalex: 0.2
+  hn: 0.3
+  ats: 0.5
+  edgar: 0.15           # SEC fair access: at most 10 requests per second
+  sbir: 1.0
+  usaspending: 0.5
+  tranco: 1.1           # Tranco API: 1 query per second
+
+endpoints:
+  github_rest: https://api.github.com
+  github_graphql: https://api.github.com/graphql
+  arxiv: https://export.arxiv.org/api/query
+  semantic_scholar: https://api.semanticscholar.org/graph/v1
+  openalex: https://api.openalex.org
+  hn: https://hn.algolia.com/api/v1
+  greenhouse: https://boards-api.greenhouse.io/v1/boards
+  lever: https://api.lever.co/v0/postings
+  ashby: https://api.ashbyhq.com/posting-api/job-board
+  edgar_fts: https://efts.sec.gov/LATEST/search-index
+  edgar_archives: https://www.sec.gov/Archives/edgar
+  edgar_data: https://data.sec.gov
+  sbir: https://api.www.sbir.gov/public/api/awards
+  usaspending: https://api.usaspending.gov/api/v2
+  tranco: https://tranco-list.eu/api
+
+# Talent sources for the "left a top lab" founder signal. These are employers people
+# leave, not investment targets. Three of them (marked) are also on Anti Fund's public
+# portfolio page; tests/test_leakage.py allowlists them in this block only.
+top_labs:
+  - Google DeepMind
+  - Google Research
+  - OpenAI            # allowlisted: talent source
+  - Anthropic
+  - Meta FAIR
+  - Meta AI
+  - Microsoft Research
+  - NVIDIA
+  - Apple
+  - Tesla
+  - SpaceX            # allowlisted: talent source
+  - Anduril           # allowlisted: talent source
+  - Boston Dynamics
+  - Blue Origin
+  - Lockheed Martin
+  - Northrop Grumman
+  - Raytheon
+  - Jet Propulsion Laboratory
+  - Lawrence Livermore National Laboratory
+  - Los Alamos National Laboratory
+  - Sandia National Laboratories
+  - Oak Ridge National Laboratory
+  - MIT
+  - Massachusetts Institute of Technology
+  - Stanford University
+  - Carnegie Mellon University
+  - University of California, Berkeley
+  - ETH Zurich
+  - Caltech
+  - Princeton Plasma Physics Laboratory
+
+# SEC Form D industry groups treated as in-thesis for discovery from the daily index.
+form_d_industry_groups:
+  - Other Technology
+  - Computers
+  - Telecommunications
+  - Other Energy
+  - Electric Utilities
+  - Energy Conservation
+  - Environmental Services
+  - Manufacturing
+  - Other
+
+federal:
+  sbir_agencies: [DOD, DOE, NASA]
+  usaspending_agencies:
+    - Department of Defense
+    - Department of Energy
+    - National Aeronautics and Space Administration
+  # AFWERX awards appear as Department of the Air Force SBIR/STTR awards under DOD.
+  afwerx_branch: Air Force
+
+ats:
+  providers: [greenhouse, lever, ashby]
+  engineering_departments: [engineering, hardware, research, r&d, software, firmware, electrical, mechanical, robotics]
+  hardware_title_terms: [hardware, mechanical, electrical, firmware, embedded, fpga, asic, rf, propulsion, avionics, manufacturing, test engineer, technician, machinist]
+
+optional:
+  x_api: {enabled: false, note: "Pluggable. Disabled without X_BEARER_TOKEN."}
+  product_hunt: {enabled: false, note: "Pluggable. Disabled without PRODUCT_HUNT_TOKEN."}

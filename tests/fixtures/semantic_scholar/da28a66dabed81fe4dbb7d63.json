@@ -1,0 +1,11 @@
+{
+ "request": {
+  "method": "GET",
+  "url": "https://api.semanticscholar.org/graph/v1/paper/arXiv:2304.13705?fields=title%2Cyear%2CpublicationDate%2CexternalIds%2Cauthors%2Cauthors.authorId"
+ },
+ "status": 200,
+ "headers": {
+  "content-type": "application/json"
+ },
+ "body": "{\"paperId\": \"91eb20f923ea3b0246868902aef4e9bea572b800\", \"externalIds\": {\"DBLP\": \"journals/corr/abs-2304-13705\", \"ArXiv\": \"2304.13705\", \"DOI\": \"10.48550/arXiv.2304.13705\", \"CorpusId\": 258331658}, \"title\": \"Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware\", \"year\": 2023, \"publicationDate\": \"2023-04-23\", \"authors\": [{\"authorId\": \"145914976\"}, {\"authorId\": \"2109446216\"}, {\"authorId\": \"1736651\"}, {\"authorId\": \"46881670\"}]}\n"
+}

@@ -1,0 +1,121 @@
+# Thesis taxonomy. Every candidate universe in Frontier Radar is generated from these
+# terms only. No company names appear here (enforced by tests/test_leakage.py).
+#
+# Per sector:
+#   keywords           free-text phrases for GitHub search and arXiv abstract filters
+#   title_terms        short terms matched as whole words (optional plural) in launch titles
+#   github_topics      exact GitHub topic slugs
+#   arxiv_categories   arXiv categories; categories listed in arxiv_filtered need a keyword hit
+#   sbir_keywords      terms for SBIR.gov and USAspending award search
+#   negative_keywords  any hit removes the item (tutorials, homework, games, crypto noise)
+
+version: 1
+
+sectors:
+  robotics:
+    label: Robotics and autonomy
+    keywords:
+      - robot manipulation
+      - humanoid robot
+      - dexterous hand
+      - imitation learning
+      - vision-language-action
+      - ROS 2
+      - motor controller
+      - actuator
+      - embodied AI
+      - robot perception
+      - SLAM
+    title_terms: [robot, robotics, humanoid, manipulator, actuator, ROS, SLAM, teleoperation, exoskeleton, quadruped, gripper]
+    github_topics: [robotics, humanoid, manipulation, imitation-learning, ros2, slam, embodied-ai, robot-learning, teleoperation]
+    arxiv_categories: [cs.RO, cs.CV, cs.LG]
+    arxiv_filtered: [cs.CV, cs.LG]
+    sbir_keywords: [autonomous robot, robotic manipulation, legged robot, unmanned ground vehicle]
+    negative_keywords: [homework, course project, tutorial, awesome list, game mod, minecraft]
+
+  defense:
+    label: Defense
+    keywords:
+      - counter-UAS
+      - uncrewed aircraft
+      - drone swarm
+      - maritime autonomy
+      - electronic warfare
+      - synthetic aperture radar
+      - command and control
+      - ISR
+      - munitions guidance
+      - hypersonic
+    title_terms: [drone, UAV, UAS, counter-drone, defense, defence, radar, sonar, missile, ISR, loitering munition, autonomous vessel]
+    github_topics: [drones, uav, px4, ardupilot, counter-uas, sar, electronic-warfare, swarm-robotics, unmanned-surface-vehicle]
+    arxiv_categories: [eess.SP, eess.SY]
+    arxiv_filtered: [eess.SP, eess.SY]
+    sbir_keywords: [counter-UAS, unmanned aircraft, electronic warfare, synthetic aperture radar, autonomous vessel, hypersonic]
+    negative_keywords: [homework, tutorial, game, fpv racing sim]
+
+  energy:
+    label: Energy
+    keywords:
+      - fusion energy
+      - tokamak
+      - stellarator
+      - fission reactor
+      - small modular reactor
+      - uranium enrichment
+      - battery chemistry
+      - grid storage
+      - geothermal
+      - power electronics
+    title_terms: [fusion, reactor, nuclear, fission, battery, grid, geothermal, inverter, power electronics, enrichment, transmission line]
+    github_topics: [fusion, tokamak, plasma-physics, nuclear-engineering, battery, energy-storage, power-electronics, geothermal, grid]
+    arxiv_categories: [physics.plasm-ph, nucl-ex, eess.SY]
+    arxiv_filtered: [eess.SY]
+    sbir_keywords: [fusion, small modular reactor, enrichment, solid-state battery, grid storage, geothermal, power electronics]
+    negative_keywords: [homework, tutorial, crypto mining, energy drink]
+
+  space:
+    label: Space
+    keywords:
+      - spacecraft propulsion
+      - orbital transfer vehicle
+      - in-space manufacturing
+      - orbital compute
+      - satellite constellation
+      - earth observation
+    title_terms: [satellite, spacecraft, rocket, orbit, orbital, CubeSat, launch vehicle, space station, lunar]
+    github_topics: [spacecraft, satellite, cubesat, orbital-mechanics, earth-observation, rocket, propulsion, gnc]
+    arxiv_categories: [physics.space-ph, astro-ph.IM]
+    arxiv_filtered: []
+    sbir_keywords: [in-space manufacturing, orbital transfer, satellite bus, spacecraft propulsion, earth observation]
+    negative_keywords: [homework, tutorial, kerbal, game]
+
+  manufacturing:
+    label: Manufacturing and industrial AI
+    keywords:
+      - predictive maintenance
+      - machine vision inspection
+      - CNC
+      - PLC
+      - digital twin
+      - factory automation
+    title_terms: [CNC, PLC, factory, manufacturing, machining, digital twin, predictive maintenance, machine vision, 3D printing, industrial automation]
+    github_topics: [predictive-maintenance, cnc, plc, digital-twin, industrial-automation, machine-vision, opc-ua, manufacturing]
+    arxiv_categories: [cs.RO, eess.SY]
+    arxiv_filtered: [cs.RO, eess.SY]
+    sbir_keywords: [advanced manufacturing, additive manufacturing, machine vision inspection, predictive maintenance]
+    negative_keywords: [homework, tutorial, minecraft, factorio]
+
+  semiconductors:
+    label: Semiconductors and compute
+    keywords:
+      - ASIC
+      - RISC-V
+      - chiplet
+      - photonic interconnect
+      - inference accelerator
+    title_terms: [ASIC, RISC-V, FPGA, chip, chiplet, silicon, photonic, accelerator, Verilog, tape-out, EDA]
+    github_topics: [risc-v, asic, fpga, chiplet, verilog, systemverilog, photonics, hardware-accelerator]
+    arxiv_categories: [cs.AR]
+    arxiv_filtered: []
+    sbir_keywords: [radiation-hardened ASIC, chiplet, photonic integrated circuit, AI accelerator]
+    negative_keywords: [homework, tutorial, course lab]
