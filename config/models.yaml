@@ -37,6 +37,7 @@ roles:
   digest: {model: claude-haiku-5-5, effort: low, max_tokens: 3000}
   entity_judge: {model: claude-haiku-5-5, effort: low, max_tokens: 600}
   thesis_judge: {model: claude-haiku-5-5, effort: low, max_tokens: 600}
+  analysis_rewriter: {model: claude-haiku-5-5, effort: low, max_tokens: 600}
 
 # Server-side refusal fallback for Sonnet 5.5 (Claude API, "default" routing form).
 sonnet_fallbacks: true

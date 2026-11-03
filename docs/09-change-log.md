@@ -2,6 +2,37 @@
 
 Newest first. Every corrective run, deviation, and gate change is recorded here.
 
+## 2026-11-03: Lab filter, homepages, private signals, analysis numbers, Live Picks
+
+- Lab and incumbent filter: the 2026-11-01 live top 30 was dominated by university groups
+  (ETH Zurich's cvg, Bonn's PRBonn, KAIST's DAVIAN, Tsinghua's OpenBMB) and large companies
+  (NVIDIA, Amazon Science), because the filter read only names and domains. In live runs the
+  pipeline now reads the GitHub profile of each top candidate (three times the enrichment
+  depth) and drops labs and incumbents (`classify_profile`). Academic markers gained
+  research-institute words, "lab at" style phrases, institution domains, and patterns for
+  .ac.xx, .edu.xx, and uni-<city>.de hosts; the incumbent list gained large companies and their
+  research accounts. Not applied in backtest mode (profiles are current). Test in
+  `tests/test_resolve.py`.
+- Homepage collector (`radar/collectors/web.py`, table `web_pages`, Alembic `0004`): home,
+  About, Team, and Careers pages for enriched companies with a domain, robots.txt obeyed (401
+  or 403 means do not crawl), every page cached as a hashed snapshot. Memo evidence leads with
+  Team and About lines that name people and roles, so the Team section can cite founders.
+  Live only. Tests in `tests/test_web.py`.
+- Private signals intake (`radar/signals.py`, table `private_signals`): `radar signal add`,
+  CSV import, and a dashboard Signals form writing to a gitignored local inbox. Exact matching
+  only (domain, GitHub organization, distinctive name). Each signal gets a snapshot (source
+  "private") so memos cite it like a public source; the static export withholds private
+  excerpts. Private signals lead the evidence pack. Tests in `tests/test_signals.py`.
+- Analysis numbers (Mohamed's rule): any number in an Analysis paragraph must also appear in a
+  published, cited fact. The structure check rejects drafts that break it; after verification,
+  analysis whose number lost its fact is rewritten without it by a Haiku rewriter
+  (`analysis_rewriter.v1`) or dropped. Prompt research.v4 states the rule and asks for founder
+  roles and backgrounds from website pages. Tests in `tests/test_agents.py`.
+- Live Picks (`radar/picks.py`, `radar picks`): from the latest scored run, the top 10
+  companies (not individuals, not labs or incumbents) with no SEC Form D on file since
+  2024-01-01, each with a why-now line, written to `picks/<date>.json` and `.md` with a
+  resolution date 182 days out and the grading rule. Test in `tests/test_picks.py`.
+
 ## 2026-11-03: Claim gate closed; memo quality (research.v2 and v3)
 
 - Claim citation gate: Mohamed marked all 40 sampled published claims supported (1.0 against

@@ -240,7 +240,9 @@ def f_contributor_growth(d: CompanyData) -> FeatureValue:
 
 def f_commit_cadence(d: CompanyData) -> FeatureValue:
     evs = d.window("commit", 84)
-    weeks = {_d(_aware(e.at)).isocalendar()[:2] for e in evs}
+    # Weeks counted back from the cutoff (0 to 11), not calendar weeks: 84 days can touch 13
+    # ISO weeks, which once produced "commits in 13 of the last 12 weeks".
+    weeks = {(d.as_of - _d(_aware(e.at))).days // 7 for e in evs} & set(range(12))
     if not weeks:
         return FeatureValue(0.0)
     return FeatureValue(len(weeks) / 12, [Evidence(evs[0].snapshot_id, f"commits in {len(weeks)} of the last 12 weeks",

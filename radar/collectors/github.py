@@ -387,6 +387,15 @@ class GitHubCollector(HttpCollector):
             repo.contributors = len(people)
         return people
 
+    def profile(self, login: str, kind: str | None) -> tuple[dict[str, Any] | None, int]:
+        """Organization profile (/orgs: name, description, blog, location, email) for orgs,
+        the user profile otherwise. Cached like every other response."""
+        if kind == "org":
+            f = self.fetch(f"{self.api}/orgs/{login}", ok_statuses=(200, 404))
+            if f.status == 200:
+                return f.payload, f.snapshot_id
+        return self.owner(login)
+
     def owner(self, login: str) -> tuple[dict[str, Any] | None, int]:
         """User or org profile: company, bio, blog, location, created_at."""
         f = self.fetch(f"{self.api}/users/{login}", ok_statuses=(200, 404))

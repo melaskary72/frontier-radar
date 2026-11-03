@@ -9,6 +9,7 @@ const LINKS = [
   ["/agent-ops", "Agent Ops"],
   ["/portfolio", "Portfolio Stats"],
   ["/review", "Review Queue"],
+  ["/signals", "Signals"],
   ["/about", "About"],
 ] as const;
 

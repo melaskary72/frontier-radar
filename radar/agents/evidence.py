@@ -9,11 +9,13 @@ reading what the source returned. Excerpts carry the fetch date, so "120 stars" 
 
 from __future__ import annotations
 
+import re
 from collections import defaultdict
 from dataclasses import dataclass
-from datetime import date
+from datetime import UTC, date, datetime, time
 from typing import Any
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from radar.collectors.common import clean_text
@@ -28,9 +30,13 @@ from radar.store.models import (
     Repo,
     RepoEvent,
     RepoTree,
+    WebPage,
 )
 
 MAX_EXCERPT = 1200
+WEB_EXCERPT = 2000
+PEOPLE_CUES = re.compile(r"\b(founder|co-founder|cofounder|ceo|cto|coo|chief|president|head of|previously|"
+                         r"formerly|ex-|phd|ph\.d|professor|engineer at|led|built|team)\b", re.I)
 
 
 @dataclass
@@ -194,12 +200,38 @@ def affiliation_items(session: Session, person_name: str, affs: list[PersonAffil
     return out
 
 
+def web_item(session: Session, page: WebPage) -> EvidenceItem | None:
+    """Excerpt re-extracted from the cached HTML. Team and About pages lead with the lines that
+    name people and roles, so founders and backgrounds can be cited."""
+    from radar.collectors.web import extract
+
+    s = _snap(session, page.snapshot_id)
+    if s is None:
+        return None
+    _, text, _ = extract(str((s.payload_json or {}).get("text") or ""))
+    lines = [ln for ln in text.split("\n") if ln.strip()]
+    if page.page_kind in ("team", "about"):
+        people = [ln for ln in lines if PEOPLE_CUES.search(ln)]
+        rest = [ln for ln in lines if not PEOPLE_CUES.search(ln)]
+        lines = people + rest
+    excerpt = clean_text(" | ".join(lines))[:WEB_EXCERPT]
+    return EvidenceItem(s.id, f"Company website ({page.page_kind})", page.title or page.url, excerpt, page.url, _fetched(s))
+
+
 def evidence_pack(session: Session, company: Company, as_of: date, limit: int = 30) -> list[EvidenceItem]:
     """Evidence for one company, using only rows timestamped on or before as_of."""
     from radar.scoring.features import load_company_data
+    from radar.signals import private_signal_items  # local: radar.signals imports this module
 
     d = load_company_data(session, company, as_of)
     items: list[EvidenceItem | None] = []
+    items += private_signal_items(session, company, as_of)  # relationship data first: it is the edge
+    if company.domain:  # current pages: used for memos on the live radar, never in the backtest
+        pages = session.scalars(select(WebPage).where(WebPage.domain == company.domain,
+                                                      WebPage.fetched_at <= datetime.combine(as_of, time.max, tzinfo=UTC)
+                                                      )).all()
+        order = {"team": 0, "about": 1, "home": 2, "careers": 3}
+        items += [web_item(session, p) for p in sorted(pages, key=lambda p: order.get(p.page_kind, 9))]
     items += [hn_item(session, p) for p in d.hn_posts]
     items += [repo_item(session, r) for r in d.repos[:6]]
     items += [paper_item(session, p) for p in d.papers[:6]]

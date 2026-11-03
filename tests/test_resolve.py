@@ -171,3 +171,20 @@ def test_split_cluster_does_not_collide_on_github_org(session: Session) -> None:
     rows = list(session.scalars(select(Company).where(Company.kind != "stale")))
     assert {r.github_org for r in rows} >= {"acmebot"}
     assert len({r.github_org for r in rows if r.github_org}) == len([r for r in rows if r.github_org])
+
+
+def test_profiles_reveal_labs_and_incumbents() -> None:
+    """Live top-30 failures (2026-11-03): opaque logins whose profiles name a university or a
+    large company. A startup profile must pass."""
+    from radar.entities.resolve import classify_profile, is_incumbent
+
+    assert classify_profile("cvg", {"name": "Computer Vision and Geometry Group", "blog": "https://cvg.ethz.ch"}) == "lab"
+    assert classify_profile("prbonn", {"description": "Photogrammetry & Robotics Lab at the University of Bonn"}) == "lab"
+    assert classify_profile("x", {"blog": "https://www.ipb.uni-bonn.de"}) == "lab"
+    assert classify_profile("davian-robotics", {"location": "KAIST, Daejeon", "blog": "https://davian.kaist.ac.kr"}) == "lab"
+    assert classify_profile("amazon-science", {"name": "Amazon Science"}) == "incumbent"
+    assert is_incumbent("NVIDIA", "nvidia") and not is_incumbent("Meta-Robotics", "meta-robotics")
+    assert classify_profile("roboninecom", {"name": "Robonine", "blog": "https://robonine.com",
+                                            "description": "Robonine creates innovative educational robots for "
+                                                           "research laboratories, schools and universities."}) is None
+    assert classify_profile("hebbian-robotics", {"name": "Hebbian Robotics", "description": "Robotics data pipelines"}) is None

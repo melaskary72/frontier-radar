@@ -100,10 +100,18 @@ def _why_now(session: Session, ranked: list[tuple[Score, Company]]) -> dict[int,
     return out
 
 
+PRIVATE_SOURCE = "private"
+PRIVATE_WITHHELD = "Private signal: excerpt withheld from the static export."
+
+
 def _snapshot(session: Session, sid: int, items: dict[int, EvidenceItem]) -> dict[str, Any] | None:
     snap = session.get(RawSnapshot, sid)
     if snap is None:
         return None
+    if snap.source == PRIVATE_SOURCE:  # private signals never leave the database in a static export
+        return {"id": sid, "source": snap.source, "url": "", "fetched_at": _iso(snap.fetched_at),
+                "sha256": snap.content_sha256, "http_status": snap.http_status, "kind": "Private signal",
+                "title": "Private signal", "link": "", "excerpt": PRIVATE_WITHHELD}
     it = items.get(sid)
     return {
         "id": sid, "source": snap.source, "url": snap.url, "fetched_at": _iso(snap.fetched_at),
@@ -199,6 +207,9 @@ def _timeline(session: Session, company: Company, as_of: date) -> list[dict[str,
 
 def _company(session: Session, s: Score, c: Company, why: dict[str, Any] | None) -> dict[str, Any]:
     pack = evidence_pack(session, c, s.as_of, limit=40)
+    # Private signals are never written into the static export; memo citations to them are
+    # redacted in _snapshot.
+    pack = [it for it in pack if not ((sn := session.get(RawSnapshot, it.id)) and sn.source == PRIVATE_SOURCE)]
     items = {it.id: it for it in pack}
     ex = explain(_scored(session, s), top_k=5)
     memo = session.scalars(select(Memo).where(Memo.company_id == c.id).order_by(Memo.version.desc())).first()

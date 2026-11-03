@@ -32,3 +32,6 @@ web/tsconfig.tsbuildinfo
 
 # OS
 .DS_Store
+
+# Private signals inbox (dashboard form): never commit
+data/inbox/

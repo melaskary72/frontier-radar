@@ -14,6 +14,7 @@ rate_limits:            # minimum seconds between requests, per source
   sbir: 1.0
   usaspending: 0.5
   tranco: 1.1           # Tranco API: 1 query per second
+  web: 2.0              # company homepages: gentle, and robots.txt is obeyed
 
 endpoints:
   github_rest: https://api.github.com
@@ -66,18 +67,46 @@ top_labs:
   - ETH Zurich
   - Caltech
   - Princeton Plasma Physics Laboratory
+  # Large companies and their research accounts (added 2026-11-03: NVIDIA and amazon-science
+  # ranked in the live top 30). Tokens match whole words in a name, login, or profile.
+  - Google
+  - Amazon
+  - amazon-science
+  - Microsoft
+  - facebookresearch
+  - Meta Platforms
+  - Intel
+  - IBM
+  - Samsung
+  - Huawei
+  - Alibaba
+  - Tencent
+  - Baidu
+  - ByteDance
+  - Qualcomm
+  - Siemens
+  - Bosch
+  - Toyota Research Institute
+  - Hugging Face
+  - huggingface
 
 # Academic markers: organizations matching these are research groups, kept in the founder
 # graph but left out of the default company ranking (see radar/entities/resolve.py).
 academic_markers:
   words: [university, universitat, universität, université, universidad, universita, college,
-          institute of technology, school of, academy of sciences, research group, research lab]
+          institute of technology, school of, academy of sciences, research group, research lab,
+          fraunhofer, max planck, inria, cnrs, riken, csiro, national laboratory, research center,
+          research centre, lab at, lab of, group at, laboratory at, laboratory of]
   # Whole tokens only. Place names companies also use (Oxford, Cambridge, Imperial) and
   # ambiguous tokens (bit, eth) are deliberately absent.
   acronyms: [mit, cmu, ucb, ucla, ucsd, uiuc, umich, gatech, ethz, epfl, tum, kaist, postech, snu,
              nus, ntu, hkust, hku, cuhk, sjtu, zju, thu, pku, ustc, hust, nju, sustech, utokyo,
              iisc, iit, kth, ucl, tsinghua, stanford, berkeley, caltech, cornell, purdue]
-  domain_suffixes: [".edu", ".ac.uk", ".ac.jp", ".ac.kr", ".edu.cn", ".ac.cn", ".edu.sg", ".edu.hk", ".edu.au"]
+  domain_suffixes: [".edu", ".ac.uk", ".ac.jp", ".ac.kr", ".edu.cn", ".ac.cn", ".edu.sg", ".edu.hk", ".edu.au",
+                    "ethz.ch", "epfl.ch", "tum.de", "kit.edu", "mpg.de", "fraunhofer.de", "inria.fr", "cnrs.fr",
+                    "riken.jp", "csiro.au", "kaist.ac.kr"]
+  # Regular expressions on the host: any .ac.xx or .edu.xx, and German uni-<city>.de hosts.
+  domain_patterns: ['\.ac\.[a-z]{2}$', '\.edu\.[a-z]{2}$', '(^|\.)uni-[a-z0-9-]+\.[a-z]{2,}$']
 
 # SEC Form D industry groups treated as in-thesis for discovery from the daily index.
 form_d_industry_groups:

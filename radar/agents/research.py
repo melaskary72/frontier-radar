@@ -2,8 +2,9 @@
 
     evidence pack -> Research Agent draft (structured sentences with citations)
     -> uncited facts, citations to unknown ids, and repeated facts are dropped before verification
-    -> analysis sentences carrying numbers that appear in no evidence item are dropped (they
-       would be uncited facts in disguise)
+    -> every number in an analysis sentence must also appear in a published, cited fact: the
+       structure check enforces it on the draft, and after verification any analysis whose
+       numbers lost their backing fact is rewritten without them (Haiku) or dropped
     -> Verifier Agent judges every cited fact against its excerpts only
     -> supported: kept; partial: replaced by the verifier's rewrite when the rewrite passes
        the strict heuristic against the same excerpts, otherwise removed; unsupported: removed
@@ -66,9 +67,42 @@ class ResearchInput:
     evidence: list[EvidenceItem]
 
 
+def numbers(text: str) -> set[str]:
+    return {n.replace(",", "") for n in NUMBER.findall(text)}
+
+
+def unbacked_numbers(sentence: str, fact_texts: list[str]) -> set[str]:
+    backed: set[str] = set()
+    for t in fact_texts:
+        backed |= numbers(t)
+    return numbers(sentence) - backed
+
+
+@dataclass
+class RewriteInput:
+    sentence: str
+    remove: list[str]
+
+
+class RewriteOutput(BaseModel):
+    sentence: str
+
+
+class AnalysisRewriter(Agent[RewriteInput, RewriteOutput]):
+    name = "analysis_rewriter"
+    prompt_file = "analysis_rewriter.v1.md"
+    output_model = RewriteOutput
+
+    def build_user(self, inp: RewriteInput) -> str:
+        return f"Sentence: {inp.sentence}\nNumbers to remove: {', '.join(inp.remove)}"
+
+    def fallback(self, inp: RewriteInput) -> RewriteOutput:
+        return RewriteOutput(sentence="")  # no model: drop rather than keep unbacked numbers
+
+
 class ResearchAgent(Agent[ResearchInput, MemoDraft]):
     name = "research"
-    prompt_file = "research.v3.md"
+    prompt_file = "research.v4.md"
     output_model = MemoDraft
 
     def build_user(self, inp: ResearchInput) -> str:
@@ -86,6 +120,12 @@ class ResearchAgent(Agent[ResearchInput, MemoDraft]):
             problems.append(f"sections must be exactly, in order: {SECTIONS}; got {headings}")
         if not 8 <= len(out.founder_call_questions) <= 10:
             problems.append(f"need 8 to 10 founder_call_questions, got {len(out.founder_call_questions)}")
+        fact_texts = [x.text for sec in out.sections for x in sec.sentences if x.kind == "fact" and x.citations]
+        for sec in out.sections:
+            for x in sec.sentences:
+                if x.kind == "analysis" and (extra := unbacked_numbers(x.text, fact_texts)):
+                    problems.append(f"analysis in {sec.heading} uses numbers {sorted(extra)} that no cited fact "
+                                    f"states; state them as cited facts or remove them: {x.text[:80]}")
         for sec in out.sections:
             need = MIN_ANALYSIS.get(sec.heading, 0)
             got = [x for x in sec.sentences if x.kind == "analysis" and len(x.text.split()) >= MIN_ANALYSIS_WORDS]
@@ -135,7 +175,6 @@ def write_memo(session: Session, company: Company, as_of: date, *, client: objec
     draft = research.run(ResearchInput(company.name, company.sector, as_of, evidence))
 
     dupes = dedupe(draft.output)
-    smuggled = drop_unsupported_numbers(draft.output, " ".join(excerpts.values()))
 
     # Number every cited fact; drop uncited facts and unknown citations before verification.
     to_check: list[ClaimToCheck] = []
@@ -160,7 +199,7 @@ def write_memo(session: Session, company: Company, as_of: date, *, client: objec
     session.flush()
 
     counts = {"supported": 0, "rewritten": 0, "removed_partial": 0, "unsupported": 0, "uncited_dropped": pre_removed,
-              "duplicates_dropped": dupes, "analysis_with_new_numbers_dropped": smuggled}
+              "duplicates_dropped": dupes}
     published: dict[str, str] = {}  # sentence text -> published text ("" when removed)
     claims: list[Claim] = []
     for c in to_check:
@@ -187,6 +226,8 @@ def write_memo(session: Session, company: Company, as_of: date, *, client: objec
                                 verdict=verdict if kept else f"removed:{verdict}", verifier_note=note))
     session.add_all(claims)
 
+    rewritten, dropped = back_analysis_numbers(session, draft.output, published, client)
+    counts["analysis_numbers_rewritten"], counts["analysis_numbers_dropped"] = rewritten, dropped
     memo.body_md = render(company, as_of, draft.output, published, excerpts)
     total = len(to_check)
     memo.claims_json = [{"id": c.claim_id, "text": c.text, "published": published.get(c.text, ""),
@@ -231,20 +272,30 @@ def dedupe(draft: MemoDraft) -> int:
     return dropped
 
 
-def drop_unsupported_numbers(draft: MemoDraft, evidence_text: str) -> int:
-    """Analysis may not carry numbers or dates absent from every evidence item."""
-    src = evidence_text.replace(",", "")
-    dropped = 0
+def back_analysis_numbers(session: Session, draft: MemoDraft, published: dict[str, str],
+                          client: object) -> tuple[int, int]:
+    """After verification: every number in analysis must appear in a published fact. Sentences
+    whose numbers lost their fact are rewritten without them, or dropped if the rewrite still
+    carries an unbacked number or comes back empty."""
+    facts = [t for t in published.values() if t]
+    rewriter: AnalysisRewriter | None = None
+    rewritten = dropped = 0
     for sec in draft.sections:
         kept = []
         for sent in sec.sentences:
-            nums = [n.replace(",", "") for n in NUMBER.findall(sent.text)] if sent.kind == "analysis" else []
-            if any(n not in src for n in nums):
-                dropped += 1
+            extra = unbacked_numbers(sent.text, facts) if sent.kind == "analysis" else set()
+            if not extra:
+                kept.append(sent)
                 continue
-            kept.append(sent)
+            rewriter = rewriter or AnalysisRewriter(session, client=client)
+            new = rewriter.run(RewriteInput(sent.text, sorted(extra))).output.sentence.strip()
+            if new and not unbacked_numbers(new, facts) and len(new.split()) >= 5:
+                kept.append(Sentence(text=new, kind="analysis", citations=[]))
+                rewritten += 1
+            else:
+                dropped += 1
         sec.sentences = kept
-    return dropped
+    return rewritten, dropped
 
 
 def render(company: Company, as_of: date, draft: MemoDraft, published: dict[str, str],

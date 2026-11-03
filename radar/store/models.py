@@ -414,3 +414,38 @@ class CollectionCheckpoint(Base):
     status: Mapped[str] = mapped_column(String(16))  # done | split
     result_json: Mapped[Any] = mapped_column(JSON, nullable=True)
     completed_at: Mapped[datetime] = mapped_column(UTCDateTime())
+
+
+class WebPage(Base):
+    """A company's public homepage, About, Team, or Careers page, fetched only where robots.txt
+    allows it. Text is extracted from the cached raw response (snapshot_id)."""
+
+    __tablename__ = "web_pages"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    domain: Mapped[str] = mapped_column(String(256), index=True)
+    url: Mapped[str] = mapped_column(Text, unique=True)
+    page_kind: Mapped[str] = mapped_column(String(16))  # home | about | team | careers
+    title: Mapped[str | None] = mapped_column(Text)
+    text: Mapped[str] = mapped_column(Text)
+    snapshot_id: Mapped[int | None] = mapped_column(ForeignKey("raw_snapshots.id"))
+    fetched_at: Mapped[datetime] = mapped_column(UTCDateTime())
+
+
+class PrivateSignal(Base):
+    """Relationship data a person enters (warm intro, lab relationship, conference note, hiring
+    note). Never collected automatically. Each row also gets a raw snapshot (source "private")
+    so a memo can cite it exactly like a public source."""
+
+    __tablename__ = "private_signals"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    company_id: Mapped[int | None] = mapped_column(ForeignKey("companies.id"), index=True)
+    company_name: Mapped[str] = mapped_column(String(256))
+    domain: Mapped[str | None] = mapped_column(String(256))
+    kind: Mapped[str] = mapped_column(String(32))  # warm_intro | lab_relationship | conference_note | hiring_note | other
+    person: Mapped[str | None] = mapped_column(String(256))
+    note: Mapped[str] = mapped_column(Text)
+    source: Mapped[str] = mapped_column(String(256))  # who provided it
+    occurred_on: Mapped[date] = mapped_column(Date, index=True)
+    entered_by: Mapped[str] = mapped_column(String(128))
+    created_at: Mapped[datetime] = mapped_column(UTCDateTime())
+    snapshot_id: Mapped[int | None] = mapped_column(ForeignKey("raw_snapshots.id"))

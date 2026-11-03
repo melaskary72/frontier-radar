@@ -158,21 +158,41 @@ def is_academic(name: str, login: str | None, domain: str | None, text: str = ""
 
     cfg = sources()["academic_markers"]
     blob = f"{name} {login or ''} {text}".lower()
-    if any(w in blob for w in cfg["words"]):
+    # Whole words only: "research lab" must not match "educational robots for research
+    # laboratories" (Robonine's profile, a false positive found on 2026-11-03).
+    if any(re.search(rf"(?<![a-z0-9]){re.escape(w)}(?![a-z0-9])", blob) for w in cfg["words"]):
         return True
     toks = set(re.split(r"[^a-z0-9]+", f"{name} {login or ''}".lower()))
     if toks & set(cfg["acronyms"]):
         return True
     host = (domain or "").lower()
-    return any(host.endswith(sfx) for sfx in cfg["domain_suffixes"])
+    if any(host.endswith(sfx) for sfx in cfg["domain_suffixes"]):
+        return True
+    return any(re.search(p, host) for p in cfg.get("domain_patterns", []))
 
 
-def is_incumbent(name: str, login: str | None) -> bool:
+def classify_profile(login: str, profile: dict | None) -> str | None:
+    """'lab' or 'incumbent' from a GitHub user or organization profile (name, description or
+    bio, company, website, location, email domain), else None. University groups usually say
+    who they are here even when the login is an opaque acronym (cvg, prbonn)."""
+    if not profile:
+        return None
+    name = str(profile.get("name") or "")
+    text = " ".join(str(profile.get(k) or "") for k in ("description", "bio", "company", "location"))
+    hosts = [normalize_domain(str(profile.get("blog") or "")), (str(profile.get("email") or "").partition("@")[2] or None)]
+    if is_academic(name, login, None, text) or any(is_academic("", None, h) for h in hosts if h):
+        return "lab"
+    if is_incumbent(name, login, f"{profile.get('company') or ''} {profile.get('description') or ''}"):
+        return "incumbent"
+    return None
+
+
+def is_incumbent(name: str, login: str | None, text: str = "") -> bool:
     """Organizations on the top_labs list are talent sources, not investment targets."""
     from radar.config import sources
 
     labs = sources()["top_labs"]
-    blob = f"{name} {login or ''}"
+    blob = f"{name} {login or ''} {text}"
     return any(re.search(rf"(?<![a-z0-9]){re.escape(lab)}(?![a-z0-9])", blob, re.I) for lab in labs)
 
 

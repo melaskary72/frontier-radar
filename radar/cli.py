@@ -65,6 +65,33 @@ def cmd_score(args: argparse.Namespace) -> None:
         print(describe(s, report))
 
 
+def cmd_picks(args: argparse.Namespace) -> None:
+    from radar.agents.evidence import evidence_pack
+    from radar.agents.sourcing import SourcingAgent, SourcingInput
+    from radar.collectors.github import GitHubCollector
+    from radar.picks import formd_names, select_picks, write_picks
+
+    names, latest = formd_names()
+    if not names:
+        raise SystemExit("no Form D index: run uv run python eval/backtest/formd_fetch.py first")
+    with session_scope() as s:
+        agent = SourcingAgent(s)
+
+        def why_now(company, score):  # type: ignore[no-untyped-def]
+            bd = score.breakdown_json or {}
+            r = agent.run(SourcingInput(company.name, company.sector, score.total, bd.get("groups", {}),
+                                        evidence_pack(s, company, args.as_of), bd.get("top_evidence", [])))
+            return r.output.why_now
+
+        from radar.collectors.web import WebCollector
+
+        picks, skipped = select_picks(s, args.as_of, args.n, gh=GitHubCollector(s), web=WebCollector(s),
+                                      formd=names, why_now=why_now)
+        jp, mp = write_picks(picks, args.as_of, skipped, latest)
+    print(mp.read_text())
+    print(f"wrote {jp} and {mp}")
+
+
 def cmd_memo(args: argparse.Namespace) -> None:
     from radar.agents.research import write_memo
     from radar.store.models import Company
@@ -134,6 +161,39 @@ def cmd_export(args: argparse.Namespace) -> None:
     log.info("exported %s", counts)
 
 
+def cmd_signal(args: argparse.Namespace) -> None:
+    """Private signals: add one, import a CSV, import the dashboard inbox, or list."""
+    import getpass
+    from pathlib import Path
+
+    from sqlalchemy import select
+
+    from radar.config import REPO_ROOT
+    from radar.signals import add_signal, import_csv, import_inbox
+    from radar.store.models import PrivateSignal
+
+    create_all()
+    entered_by = args.entered_by or getpass.getuser()
+    with session_scope() as s:
+        if args.action == "add":
+            sig = add_signal(s, company_name=args.company, kind=args.kind, note=args.note, source=args.source,
+                             occurred_on=args.on, entered_by=entered_by, person=args.person, domain=args.domain)
+            print(f"added signal {sig.id} ({sig.kind}) for {sig.company_name}; matched company "
+                  f"{sig.company_id if sig.company_id else 'none'}; snapshot {sig.snapshot_id}")
+        elif args.action in ("import", "inbox"):
+            if args.action == "import":
+                res = import_csv(s, Path(args.file), entered_by)
+            else:
+                res = import_inbox(s, Path(args.file) if args.file else REPO_ROOT / "data" / "inbox" / "private_signals.jsonl")
+            print(f"added {res.added}, skipped {res.skipped} duplicates, {len(res.errors)} errors")
+            for e in res.errors:
+                print(f"  {e}")
+        else:
+            for sig in s.scalars(select(PrivateSignal).order_by(PrivateSignal.occurred_on.desc())):
+                print(f"{sig.id:>4} {sig.occurred_on} {sig.kind:16} {sig.company_name} "
+                      f"(company {sig.company_id or 'unmatched'}) from {sig.source}")
+
+
 def main(argv: list[str] | None = None) -> None:
     p = argparse.ArgumentParser(prog="radar")
     p.add_argument("-v", "--verbose", action="store_true")
@@ -151,6 +211,10 @@ def main(argv: list[str] | None = None) -> None:
     sc.add_argument("--github-budget", type=int, default=3000)
     sc.add_argument("--no-agents", action="store_true", help="skip LLM judges, why-now lines, and memos")
     sc.set_defaults(func=cmd_score)
+    pk = sub.add_parser("picks", help="today's top frontier companies with no Form D yet, as a dated bet")
+    pk.add_argument("--as-of", type=_date, default=date.today())
+    pk.add_argument("-n", type=int, default=10)
+    pk.set_defaults(func=cmd_picks)
     mm = sub.add_parser("memo", help="write and verify a memo for one company")
     mm.add_argument("company_id", type=int)
     mm.add_argument("--as-of", type=_date, default=date.today())
@@ -165,6 +229,24 @@ def main(argv: list[str] | None = None) -> None:
     ex.add_argument("--agent-db", action="append", help="extra database whose agent runs to include (default data/radar.db)")
     ex.add_argument("--out", help="output directory (default web/public/data)")
     ex.set_defaults(func=cmd_export)
+    sg = sub.add_parser("signal", help="private signals: warm intros, lab relationships, conference and hiring notes")
+    sga = sg.add_subparsers(dest="action", required=True)
+    add = sga.add_parser("add", help="add one private signal")
+    add.add_argument("--company", required=True)
+    add.add_argument("--kind", required=True, choices=["warm_intro", "lab_relationship", "conference_note",
+                                                       "hiring_note", "other"])
+    add.add_argument("--note", required=True)
+    add.add_argument("--source", required=True, help="who provided it")
+    add.add_argument("--on", type=_date, required=True, help="date it happened, YYYY-MM-DD")
+    add.add_argument("--person")
+    add.add_argument("--domain")
+    imp = sga.add_parser("import", help="import a CSV (company_name, domain, kind, person, note, source, occurred_on)")
+    imp.add_argument("file")
+    inbox = sga.add_parser("inbox", help="import the dashboard form inbox (data/inbox/private_signals.jsonl)")
+    inbox.add_argument("--file")
+    sga.add_parser("list", help="list private signals")
+    sg.add_argument("--entered-by", help="defaults to the OS user name")
+    sg.set_defaults(func=cmd_signal, file=None)
     args = p.parse_args(argv)
     logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO,
                         format="%(levelname)s %(name)s: %(message)s")

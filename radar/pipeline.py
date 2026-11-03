@@ -26,6 +26,7 @@ from radar.collectors.edgar import EdgarCollector
 from radar.collectors.github import GitHubCollector
 from radar.collectors.openalex import OpenAlexCollector
 from radar.collectors.tranco import TrancoCollector
+from radar.collectors.web import WebCollector
 from radar.enrich import (
     Budget,
     enrich_company,
@@ -36,7 +37,7 @@ from radar.enrich import (
     thesis_probs,
 )
 from radar.entities.graph import build_graph
-from radar.entities.resolve import is_incumbent, resolve
+from radar.entities.resolve import classify_profile, is_incumbent, resolve
 from radar.scoring.explain import explain
 from radar.scoring.score import Scored, score_companies
 from radar.store.models import Company
@@ -52,6 +53,7 @@ class RunConfig:
     score_top: int = 600          # fully score the top of the prescore list
     github_budget: int = 3000
     other_budget: int = 600
+    web_budget: int = 400       # company homepages, separate so job boards and SEC cannot starve it
     thesis_gate: float = 0.5      # companies below this thesis probability are not ranked
     include_labs: bool = False    # research groups stay in the graph, out of the ranking
     agents: bool = True           # LLM judges, why-now lines, memos (live mode only)
@@ -101,7 +103,7 @@ def run(session: Session, cfg: RunConfig) -> RunReport:
     earliest = cfg.as_of - timedelta(days=cfg.lookback_days) if cfg.lookback_days else None
     companies = [c for c in companies if c.first_seen_at.date() <= cfg.as_of
                  and (earliest is None or c.first_seen_at.date() >= earliest)
-                 and c.kind != "stale" and (cfg.include_labs or c.kind != "lab")
+                 and c.kind not in ("stale", "incumbent") and (cfg.include_labs or c.kind != "lab")
                  and not is_incumbent(c.name, c.github_org)]
     probs = thesis_probs(session, companies, cfg.as_of)
     mark("thesis")
@@ -109,6 +111,8 @@ def run(session: Session, cfg: RunConfig) -> RunReport:
         probs = _judge_uncertain(session, companies, probs, cfg.judge_limit, cfg.as_of)
     in_thesis = [c for c in companies if probs[c.id][0] >= cfg.thesis_gate]
     ranked = prescore(session, in_thesis, cfg.as_of, probs)
+    if not cfg.pit_only:  # live only: profiles are current, so the backtest never reads them
+        ranked = drop_labs_and_incumbents(session, gh, ranked, cfg.enrich_top * 3, gh_budget)
     chosen = [c for c, _ in ranked[: cfg.enrich_top]]
     mark("prescore")
 
@@ -124,6 +128,12 @@ def run(session: Session, cfg: RunConfig) -> RunReport:
     if not cfg.pit_only:
         ats, tranco = ATSCollector(session), TrancoCollector(session)
         enrich_live_only(session, ats, tranco, chosen, other)
+        web, web_budget = WebCollector(session), Budget(cfg.web_budget)
+        for c in chosen:  # homepages for memos: current pages, live only
+            if c.domain and web_budget.left() > 0:
+                before = web.requests_made
+                web.collect_site(c.domain)
+                web_budget.used += web.requests_made - before
     session.flush()
     mark("enrich")
 
@@ -145,6 +155,29 @@ def run(session: Session, cfg: RunConfig) -> RunReport:
     return RunReport(cfg.as_of, len(companies), len(chosen), len(scored), requests,
                      time.monotonic() - t0, scored[:25], [c.id for c in companies], [c.id for c in in_thesis],
                      [c.id for c in chosen], scored)
+
+
+def drop_labs_and_incumbents(session: Session, gh: GitHubCollector, ranked: list[tuple[Company, float]],
+                             limit: int, budget: Budget) -> list[tuple[Company, float]]:
+    """Read the GitHub profile of each top candidate and drop university groups and large
+    companies whose name and login did not give them away (cvg is ETH Zurich's Computer
+    Vision and Geometry Group; prbonn is a University of Bonn lab). Sets company.kind."""
+    kept: list[tuple[Company, float]] = []
+    dropped = 0
+    for i, (c, score) in enumerate(ranked):
+        if i < limit and c.github_org and budget.left() > 0:
+            before = gh.requests_made
+            prof, _ = gh.profile(c.github_org, c.kind)
+            budget.used += gh.requests_made - before
+            tag = classify_profile(c.github_org, prof)
+            if tag:
+                c.kind = tag
+                dropped += 1
+                continue
+        kept.append((c, score))
+    if dropped:
+        log.info("profile check: dropped %d labs and incumbents from the top %d", dropped, limit)
+    return kept
 
 
 def _judge_uncertain(session: Session, companies: list[Company], probs: dict[int, tuple[float, str]],

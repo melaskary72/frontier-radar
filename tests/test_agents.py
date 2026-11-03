@@ -230,23 +230,46 @@ def test_repeated_facts_are_published_once(session: Session) -> None:
     assert pub.summary["duplicates_dropped"] == 1 and pub.summary["checked"] == 1
 
 
-def test_analysis_is_marked_and_cannot_smuggle_numbers(session: Session) -> None:
+def test_analysis_numbers_must_be_backed_by_published_facts(session: Session) -> None:
+    """Every number in analysis must appear in a published, cited fact. When the verifier
+    removes the fact behind a number, the analysis sentence is rewritten without it."""
     c = seed_company(session)
     sid = session.scalars(select(RawSnapshot.id)).one()
     sections: dict[str, list[dict[str, Any]]] = {h: [] for h in SECTIONS}
-    sections["Snapshot"] = [{"text": "Kestrel launched on Hacker News with 120 points.", "kind": "fact", "citations": [sid]}]
+    sections["Snapshot"] = [{"text": "Kestrel launched on Hacker News with 120 points.", "kind": "fact", "citations": [sid]},
+                            {"text": "The launch drew 400 comments.", "kind": "fact", "citations": [sid]}]
+    sections.update(substantive_analysis())
+    sections["Market"] = [
+        {"text": "The 120 points show the launch reached a broad technical audience on the site.", "kind": "analysis", "citations": []},
+        {"text": "The 400 comments suggest strong interest from engineers in a small turbine.", "kind": "analysis", "citations": []},
+    ]
+    draft = {"sections": [{"heading": h, "sentences": v} for h, v in sections.items()],
+             "founder_call_questions": [f"Q{i}?" for i in range(9)]}
+    verdicts = {"verdicts": [{"claim_id": 1, "verdict": "supported", "note": "ok", "rewrite": ""},
+                             {"claim_id": 2, "verdict": "unsupported", "note": "no comment count", "rewrite": ""}]}
+    rewrite = {"sentence": "The discussion suggests strong interest from engineers in a small turbine."}
+    client = FakeClient(response(draft, model="claude-sonnet-5-5"), response(verdicts, model="claude-sonnet-5-5"),
+                        response(rewrite))
+    pub = write_memo(session, c, date(2026, 10, 1), client=client)
+    market = pub.memo.body_md.split("## Market")[1].split("## ")[0]
+    assert "_Analysis:_ The 120 points show" in market
+    assert "400" not in market and "The discussion suggests strong interest" in market
+    assert pub.summary["analysis_numbers_rewritten"] == 1 and pub.summary["analysis_numbers_dropped"] == 0
+    tech = pub.memo.body_md.split("## Technology")[1].split("## ")[0]
+    assert "_Analysis:_ Keeping a small turbine engine" in tech
+
+
+def test_unbacked_analysis_number_fails_the_structure_check() -> None:
+    from radar.agents.research import ResearchAgent, ResearchInput
+
+    sections: dict[str, list[dict[str, Any]]] = {h: [] for h in SECTIONS}
     sections.update(substantive_analysis())
     sections["Market"] = [{"text": "The market for these engines is worth 900 million dollars every year.",
                            "kind": "analysis", "citations": []}]
-    draft = {"sections": [{"heading": h, "sentences": v} for h, v in sections.items()],
-             "founder_call_questions": [f"Q{i}?" for i in range(9)]}
-    verdicts = {"verdicts": [{"claim_id": 1, "verdict": "supported", "note": "ok", "rewrite": ""}]}
-    client = FakeClient(response(draft, model="claude-sonnet-5-5"), response(verdicts, model="claude-sonnet-5-5"))
-    pub = write_memo(session, c, date(2026, 10, 1), client=client)
-    body = pub.memo.body_md
-    assert "900 million" not in body and pub.summary["analysis_with_new_numbers_dropped"] == 1
-    tech = body.split("## Technology")[1].split("## ")[0]
-    assert "_Analysis:_ Keeping a small turbine engine" in tech
+    draft = MemoDraft.model_validate({"sections": [{"heading": h, "sentences": v} for h, v in sections.items()],
+                                      "founder_call_questions": [f"Q{i}?" for i in range(9)]})
+    problems = ResearchAgent.check(None, ResearchInput("x", None, date(2026, 1, 1), []), draft)  # type: ignore[arg-type]
+    assert any("numbers ['900']" in p for p in problems)
 
 
 def test_thin_analysis_fails_the_structure_check() -> None:
