@@ -12,19 +12,19 @@
 
 companies:
   # Backtest primary set
-  - {name: Efference, mode: word, backtest: true}
-  - {name: Westmag, mode: word, backtest: true}
-  - {name: Trajectory, mode: domain, backtest: true, domains: []}
-  - {name: Merge Labs, mode: phrase, backtest: true, domains: []}
-  - {name: Aeon, mode: word, backtest: true}
-  - {name: Enigma, mode: word, backtest: true}
-  - {name: General Galactic, mode: phrase, backtest: true}
-  - {name: Orbital, mode: domain, backtest: true, domains: []}
+  - {name: Efference, mode: word, backtest: true, domains: [efference.ai]}
+  - {name: Westmag, mode: word, backtest: true, domains: [westmag.com]}
+  - {name: Trajectory, mode: domain, backtest: true, domains: [trajectory.ai]}
+  - {name: Merge Labs, mode: phrase, backtest: true, domains: [merge.io]}
+  - {name: Aeon, mode: word, backtest: true, domains: [aeonindustrial.com]}
+  - {name: Enigma, mode: word, backtest: true, domains: [enigma.inc]}
+  - {name: General Galactic, mode: phrase, backtest: true, domains: [gengalactic.com]}
+  - {name: Orbital, mode: domain, backtest: true, domains: [orbital.inc]}
   # Backtest secondary set (applied AI)
-  - {name: Catalyst, mode: domain, backtest: true, domains: []}
-  - {name: Natural, mode: domain, backtest: true, domains: []}
-  - {name: Melius, mode: word, backtest: true}
-  - {name: Pensive, mode: word, backtest: true}
+  - {name: Catalyst, mode: domain, backtest: true, domains: [catalyst.app]}
+  - {name: Natural, mode: domain, backtest: true, domains: [natural.co]}
+  - {name: Melius, mode: word, backtest: true, domains: [melius.com]}
+  - {name: Pensive, mode: word, backtest: true, domains: [pensive.com]}
   # Headline
   - {name: Anduril, mode: word}
   - {name: OpenAI, mode: word}

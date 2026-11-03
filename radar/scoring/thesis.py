@@ -20,6 +20,7 @@ import csv
 import re
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
+from datetime import UTC, date, datetime, time
 from functools import cache
 from pathlib import Path
 from typing import Protocol
@@ -116,12 +117,17 @@ class ThesisClassifier:
         self.embed = embed
         texts, y = load_labels(labels)
         self.clf = make_clf().fit(featurize(texts, embed), np.array(y))
+        self._cache: dict[str, float] = {}  # text -> classifier probability
 
     def predict(self, texts: Sequence[str], judge: LLMJudge | None = None) -> list[tuple[float, str]]:
         """(probability, method) per text; method is 'classifier' or 'llm'."""
         if not texts:
             return []
-        probs = self.clf.predict_proba(featurize(texts, self.embed))[:, 1]
+        todo = [t for t in dict.fromkeys(texts) if t not in self._cache]
+        if todo:
+            for t, p in zip(todo, self.clf.predict_proba(featurize(todo, self.embed))[:, 1], strict=True):
+                self._cache[t] = float(p)
+        probs = [self._cache[t] for t in texts]
         out = []
         for text, p in zip(texts, probs, strict=True):
             if judge is not None and UNCERTAIN[0] < p < UNCERTAIN[1]:
@@ -141,21 +147,32 @@ def thesis_probability(texts: list[str], judge: LLMJudge | None = None,
     return (classifier or default_classifier()).predict(texts, judge)
 
 
-def company_text(session: Session, company: Company) -> str:
-    """Name plus every description the company's evidence carries, in label format."""
+def company_text(session: Session, company: Company, as_of: date | None = None) -> str:
+    """Name plus every description the company's evidence carries, in label format.
+
+    With as_of, only rows timestamped on or before that date are included, so a backtest
+    never classifies a company using text it published later."""
+    end = datetime.combine(as_of, time.max, tzinfo=UTC) if as_of else None
     parts = [company.name]
     links: dict[str, list[int]] = {}
     for e in session.scalars(select(Edge).where(Edge.src_type == "company", Edge.src_id == company.id)):
         links.setdefault(e.dst_type, []).append(e.dst_id)
-    repo_ids = links.get("repos", [])
-    for r in session.scalars(select(Repo).where(Repo.id.in_(repo_ids))):
+    repo_q = select(Repo).where(Repo.id.in_(links.get("repos", [])))
+    hn_q = select(HNPost).where(HNPost.id.in_(links.get("hn_posts", [])))
+    award_q = select(Award).where(Award.id.in_(links.get("awards", [])))
+    if end is not None:
+        repo_q, hn_q = repo_q.where(Repo.created_at <= end), hn_q.where(HNPost.created_at <= end)
+        award_q = award_q.where(Award.award_date <= as_of)
+    repos = list(session.scalars(repo_q))
+    for r in repos:
         parts += [r.full_name.split("/")[-1].replace("-", " "), r.description or "", " ".join(r.topics_json or [])]
-    for p in session.scalars(select(HNPost).where(HNPost.id.in_(links.get("hn_posts", [])))):
-        parts.append(p.title)
-    for a in session.scalars(select(Award).where(Award.id.in_(links.get("awards", [])))):
-        parts.append(a.topic or "")
-    if repo_ids:
-        pids = list(session.scalars(select(Edge.dst_id).where(Edge.relation == "implements",
-                                                              Edge.src_id.in_(repo_ids))))
-        parts += [pap.title for pap in session.scalars(select(Paper).where(Paper.id.in_(pids)))]
+    parts += [p.title for p in session.scalars(hn_q)]
+    parts += [a.topic or "" for a in session.scalars(award_q)]
+    if repos:
+        pids = list(session.scalars(select(Edge.dst_id).where(Edge.relation == "implements", Edge.src_type == "repos",
+                                                              Edge.src_id.in_([r.id for r in repos]))))
+        paper_q = select(Paper).where(Paper.id.in_(pids))
+        if end is not None:
+            paper_q = paper_q.where(Paper.submitted_at <= end)
+        parts += [pap.title for pap in session.scalars(paper_q)]
     return clean_text(" ".join(x for x in parts if x))[:1200]

@@ -1,0 +1,1156 @@
+{
+ "fingerprint": "b5c9630306afa959",
+ "data_end": "2026-11-01",
+ "top": 100,
+ "matching": "exact normalized name or GitHub org vs Form D issuer, distinctive names only",
+ "horizons": {
+  "6m": {
+   "eligible_cutoffs": [
+    "2024-08-14",
+    "2024-10-13",
+    "2024-12-13",
+    "2025-02-11",
+    "2025-05-03",
+    "2025-07-02",
+    "2025-07-25",
+    "2025-09-23",
+    "2025-10-17",
+    "2025-11-29",
+    "2025-12-16",
+    "2026-01-28",
+    "2026-02-27",
+    "2026-03-04",
+    "2026-03-11",
+    "2026-04-28",
+    "2026-05-03"
+   ],
+   "per_cutoff": [
+    {
+     "cutoff": "2024-08-14",
+     "radar": {
+      "n": 100,
+      "hits": 0
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 6213,
+      "hits": 2
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "user": 0.0,
+      "org": 0.0,
+      "launch": 0.0,
+      "awardee": 0.015038
+     }
+    },
+    {
+     "cutoff": "2024-10-13",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 6350,
+      "hits": 3
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.0,
+      "user": 0.0,
+      "launch": 0.0,
+      "awardee": 0.02459
+     }
+    },
+    {
+     "cutoff": "2024-12-13",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 6584,
+      "hits": 4
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 1
+     },
+     "in_thesis_rate_by_kind": {
+      "user": 0.0,
+      "org": 0.0,
+      "launch": 0.076923,
+      "awardee": 0.025862
+     }
+    },
+    {
+     "cutoff": "2025-02-11",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 6899,
+      "hits": 4
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "user": 0.0,
+      "org": 0.0,
+      "launch": 0.0625,
+      "awardee": 0.026316
+     }
+    },
+    {
+     "cutoff": "2025-05-03",
+     "radar": {
+      "n": 100,
+      "hits": 0
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 7518,
+      "hits": 1
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.0,
+      "user": 0.0,
+      "launch": 0.058824,
+      "awardee": 0.0
+     }
+    },
+    {
+     "cutoff": "2025-07-02",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 8306,
+      "hits": 2
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.0,
+      "user": 0.0,
+      "launch": 0.0,
+      "awardee": 0.017391
+     }
+    },
+    {
+     "cutoff": "2025-07-25",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 8629,
+      "hits": 2
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.0,
+      "user": 0.0,
+      "launch": 0.0,
+      "awardee": 0.018868
+     }
+    },
+    {
+     "cutoff": "2025-09-23",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 9774,
+      "hits": 2
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.0,
+      "user": 0.0,
+      "launch": 0.0,
+      "awardee": 0.019608
+     }
+    },
+    {
+     "cutoff": "2025-10-17",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 10219,
+      "hits": 2
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "user": 0.0,
+      "org": 0.0,
+      "launch": 0.0,
+      "awardee": 0.019417
+     }
+    },
+    {
+     "cutoff": "2025-11-29",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 11423,
+      "hits": 1
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "user": 0.0,
+      "org": 0.0,
+      "launch": 0.0,
+      "awardee": 0.009524
+     }
+    },
+    {
+     "cutoff": "2025-12-16",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 12502,
+      "hits": 1
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "user": 0.0,
+      "org": 0.0,
+      "launch": 0.0,
+      "awardee": 0.009346
+     }
+    },
+    {
+     "cutoff": "2026-01-28",
+     "radar": {
+      "n": 100,
+      "hits": 0
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 14268,
+      "hits": 1
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "user": 0.0,
+      "org": 0.0,
+      "launch": 0.043478,
+      "awardee": 0.0
+     }
+    },
+    {
+     "cutoff": "2026-02-27",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 15829,
+      "hits": 3
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.000909,
+      "user": 0.0,
+      "launch": 0.034483,
+      "awardee": 0.010309
+     }
+    },
+    {
+     "cutoff": "2026-03-04",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 16119,
+      "hits": 3
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.000895,
+      "user": 0.0,
+      "launch": 0.03125,
+      "awardee": 0.010638
+     }
+    },
+    {
+     "cutoff": "2026-03-11",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 16556,
+      "hits": 3
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.000883,
+      "user": 0.0,
+      "launch": 0.03125,
+      "awardee": 0.010638
+     }
+    },
+    {
+     "cutoff": "2026-04-28",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 19784,
+      "hits": 4
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "user": 0.0,
+      "org": 0.000791,
+      "launch": 0.030303,
+      "awardee": 0.020202
+     }
+    },
+    {
+     "cutoff": "2026-05-03",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 20120,
+      "hits": 4
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.000777,
+      "user": 0.0,
+      "launch": 0.030303,
+      "awardee": 0.020408
+     }
+    }
+   ],
+   "type_standardized": {
+    "radar": {
+     "observed_hits": 14,
+     "expected_hits_at_in_thesis_rate_of_same_kind": 8.466,
+     "companies_with_a_hit": 3,
+     "companies": 353,
+     "lift": 1.654,
+     "ci95": [
+      0.0,
+      3.846
+     ],
+     "p_lift_le_1": 0.2702
+    },
+    "stars": {
+     "observed_hits": 0,
+     "expected_hits_at_in_thesis_rate_of_same_kind": 0.225,
+     "companies_with_a_hit": 0,
+     "companies": 316,
+     "lift": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "p_lift_le_1": 1.0
+    }
+   },
+   "all": {
+    "radar": {
+     "observations": 1700,
+     "companies": 353,
+     "hits": 14,
+     "rate": 0.00824,
+     "rate_ci95_wilson": [
+      0.0049,
+      0.0138
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0,
+      0.0196
+     ]
+    },
+    "stars": {
+     "observations": 1700,
+     "companies": 316,
+     "hits": 0,
+     "rate": 0.0,
+     "rate_ci95_wilson": [
+      0.0,
+      0.0023
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0,
+      0.0
+     ]
+    },
+    "random": {
+     "observations": 197093,
+     "companies": 32515,
+     "hits": 42,
+     "rate": 0.00021,
+     "rate_ci95_wilson": [
+      0.0002,
+      0.0003
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0001,
+      0.00035
+     ]
+    },
+    "lift_radar_vs_random": {
+     "lift": 39.238,
+     "ci95": [
+      0.0,
+      126.447
+     ],
+     "bootstrap_draws_used": 5000,
+     "p_lift_le_1": 0.051
+    },
+    "lift_radar_vs_stars": {
+     "lift": null,
+     "ci95": null,
+     "bootstrap_draws_used": 0,
+     "p_lift_le_1": null
+    },
+    "lift_stars_vs_random": {
+     "lift": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "bootstrap_draws_used": 5000,
+     "p_lift_le_1": 1.0
+    }
+   },
+   "no_prior_form_d": {
+    "radar": {
+     "observations": 1667,
+     "companies": 347,
+     "hits": 3,
+     "rate": 0.0018,
+     "rate_ci95_wilson": [
+      0.0006,
+      0.0053
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0,
+      0.00573
+     ]
+    },
+    "stars": {
+     "observations": 1700,
+     "companies": 316,
+     "hits": 0,
+     "rate": 0.0,
+     "rate_ci95_wilson": [
+      0.0,
+      0.0023
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0,
+      0.0
+     ]
+    },
+    "random": {
+     "observations": 197018,
+     "companies": 32504,
+     "hits": 21,
+     "rate": 0.00011,
+     "rate_ci95_wilson": [
+      0.0001,
+      0.0002
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      4e-05,
+      0.0002
+     ]
+    },
+    "lift_radar_vs_random": {
+     "lift": 16.364,
+     "ci95": [
+      0.0,
+      90.178
+     ],
+     "bootstrap_draws_used": 5000,
+     "p_lift_le_1": 0.3682
+    },
+    "lift_radar_vs_stars": {
+     "lift": null,
+     "ci95": null,
+     "bootstrap_draws_used": 0,
+     "p_lift_le_1": null
+    },
+    "lift_stars_vs_random": {
+     "lift": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "bootstrap_draws_used": 5000,
+     "p_lift_le_1": 1.0
+    }
+   },
+   "matchable_only": {
+    "radar": {
+     "observations": 1508,
+     "companies": 315,
+     "hits": 14,
+     "rate": 0.00928,
+     "rate_ci95_wilson": [
+      0.0055,
+      0.0155
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0,
+      0.02128
+     ]
+    },
+    "stars": {
+     "observations": 1432,
+     "companies": 259,
+     "hits": 0,
+     "rate": 0.0,
+     "rate_ci95_wilson": [
+      0.0,
+      0.0027
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0,
+      0.0
+     ]
+    },
+    "random": {
+     "observations": 169018,
+     "companies": 27894,
+     "hits": 42,
+     "rate": 0.00025,
+     "rate_ci95_wilson": [
+      0.0002,
+      0.0003
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.00011,
+      0.00041
+     ]
+    },
+    "lift_radar_vs_random": {
+     "lift": 37.12,
+     "ci95": [
+      0.0,
+      117.345
+     ],
+     "bootstrap_draws_used": 5000,
+     "p_lift_le_1": 0.0478
+    },
+    "lift_radar_vs_stars": {
+     "lift": null,
+     "ci95": null,
+     "bootstrap_draws_used": 0,
+     "p_lift_le_1": null
+    },
+    "lift_stars_vs_random": {
+     "lift": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "bootstrap_draws_used": 5000,
+     "p_lift_le_1": 1.0
+    }
+   }
+  },
+  "12m": {
+   "eligible_cutoffs": [
+    "2024-08-14",
+    "2024-10-13",
+    "2024-12-13",
+    "2025-02-11",
+    "2025-05-03",
+    "2025-07-02",
+    "2025-07-25",
+    "2025-09-23",
+    "2025-10-17"
+   ],
+   "per_cutoff": [
+    {
+     "cutoff": "2024-08-14",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 6213,
+      "hits": 5
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "user": 0.0,
+      "org": 0.0,
+      "launch": 0.0,
+      "awardee": 0.037594
+     }
+    },
+    {
+     "cutoff": "2024-10-13",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 6350,
+      "hits": 4
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.0,
+      "user": 0.0,
+      "launch": 0.0,
+      "awardee": 0.032787
+     }
+    },
+    {
+     "cutoff": "2024-12-13",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 6584,
+      "hits": 5
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "user": 0.0,
+      "org": 0.0,
+      "launch": 0.076923,
+      "awardee": 0.034483
+     }
+    },
+    {
+     "cutoff": "2025-02-11",
+     "radar": {
+      "n": 100,
+      "hits": 2
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 6899,
+      "hits": 6
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "user": 0.0,
+      "org": 0.0,
+      "launch": 0.0625,
+      "awardee": 0.04386
+     }
+    },
+    {
+     "cutoff": "2025-05-03",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 7518,
+      "hits": 3
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.0,
+      "user": 0.0,
+      "launch": 0.058824,
+      "awardee": 0.016807
+     }
+    },
+    {
+     "cutoff": "2025-07-02",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 8306,
+      "hits": 2
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.0,
+      "user": 0.0,
+      "launch": 0.0,
+      "awardee": 0.017391
+     }
+    },
+    {
+     "cutoff": "2025-07-25",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 8629,
+      "hits": 2
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.0,
+      "user": 0.0,
+      "launch": 0.0,
+      "awardee": 0.018868
+     }
+    },
+    {
+     "cutoff": "2025-09-23",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 9774,
+      "hits": 3
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "org": 0.0,
+      "user": 0.0,
+      "launch": 0.043478,
+      "awardee": 0.019608
+     }
+    },
+    {
+     "cutoff": "2025-10-17",
+     "radar": {
+      "n": 100,
+      "hits": 1
+     },
+     "stars": {
+      "n": 100,
+      "hits": 0
+     },
+     "random": {
+      "n": 10219,
+      "hits": 4
+     },
+     "random_draw_100": {
+      "n": 100,
+      "hits": 0
+     },
+     "in_thesis_rate_by_kind": {
+      "user": 0.0,
+      "org": 0.0,
+      "launch": 0.041667,
+      "awardee": 0.029126
+     }
+    }
+   ],
+   "type_standardized": {
+    "radar": {
+     "observed_hits": 10,
+     "expected_hits_at_in_thesis_rate_of_same_kind": 8.86,
+     "companies_with_a_hit": 2,
+     "companies": 270,
+     "lift": 1.129,
+     "ci95": [
+      0.0,
+      2.965
+     ],
+     "p_lift_le_1": 0.4624
+    },
+    "stars": {
+     "observed_hits": 0,
+     "expected_hits_at_in_thesis_rate_of_same_kind": 0.0,
+     "companies_with_a_hit": 0,
+     "companies": 256,
+     "lift": null,
+     "ci95": [
+      NaN,
+      NaN
+     ],
+     "p_lift_le_1": 0.0
+    }
+   },
+   "all": {
+    "radar": {
+     "observations": 900,
+     "companies": 270,
+     "hits": 10,
+     "rate": 0.01111,
+     "rate_ci95_wilson": [
+      0.006,
+      0.0203
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0,
+      0.02951
+     ]
+    },
+    "stars": {
+     "observations": 900,
+     "companies": 256,
+     "hits": 0,
+     "rate": 0.0,
+     "rate_ci95_wilson": [
+      0.0,
+      0.0043
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0,
+      0.0
+     ]
+    },
+    "random": {
+     "observations": 70492,
+     "companies": 17913,
+     "hits": 34,
+     "rate": 0.00048,
+     "rate_ci95_wilson": [
+      0.0003,
+      0.0007
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.00019,
+      0.00083
+     ]
+    },
+    "lift_radar_vs_random": {
+     "lift": 23.146,
+     "ci95": [
+      0.0,
+      92.032
+     ],
+     "bootstrap_draws_used": 5000,
+     "p_lift_le_1": 0.1342
+    },
+    "lift_radar_vs_stars": {
+     "lift": null,
+     "ci95": null,
+     "bootstrap_draws_used": 0,
+     "p_lift_le_1": null
+    },
+    "lift_stars_vs_random": {
+     "lift": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "bootstrap_draws_used": 5000,
+     "p_lift_le_1": 1.0
+    }
+   },
+   "no_prior_form_d": {
+    "radar": {
+     "observations": 881,
+     "companies": 266,
+     "hits": 4,
+     "rate": 0.00454,
+     "rate_ci95_wilson": [
+      0.0018,
+      0.0116
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0,
+      0.01478
+     ]
+    },
+    "stars": {
+     "observations": 900,
+     "companies": 256,
+     "hits": 0,
+     "rate": 0.0,
+     "rate_ci95_wilson": [
+      0.0,
+      0.0043
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0,
+      0.0
+     ]
+    },
+    "random": {
+     "observations": 70456,
+     "companies": 17905,
+     "hits": 20,
+     "rate": 0.00028,
+     "rate_ci95_wilson": [
+      0.0002,
+      0.0004
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0001,
+      0.00054
+     ]
+    },
+    "lift_radar_vs_random": {
+     "lift": 16.214,
+     "ci95": [
+      0.0,
+      85.608
+     ],
+     "bootstrap_draws_used": 4998,
+     "p_lift_le_1": 0.3479
+    },
+    "lift_radar_vs_stars": {
+     "lift": null,
+     "ci95": null,
+     "bootstrap_draws_used": 0,
+     "p_lift_le_1": null
+    },
+    "lift_stars_vs_random": {
+     "lift": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "bootstrap_draws_used": 4998,
+     "p_lift_le_1": 1.0
+    }
+   },
+   "matchable_only": {
+    "radar": {
+     "observations": 809,
+     "companies": 242,
+     "hits": 10,
+     "rate": 0.01236,
+     "rate_ci95_wilson": [
+      0.0067,
+      0.0226
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0,
+      0.03242
+     ]
+    },
+    "stars": {
+     "observations": 766,
+     "companies": 212,
+     "hits": 0,
+     "rate": 0.0,
+     "rate_ci95_wilson": [
+      0.0,
+      0.005
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.0,
+      0.0
+     ]
+    },
+    "random": {
+     "observations": 59553,
+     "companies": 15131,
+     "hits": 34,
+     "rate": 0.00057,
+     "rate_ci95_wilson": [
+      0.0004,
+      0.0008
+     ],
+     "rate_ci95_cluster_bootstrap": [
+      0.00023,
+      0.00098
+     ]
+    },
+    "lift_radar_vs_random": {
+     "lift": 21.684,
+     "ci95": [
+      0.0,
+      83.181
+     ],
+     "bootstrap_draws_used": 4999,
+     "p_lift_le_1": 0.1334
+    },
+    "lift_radar_vs_stars": {
+     "lift": null,
+     "ci95": null,
+     "bootstrap_draws_used": 0,
+     "p_lift_le_1": null
+    },
+    "lift_stars_vs_random": {
+     "lift": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "bootstrap_draws_used": 4999,
+     "p_lift_le_1": 1.0
+    }
+   }
+  }
+ }
+}

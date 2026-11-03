@@ -19,11 +19,13 @@ from radar.store.models import Paper
 ID_RE = re.compile(r"arxiv\.org/abs/([^v]+)(v\d+)?$")
 
 
-def build_query(category: str, keyword: str | None, since: date, until: date) -> str:
+def build_query(category: str, keyword: str | None, since: date, until: date, code_only: bool = False) -> str:
     window = f"submittedDate:[{since:%Y%m%d}0000 TO {until:%Y%m%d}2359]"
     q = f"cat:{category} AND {window}"
     if keyword:
         q += f' AND abs:"{keyword}"'
+    if code_only:
+        q += " AND abs:github"
     return q
 
 
@@ -81,6 +83,24 @@ class ArxivCollector(HttpCollector):
                     record_discovery(self.session, "papers", paper.id, sector, q)
                     papers[e["arxiv_id"]] = paper
         return list(papers.values())
+
+    def discover_with_code(self, sector: str, since: date, until: date) -> int:
+        """Papers in the sector's categories whose abstract links GitHub code, exhaustively.
+        Backtest use: these papers are how research code enters the universe."""
+        s = thesis().sectors[sector]
+        n = 0
+        for cat in s.arxiv_categories:
+            q = build_query(cat, None, since, until, code_only=True)
+            for e, snap in self.search(q, max_results=200, max_pages=10):
+                text = f"{e['title']} {e['abstract']}"
+                if cat in s.arxiv_filtered and not text_has_any(text, s.keywords + s.title_terms):
+                    continue
+                if text_has_any(text, s.negative_keywords):
+                    continue
+                paper = self.upsert_paper(e, snap)
+                record_discovery(self.session, "papers", paper.id, sector, f"arxiv:{cat} code")
+                n += 1
+        return n
 
     def upsert_paper(self, e: dict[str, Any], snapshot_id: int) -> Paper:
         submitted = parse_dt(e["submitted_at"])

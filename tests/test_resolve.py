@@ -117,3 +117,57 @@ def test_resolve_is_idempotent(session: Session) -> None:
     ids = sorted(c.id for c in session.scalars(select(Company)))
     resolve(session)
     assert sorted(c.id for c in session.scalars(select(Company))) == ids
+
+
+def test_sector_lookup_handles_more_ids_than_sqlite_variables(session: Session) -> None:
+    """The backtest resolves 200K+ repositories; one IN clause would exceed SQLite's limit."""
+    from radar.entities.resolve import _sectors
+
+    now = datetime.now(UTC)
+    session.add_all([Discovery(table_name="repos", row_id=i, sector="robotics", query="q", discovered_at=now)
+                     for i in (1, 40_000)])
+    session.flush()
+    out = _sectors(session, "repos", range(1, 40_001))
+    assert out == {1: ["robotics"], 40_000: ["robotics"]}
+
+
+def test_fuzzy_merge_needs_a_distinctive_core() -> None:
+    """Names made only of suffixes and field vocabulary must not fuzzy-merge (entity gate, Nov 2)."""
+    from radar.entities.resolve import Mention, compare, has_distinctive_core
+
+    for generic in ("Command-and-Control", "Additive Manufacturing Llc", "naval-group", "Open-source Robotics"):
+        assert not has_distinctive_core(generic), generic
+    assert has_distinctive_core("Bluehalo Labs, Llc")
+
+    gh = Mention(key="gh:command-and-control", source="github", name="Command-and-Control", kind="user",
+                 github_login="command-and-control")
+    award = Mention(key="award:x", source="award", name="Command And Control Technologies Corporation",
+                    kind="awardee")
+    d = compare(gh, award)
+    assert d is not None and d.verdict == "ambiguous"
+    a = Mention(key="award:a", source="award", name="Bluehalo Llc", kind="awardee")
+    b = Mention(key="award:b", source="award", name="Bluehalo Labs, Llc", kind="awardee")
+    d = compare(a, b)
+    assert d is not None and d.verdict == "merge"
+
+
+def test_split_cluster_does_not_collide_on_github_org(session: Session) -> None:
+    """A cluster keyed by a domain splits on a later run; the GitHub org moves to a new row."""
+    from radar.entities.resolve import resolve
+
+    now = datetime(2026, 1, 1, tzinfo=UTC)
+    session.add(Repo(full_name="acmebot/arm", owner="acmebot", owner_type="Organization", created_at=now,
+                     homepage="https://acmebot.ai", stars=1))
+    session.add(HNPost(object_id="1", kind="show_hn", title="Show HN: Acmebot - robot arms",
+                       url="https://acmebot.ai", created_at=now))
+    session.flush()
+    resolve(session)
+    c = session.scalars(select(Company).where(Company.github_org == "acmebot")).one()
+    assert c.domain == "acmebot.ai"
+    # The repository drops its homepage: the GitHub mention and the launch post now resolve apart.
+    session.scalars(select(Repo)).one().homepage = None
+    session.flush()
+    resolve(session)
+    rows = list(session.scalars(select(Company).where(Company.kind != "stale")))
+    assert {r.github_org for r in rows} >= {"acmebot"}
+    assert len({r.github_org for r in rows if r.github_org}) == len([r for r in rows if r.github_org])

@@ -50,13 +50,13 @@ class HNCollector(HttpCollector):
                 break
         return out
 
-    def discover(self, sector: str, since: date, until: date | None = None) -> list[HNPost]:
+    def discover(self, sector: str, since: date, until: date | None = None, max_pages: int = 2) -> list[HNPost]:
         posts: dict[str, HNPost] = {}
         s = thesis().sectors[sector]
         for term in s.title_terms or s.keywords:
             # Algolia matches loosely; keep titles with the term as a whole word (or plural).
             pattern = title_pattern(term)
-            for h, snap in self.search(term, since, until):
+            for h, snap in self.search(term, since, until, max_pages=max_pages):
                 title = h.get("title") or ""
                 kind = classify(title)
                 if kind is None or not pattern.search(title) or text_has_any(title, s.negative_keywords):

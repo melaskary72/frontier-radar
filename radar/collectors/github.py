@@ -18,7 +18,7 @@ import logging
 import os
 import subprocess
 import time
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Any
 
 import httpx
@@ -26,6 +26,7 @@ import httpx
 from radar.collectors.base import HttpCollector, RateLimiter
 from radar.collectors.common import parse_dt, record_discovery, text_has_any, upsert
 from radar.config import sources, thesis
+from radar.store.checkpoints import Checkpoints
 from radar.store.models import Repo, RepoEvent, RepoTree
 
 log = logging.getLogger(__name__)
@@ -90,8 +91,9 @@ def github_token() -> str | None:
 class GitHubCollector(HttpCollector):
     source = "github"
 
-    def __init__(self, *args: Any, token: str | None = None, **kwargs: Any):
+    def __init__(self, *args: Any, token: str | None = None, wait_on_budget: bool = False, **kwargs: Any):
         super().__init__(*args, **kwargs)
+        self.wait_on_budget = wait_on_budget  # long batch jobs sleep through limits instead of stopping
         self.token = token if token is not None else (None if self.offline else github_token())
         cfg = sources()
         self.api = cfg["endpoints"]["github_rest"]
@@ -115,7 +117,12 @@ class GitHubCollector(HttpCollector):
             self._window_start, self._window_count = time.monotonic(), 0
         self._window_count += 1
         if self._window_count >= self.hourly_budget:
-            raise BudgetExhausted(f"self-imposed budget of {self.hourly_budget}/hour reached")
+            if not self.wait_on_budget:
+                raise BudgetExhausted(f"self-imposed budget of {self.hourly_budget}/hour reached")
+            pause = max(0.0, 3600 - (time.monotonic() - self._window_start))
+            log.warning("hourly budget reached; sleeping %.0fs", pause)
+            time.sleep(pause)
+            self._window_start, self._window_count = time.monotonic(), 0
         remaining = resp.headers.get("x-ratelimit-remaining")
         if remaining is None or not remaining.isdigit():
             return
@@ -126,7 +133,12 @@ class GitHubCollector(HttpCollector):
                 reset = int(resp.headers.get("x-ratelimit-reset", "0"))
                 time.sleep(max(0, min(61, reset - time.time() + 1)))
         elif int(remaining) < 50:
-            raise BudgetExhausted(f"GitHub {resource} rate limit nearly exhausted ({remaining} left)")
+            if not self.wait_on_budget:
+                raise BudgetExhausted(f"GitHub {resource} rate limit nearly exhausted ({remaining} left)")
+            reset = int(resp.headers.get("x-ratelimit-reset", "0"))
+            pause = max(1.0, min(3700, reset - time.time() + 5))
+            log.warning("GitHub %s limit low; sleeping %.0fs", resource, pause)
+            time.sleep(pause)
 
     # ------------------------------------------------------------------ discovery
 
@@ -151,13 +163,84 @@ class GitHubCollector(HttpCollector):
                 break
         return out
 
-    def queries_for_sector(self, sector: str, since: date, until: date | None = None) -> list[str]:
+    @staticmethod
+    def base_queries(sector: str) -> list[str]:
         """Thesis-only queries. Never contains a company name (see tests/test_leakage.py)."""
         s = thesis().sectors[sector]
+        return [f"topic:{t}" for t in s.github_topics] + [f'"{kw}" in:name,description' for kw in s.keywords]
+
+    def queries_for_sector(self, sector: str, since: date, until: date | None = None) -> list[str]:
         window = f"created:{since.isoformat()}..{until.isoformat()}" if until else f"created:>={since.isoformat()}"
-        qs = [f"topic:{t} {window}" for t in s.github_topics]
-        qs += [f'"{kw}" in:name,description {window}' for kw in s.keywords]
-        return qs
+        return [f"{q} {window}" for q in self.base_queries(sector)]
+
+    def discover_exhaustive(self, sector: str, since: date, until: date,
+                            checkpoints: Checkpoints | None = None) -> tuple[int, list[str]]:
+        """Every repository the thesis queries return for repos created in [since, until].
+
+        Windows with more than 1,000 results (GitHub's search cap) are split in half until
+        they fit, then paged to the end, so membership never depends on a popularity sort.
+        Returns (repos stored, windows still truncated at 7 days or less).
+
+        With `checkpoints`, every finished window (and every split decision) is committed with
+        its rows, and windows already recorded are skipped, so an interrupted run resumes at
+        the window where it stopped.
+        """
+        negatives = thesis().sectors[sector].negative_keywords
+        stored, truncated = 0, []
+
+        def window(base: str, start: date, end: date) -> None:
+            nonlocal stored
+            q = f"{base} created:{start.isoformat()}..{end.isoformat()}"
+            key = f"github/{sector}/{q}"
+            cp = checkpoints.get(key) if checkpoints else None
+            if cp is not None:
+                if cp.status == "split":
+                    mid = start + (end - start) // 2
+                    window(base, start, mid)
+                    window(base, mid + timedelta(days=1), end)
+                else:
+                    stored += int((cp.result_json or {}).get("stored", 0))
+                    if (cp.result_json or {}).get("truncated"):
+                        truncated.append(q)
+                return
+            if not self.offline:
+                self.search_limiter.wait()
+            f = self.fetch(f"{self.api}/search/repositories", params={"q": q, "per_page": 100, "page": 1},
+                           ok_statuses=(200, 422))
+            total = int((f.payload or {}).get("total_count", 0)) if f.status == 200 else 0
+            if total > 1000 and (end - start).days > 6:
+                if checkpoints:
+                    checkpoints.mark(key, "split", {"total_count": total})
+                mid = start + (end - start) // 2
+                window(base, start, mid)
+                window(base, mid + timedelta(days=1), end)
+                return
+            if total > 1000:
+                truncated.append(q)
+            before = stored
+            pages = [(f.payload or {}).get("items", [])]
+            for page in range(2, min(10, -(-total // 100)) + 1):
+                if not self.offline:
+                    self.search_limiter.wait()
+                fp = self.fetch(f"{self.api}/search/repositories", params={"q": q, "per_page": 100, "page": page},
+                                ok_statuses=(200, 422))
+                pages.append((fp.payload or {}).get("items", []) if fp.status == 200 else [])
+            for items in pages:
+                for item in items:
+                    text = f"{item.get('full_name', '')} {item.get('description') or ''}"
+                    if item.get("fork") or text_has_any(text, negatives):
+                        continue
+                    repo = self.upsert_repo(item, f.snapshot_id)
+                    record_discovery(self.session, "repos", repo.id, sector, base)
+                    stored += 1
+            if checkpoints:
+                checkpoints.mark(key, "done", {"stored": stored - before, "total_count": total,
+                                               "truncated": total > 1000})
+
+        for base in self.base_queries(sector):
+            window(base, since, until)
+            self.session.flush()
+        return stored, truncated
 
     def discover(
         self, sector: str, since: date, until: date | None = None, max_pages: int = 1

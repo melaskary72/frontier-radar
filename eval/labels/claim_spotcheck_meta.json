@@ -1,0 +1,12 @@
+{
+ "memos": 4,
+ "claims_checked": 75,
+ "first_draft_supported": 66,
+ "first_draft_supported_rate": 0.88,
+ "rewritten": 7,
+ "removed": 2,
+ "published_pool": 73,
+ "sampled": 40,
+ "seed": 40,
+ "as_of": "2026-11-01"
+}

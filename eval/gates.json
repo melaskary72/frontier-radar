@@ -1,0 +1,70 @@
+{
+ "generated": "2026-11-02",
+ "gates": {
+  "claim_citation_precision": {
+   "value": null,
+   "target": ">= 0.95 supported (published claims, human spot-check of 40)",
+   "status": "pending",
+   "method": "verifier checks every claim; Mohamed adjudicates 40 random published claims",
+   "memos": 4,
+   "claims_checked": 75,
+   "first_draft_supported_rate": 0.88,
+   "rewritten": 7,
+   "removed": 2,
+   "spotcheck_status": "awaiting Mohamed"
+  },
+  "thesis_classifier_accuracy": {
+   "value": 0.9,
+   "target": ">= 0.85",
+   "status": "pass",
+   "method": "shipped path: CV classifier, Haiku judge replaces probabilities in the uncertain band",
+   "classifier_cv_accuracy_by_seed": [
+    0.6752136752136753,
+    0.6923076923076923,
+    0.6752136752136753
+   ],
+   "judge_alone_accuracy": 0.906,
+   "combined_accuracy_by_seed": [
+    0.8888888888888888,
+    0.9145299145299145,
+    0.8974358974358975
+   ],
+   "uncertain_band": [
+    0.3,
+    0.7
+   ]
+  },
+  "entity_resolution_precision": {
+   "value": 0.984,
+   "target": ">= 0.90 precision",
+   "status": "pass",
+   "method": "100 labeled pairs; precision over the resolver's 63 merges",
+   "recall": 0.939,
+   "n_pairs": 100
+  },
+  "leakage_test": {
+   "value": "pass",
+   "target": "pass",
+   "status": "pass",
+   "method": "tests/test_leakage.py (also in CI)"
+  },
+  "total_llm_cost": {
+   "value": 0.3094,
+   "target": "< $15.00",
+   "status": "pass",
+   "method": "append-only ledger data/cost_ledger.jsonl"
+  },
+  "weekly_pipeline_minutes": {
+   "value": null,
+   "target": "< 20",
+   "status": "pending",
+   "method": "GitHub Actions log (Phase 5)"
+  },
+  "offline_demo": {
+   "value": null,
+   "target": "make demo on a fresh clone, no keys",
+   "status": "pending",
+   "method": "CI job (Phase 5)"
+  }
+ }
+}

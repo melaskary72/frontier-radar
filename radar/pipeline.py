@@ -12,7 +12,7 @@ from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timedelta
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -58,6 +58,8 @@ class RunConfig:
     judge_limit: int = 300        # thesis-judge calls per run (uncertain band only)
     why_now_top: int = 25
     memo_top: int = 5
+    lookback_days: int | None = None  # backtest: only entities first seen within this window
+    wait_on_budget: bool = False      # long batch runs sleep through GitHub limits
 
 
 @dataclass
@@ -69,31 +71,46 @@ class RunReport:
     requests: dict[str, int] = field(default_factory=dict)
     seconds: float = 0.0
     top: list[Scored] = field(default_factory=list)
+    universe_ids: list[int] = field(default_factory=list)   # eligible before the thesis gate
+    in_thesis_ids: list[int] = field(default_factory=list)
+    enriched_ids: list[int] = field(default_factory=list)
+    scored_all: list[Scored] = field(default_factory=list)
 
 
 def run(session: Session, cfg: RunConfig) -> RunReport:
     t0 = time.monotonic()
+    marks: dict[str, float] = {}
+
+    def mark(stage: str) -> None:
+        marks[stage] = round(time.monotonic() - t0 - sum(marks.values()), 1)
+
     use_agents = cfg.agents and not cfg.pit_only
     resolve(session, judge=entity_judge(session) if use_agents else None)
     build_graph(session)
+    mark("resolve")
 
-    gh = GitHubCollector(session)
+    gh = GitHubCollector(session, wait_on_budget=cfg.wait_on_budget)
     gh_budget = Budget(cfg.github_budget)
     added = materialize_paper_repos(session, gh, gh_budget)
     if added:
         resolve(session)
         build_graph(session)
+    mark("paper_repos")
 
     companies = list(session.scalars(select(Company).where(Company.first_seen_at.is_not(None))))
+    earliest = cfg.as_of - timedelta(days=cfg.lookback_days) if cfg.lookback_days else None
     companies = [c for c in companies if c.first_seen_at.date() <= cfg.as_of
+                 and (earliest is None or c.first_seen_at.date() >= earliest)
                  and c.kind != "stale" and (cfg.include_labs or c.kind != "lab")
                  and not is_incumbent(c.name, c.github_org)]
-    probs = thesis_probs(session, companies)
+    probs = thesis_probs(session, companies, cfg.as_of)
+    mark("thesis")
     if use_agents:
-        probs = _judge_uncertain(session, companies, probs, cfg.judge_limit)
+        probs = _judge_uncertain(session, companies, probs, cfg.judge_limit, cfg.as_of)
     in_thesis = [c for c in companies if probs[c.id][0] >= cfg.thesis_gate]
     ranked = prescore(session, in_thesis, cfg.as_of, probs)
     chosen = [c for c, _ in ranked[: cfg.enrich_top]]
+    mark("prescore")
 
     oa = OpenAlexCollector(session)
     other = Budget(cfg.other_budget)
@@ -108,9 +125,11 @@ def run(session: Session, cfg: RunConfig) -> RunReport:
         ats, tranco = ATSCollector(session), TrancoCollector(session)
         enrich_live_only(session, ats, tranco, chosen, other)
     session.flush()
+    mark("enrich")
 
     to_score = [c for c, _ in ranked[: max(cfg.score_top, cfg.enrich_top)]]
     scored = score_companies(session, to_score, cfg.as_of, pit_only=cfg.pit_only, thesis=probs)
+    mark("score")
     if use_agents:
         _why_now(session, scored[: cfg.why_now_top], cfg.as_of)
         for s in scored[: cfg.memo_top]:
@@ -120,14 +139,16 @@ def run(session: Session, cfg: RunConfig) -> RunReport:
     requests = {"github": gh.requests_made, "openalex": oa.requests_made, "edgar": edgar.requests_made}
     if ats and tranco:
         requests.update(ats=ats.requests_made, tranco=tranco.requests_made)
-    log.info("%d companies, %d in thesis, %d enriched, %d scored", len(companies), len(in_thesis),
-             len(chosen), len(scored))
+    mark("agents")
+    log.info("%d companies, %d in thesis, %d enriched, %d scored; stage seconds %s", len(companies),
+             len(in_thesis), len(chosen), len(scored), marks)
     return RunReport(cfg.as_of, len(companies), len(chosen), len(scored), requests,
-                     time.monotonic() - t0, scored[:25])
+                     time.monotonic() - t0, scored[:25], [c.id for c in companies], [c.id for c in in_thesis],
+                     [c.id for c in chosen], scored)
 
 
 def _judge_uncertain(session: Session, companies: list[Company], probs: dict[int, tuple[float, str]],
-                     limit: int) -> dict[int, tuple[float, str]]:
+                     limit: int, as_of: date) -> dict[int, tuple[float, str]]:
     """Send classifier probabilities in the uncertain band to the Haiku thesis judge."""
     from radar.scoring.thesis import UNCERTAIN, company_text
 
@@ -135,7 +156,7 @@ def _judge_uncertain(session: Session, companies: list[Company], probs: dict[int
     uncertain = sorted((c for c in companies if UNCERTAIN[0] < probs[c.id][0] < UNCERTAIN[1]),
                        key=lambda c: abs(probs[c.id][0] - 0.5))[:limit]
     for c in uncertain:
-        probs[c.id] = (judge(company_text(session, c)), "llm")
+        probs[c.id] = (judge(company_text(session, c, as_of)), "llm")
     log.info("thesis judge: %d of %d companies in the uncertain band", len(uncertain), len(companies))
     return probs
 

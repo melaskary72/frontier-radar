@@ -1,0 +1,360 @@
+{
+ "generated": "2026-11-02",
+ "candidates": {
+  "E+C (v1 shipped)": [
+   "E",
+   "C"
+  ],
+  "E": [
+   "E"
+  ],
+  "P": [
+   "P"
+  ],
+  "P+C": [
+   "P",
+   "C"
+  ],
+  "E+P": [
+   "E",
+   "P"
+  ],
+  "E+C+P": [
+   "E",
+   "C",
+   "P"
+  ]
+ },
+ "C_grid": [
+  0.03,
+  0.1,
+  0.3,
+  1.0,
+  3.0
+ ],
+ "seeds": [
+  7,
+  11,
+  23
+ ],
+ "results": [
+  {
+   "labels": "thesis_labels_v1.csv",
+   "n": 117,
+   "positives": 51,
+   "plain_cv": {
+    "bge-small | E+C (v1 shipped)": {
+     "C=1 mean": 0.721,
+     "best_C": 3.0,
+     "best_C mean": 0.724,
+     "best_C by seed": [
+      0.718,
+      0.718,
+      0.735
+     ]
+    },
+    "bge-small | E": {
+     "C=1 mean": 0.684,
+     "best_C": 1.0,
+     "best_C mean": 0.684,
+     "best_C by seed": [
+      0.701,
+      0.684,
+      0.667
+     ]
+    },
+    "bge-small | P": {
+     "C=1 mean": 0.595,
+     "best_C": 3.0,
+     "best_C mean": 0.595,
+     "best_C by seed": [
+      0.615,
+      0.556,
+      0.615
+     ]
+    },
+    "bge-small | P+C": {
+     "C=1 mean": 0.709,
+     "best_C": 1.0,
+     "best_C mean": 0.709,
+     "best_C by seed": [
+      0.718,
+      0.701,
+      0.709
+     ]
+    },
+    "bge-small | E+P": {
+     "C=1 mean": 0.675,
+     "best_C": 0.1,
+     "best_C mean": 0.675,
+     "best_C by seed": [
+      0.667,
+      0.692,
+      0.667
+     ]
+    },
+    "bge-small | E+C+P": {
+     "C=1 mean": 0.738,
+     "best_C": 3.0,
+     "best_C mean": 0.749,
+     "best_C by seed": [
+      0.744,
+      0.744,
+      0.761
+     ]
+    },
+    "bge-base | E+C (v1 shipped)": {
+     "C=1 mean": 0.746,
+     "best_C": 3.0,
+     "best_C mean": 0.752,
+     "best_C by seed": [
+      0.744,
+      0.769,
+      0.744
+     ]
+    },
+    "bge-base | E": {
+     "C=1 mean": 0.701,
+     "best_C": 0.3,
+     "best_C mean": 0.704,
+     "best_C by seed": [
+      0.709,
+      0.735,
+      0.667
+     ]
+    },
+    "bge-base | P": {
+     "C=1 mean": 0.692,
+     "best_C": 3.0,
+     "best_C mean": 0.695,
+     "best_C by seed": [
+      0.718,
+      0.684,
+      0.684
+     ]
+    },
+    "bge-base | P+C": {
+     "C=1 mean": 0.749,
+     "best_C": 1.0,
+     "best_C mean": 0.749,
+     "best_C by seed": [
+      0.744,
+      0.744,
+      0.761
+     ]
+    },
+    "bge-base | E+P": {
+     "C=1 mean": 0.749,
+     "best_C": 0.3,
+     "best_C mean": 0.758,
+     "best_C by seed": [
+      0.761,
+      0.778,
+      0.735
+     ]
+    },
+    "bge-base | E+C+P": {
+     "C=1 mean": 0.766,
+     "best_C": 3.0,
+     "best_C mean": 0.781,
+     "best_C by seed": [
+      0.778,
+      0.778,
+      0.786
+     ]
+    }
+   },
+   "nested_cv_by_seed": [
+    0.761,
+    0.726,
+    0.692
+   ],
+   "nested_cv_mean": 0.726,
+   "nested_picks": [
+    "bge-base | E+C+P | C=3.0",
+    "bge-base | P+C | C=1.0",
+    "bge-base | E+C (v1 shipped) | C=3.0",
+    "bge-small | E+C+P | C=3.0",
+    "bge-base | E+P | C=0.03",
+    "bge-base | E+P | C=3.0",
+    "bge-small | E+C+P | C=0.03",
+    "bge-small | E+C+P | C=0.3",
+    "bge-small | E+C+P | C=1.0"
+   ],
+   "nested_pick_counts": {
+    "bge-base | E+P | C=0.03": 1,
+    "bge-base | E+C+P | C=3.0": 4,
+    "bge-base | P+C | C=1.0": 2,
+    "bge-base | E+P | C=3.0": 1,
+    "bge-small | E+C+P | C=0.03": 1,
+    "bge-small | E+C+P | C=0.3": 1,
+    "bge-base | E+C (v1 shipped) | C=3.0": 2,
+    "bge-small | E+C+P | C=3.0": 2,
+    "bge-small | E+C+P | C=1.0": 1
+   }
+  },
+  {
+   "labels": "thesis_labels.csv",
+   "n": 117,
+   "positives": 54,
+   "plain_cv": {
+    "bge-small | E+C (v1 shipped)": {
+     "C=1 mean": 0.681,
+     "best_C": 3.0,
+     "best_C mean": 0.698,
+     "best_C by seed": [
+      0.684,
+      0.726,
+      0.684
+     ]
+    },
+    "bge-small | E": {
+     "C=1 mean": 0.695,
+     "best_C": 3.0,
+     "best_C mean": 0.715,
+     "best_C by seed": [
+      0.692,
+      0.761,
+      0.692
+     ]
+    },
+    "bge-small | P": {
+     "C=1 mean": 0.618,
+     "best_C": 0.1,
+     "best_C mean": 0.618,
+     "best_C by seed": [
+      0.632,
+      0.624,
+      0.598
+     ]
+    },
+    "bge-small | P+C": {
+     "C=1 mean": 0.664,
+     "best_C": 3.0,
+     "best_C mean": 0.664,
+     "best_C by seed": [
+      0.641,
+      0.675,
+      0.675
+     ]
+    },
+    "bge-small | E+P": {
+     "C=1 mean": 0.707,
+     "best_C": 3.0,
+     "best_C mean": 0.721,
+     "best_C by seed": [
+      0.709,
+      0.726,
+      0.726
+     ]
+    },
+    "bge-small | E+C+P": {
+     "C=1 mean": 0.709,
+     "best_C": 3.0,
+     "best_C mean": 0.732,
+     "best_C by seed": [
+      0.709,
+      0.761,
+      0.726
+     ]
+    },
+    "bge-base | E+C (v1 shipped)": {
+     "C=1 mean": 0.687,
+     "best_C": 3.0,
+     "best_C mean": 0.695,
+     "best_C by seed": [
+      0.675,
+      0.726,
+      0.684
+     ]
+    },
+    "bge-base | E": {
+     "C=1 mean": 0.675,
+     "best_C": 3.0,
+     "best_C mean": 0.678,
+     "best_C by seed": [
+      0.615,
+      0.744,
+      0.675
+     ]
+    },
+    "bge-base | P": {
+     "C=1 mean": 0.672,
+     "best_C": 3.0,
+     "best_C mean": 0.678,
+     "best_C by seed": [
+      0.667,
+      0.667,
+      0.701
+     ]
+    },
+    "bge-base | P+C": {
+     "C=1 mean": 0.672,
+     "best_C": 3.0,
+     "best_C mean": 0.687,
+     "best_C by seed": [
+      0.684,
+      0.675,
+      0.701
+     ]
+    },
+    "bge-base | E+P": {
+     "C=1 mean": 0.698,
+     "best_C": 3.0,
+     "best_C mean": 0.704,
+     "best_C by seed": [
+      0.65,
+      0.752,
+      0.709
+     ]
+    },
+    "bge-base | E+C+P": {
+     "C=1 mean": 0.698,
+     "best_C": 3.0,
+     "best_C mean": 0.707,
+     "best_C by seed": [
+      0.692,
+      0.735,
+      0.692
+     ]
+    }
+   },
+   "nested_cv_by_seed": [
+    0.65,
+    0.735,
+    0.675
+   ],
+   "nested_cv_mean": 0.687,
+   "nested_picks": [
+    "bge-small | E+P | C=3.0",
+    "bge-small | E+C+P | C=1.0",
+    "bge-small | E | C=0.03",
+    "bge-small | E+P | C=0.1",
+    "bge-small | E+P | C=0.03",
+    "bge-base | E+C+P | C=0.3",
+    "bge-small | E | C=3.0",
+    "bge-base | E+P | C=3.0",
+    "bge-base | E+C+P | C=1.0",
+    "bge-small | E | C=1.0",
+    "bge-small | E+C (v1 shipped) | C=3.0",
+    "bge-small | E+C+P | C=3.0",
+    "bge-small | E+P | C=1.0"
+   ],
+   "nested_pick_counts": {
+    "bge-small | E | C=0.03": 1,
+    "bge-small | E+P | C=3.0": 2,
+    "bge-small | E+P | C=0.1": 1,
+    "bge-small | E+P | C=0.03": 1,
+    "bge-base | E+C+P | C=0.3": 1,
+    "bge-small | E | C=3.0": 1,
+    "bge-base | E+P | C=3.0": 1,
+    "bge-base | E+C+P | C=1.0": 1,
+    "bge-small | E | C=1.0": 1,
+    "bge-small | E+C (v1 shipped) | C=3.0": 1,
+    "bge-small | E+C+P | C=3.0": 1,
+    "bge-small | E+C+P | C=1.0": 2,
+    "bge-small | E+P | C=1.0": 1
+   }
+  }
+ ]
+}

@@ -105,9 +105,23 @@ def materialize_paper_repos(session: Session, gh: GitHubCollector, budget: Budge
     return added
 
 
-def thesis_probs(session: Session, companies: list[Company], judge=None) -> dict[int, tuple[float, str]]:  # type: ignore[no-untyped-def]
-    texts = [company_text(session, c) for c in companies]
-    return {c.id: pm for c, pm in zip(companies, thesis_probability(texts, judge), strict=True)}
+def thesis_probs(session: Session, companies: list[Company], as_of: date | None = None
+                 ) -> dict[int, tuple[float, str]]:
+    texts = [company_text(session, c, as_of) for c in companies]
+    return {c.id: pm for c, pm in zip(companies, thesis_probability(texts), strict=True)}
+
+
+def _visible_rows(session: Session, links: dict[str, list[int]], as_of: date) -> dict[str, list[int]]:
+    """Linked row ids whose own timestamp is on or before as_of."""
+    t_end = datetime.combine(as_of, time.max, tzinfo=UTC)
+    return {
+        "repos": list(session.scalars(select(Repo.id).where(Repo.id.in_(links.get("repos", [])), Repo.created_at <= t_end))),
+        "hn_posts": list(session.scalars(select(HNPost.id).where(HNPost.id.in_(links.get("hn_posts", [])),
+                                                                 HNPost.created_at <= t_end))),
+        "awards": list(session.scalars(select(Award.id).where(Award.id.in_(links.get("awards", [])), Award.award_date <= as_of))),
+        "papers": list(session.scalars(select(Paper.id).where(Paper.id.in_(links.get("papers", [])),
+                                                              Paper.submitted_at <= t_end))),
+    }
 
 
 def prescore(session: Session, companies: list[Company], as_of: date,
@@ -118,9 +132,9 @@ def prescore(session: Session, companies: list[Company], as_of: date,
     for c in companies:
         p = probs[c.id][0]
         links = _links(session, c.id)
+        visible = _visible_rows(session, links, as_of)
         n_queries = 0
-        for table in ("repos", "hn_posts", "awards", "papers"):
-            ids = links.get(table, [])
+        for table, ids in visible.items():
             if ids:
                 n_queries += session.scalar(select(func.count(func.distinct(Discovery.query))).where(
                     Discovery.table_name == table, Discovery.row_id.in_(ids))) or 0
@@ -171,7 +185,7 @@ def _enrich_authors(session: Session, oa: OpenAlexCollector, links: dict[str, li
     repo_ids = links.get("repos", [])
     if not repo_ids:
         return
-    paper_ids = list(session.scalars(select(Edge.dst_id).where(Edge.relation == "implements",
+    paper_ids = list(session.scalars(select(Edge.dst_id).where(Edge.relation == "implements", Edge.src_type == "repos",
                                                                Edge.src_id.in_(repo_ids))))
     for paper in session.scalars(select(Paper).where(Paper.id.in_(paper_ids))):
         before = oa.requests_made

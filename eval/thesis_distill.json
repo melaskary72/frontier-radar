@@ -1,0 +1,39 @@
+{
+ "generated": "2026-11-02",
+ "n_train": 1000,
+ "train_positives": 414,
+ "n_test": 117,
+ "test_labels": "eval/labels/thesis_labels.csv (v2)",
+ "results": {
+  "E+C (v1 shipped)": {
+   "C": 3.0,
+   "train_cv_vs_judge": 0.746,
+   "test_accuracy_vs_human": 0.709
+  },
+  "E": {
+   "C": 1.0,
+   "train_cv_vs_judge": 0.743,
+   "test_accuracy_vs_human": 0.675
+  },
+  "P": {
+   "C": 1.0,
+   "train_cv_vs_judge": 0.638,
+   "test_accuracy_vs_human": 0.641
+  },
+  "P+C": {
+   "C": 3.0,
+   "train_cv_vs_judge": 0.67,
+   "test_accuracy_vs_human": 0.701
+  },
+  "E+P": {
+   "C": 3.0,
+   "train_cv_vs_judge": 0.743,
+   "test_accuracy_vs_human": 0.701
+  },
+  "E+C+P": {
+   "C": 3.0,
+   "train_cv_vs_judge": 0.75,
+   "test_accuracy_vs_human": 0.692
+  }
+ }
+}

@@ -6,7 +6,7 @@ dashboard can be traced to a cached HTTP response with its fetch time and SHA-25
 
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import UTC, date, datetime
 from typing import Any, ClassVar
 
 from sqlalchemy import (
@@ -21,7 +21,28 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
 )
+from sqlalchemy.engine import Dialect
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.types import TypeDecorator
+
+
+class UTCDateTime(TypeDecorator[datetime]):
+    """Timezone-aware datetimes on every backend. SQLite stores no offset and hands back
+    naive values, which cannot be compared with aware ones; values are written as UTC and
+    read back with UTC attached. Same DDL as UTCDateTime()."""
+
+    impl = DateTime(timezone=True)
+    cache_ok = True
+
+    def process_bind_param(self, value: datetime | None, dialect: Dialect) -> datetime | None:
+        if value is not None and value.tzinfo is not None:
+            value = value.astimezone(UTC)
+        return value
+
+    def process_result_value(self, value: datetime | None, dialect: Dialect) -> datetime | None:
+        if value is not None and value.tzinfo is None:
+            value = value.replace(tzinfo=UTC)
+        return value
 
 
 class Base(DeclarativeBase):
@@ -34,7 +55,7 @@ class RawSnapshot(Base):
     source: Mapped[str] = mapped_column(String(32), index=True)
     url: Mapped[str] = mapped_column(Text)
     request_key: Mapped[str] = mapped_column(String(64), index=True)  # sha256(method, url, body)
-    fetched_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    fetched_at: Mapped[datetime] = mapped_column(UTCDateTime(), index=True)
     content_sha256: Mapped[str] = mapped_column(String(64))
     payload_json: Mapped[Any] = mapped_column(JSON)
     http_status: Mapped[int] = mapped_column(Integer)
@@ -53,7 +74,7 @@ class Person(Base):
     # Current Semantic Scholar metrics: live radar only (not observable point-in-time).
     citation_count: Mapped[int | None] = mapped_column(Integer)
     h_index: Mapped[int | None] = mapped_column(Integer)
-    first_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    first_seen_at: Mapped[datetime] = mapped_column(UTCDateTime())
 
 
 class PersonAffiliation(Base):
@@ -85,7 +106,7 @@ class Company(Base):
     sector: Mapped[str | None] = mapped_column(String(32), index=True)
     stage_guess: Mapped[str | None] = mapped_column(String(32))
     location: Mapped[str | None] = mapped_column(String(256))
-    first_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    first_seen_at: Mapped[datetime] = mapped_column(UTCDateTime())
 
 
 class Repo(Base):
@@ -96,12 +117,12 @@ class Repo(Base):
     owner_type: Mapped[str | None] = mapped_column(String(16))  # User | Organization
     description: Mapped[str | None] = mapped_column(Text)
     language: Mapped[str | None] = mapped_column(String(64))
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    pushed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(UTCDateTime())
+    pushed_at: Mapped[datetime | None] = mapped_column(UTCDateTime())
     stars: Mapped[int] = mapped_column(Integer, default=0)
     forks: Mapped[int] = mapped_column(Integer, default=0)
     contributors: Mapped[int | None] = mapped_column(Integer)
-    last_commit_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    last_commit_at: Mapped[datetime | None] = mapped_column(UTCDateTime())
     topics_json: Mapped[list[Any]] = mapped_column(JSON, default=list)
     homepage: Mapped[str | None] = mapped_column(Text)
     snapshot_id: Mapped[int | None] = mapped_column(ForeignKey("raw_snapshots.id"))
@@ -127,7 +148,7 @@ class RepoEvent(Base):
     external_id: Mapped[str] = mapped_column(String(64))
     actor: Mapped[str | None] = mapped_column(String(128))
     is_external: Mapped[bool | None] = mapped_column()  # actor outside owner/members
-    at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    at: Mapped[datetime] = mapped_column(UTCDateTime())
     snapshot_id: Mapped[int | None] = mapped_column(ForeignKey("raw_snapshots.id"))
 
 
@@ -140,7 +161,7 @@ class RepoTree(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     repo_full_name: Mapped[str] = mapped_column(String(256), index=True)
     sha: Mapped[str] = mapped_column(String(40))
-    committed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    committed_at: Mapped[datetime] = mapped_column(UTCDateTime())
     signals_json: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
     snapshot_id: Mapped[int | None] = mapped_column(ForeignKey("raw_snapshots.id"))
 
@@ -151,7 +172,7 @@ class Paper(Base):
     arxiv_id: Mapped[str] = mapped_column(String(32), unique=True)
     title: Mapped[str] = mapped_column(Text)
     abstract: Mapped[str | None] = mapped_column(Text)
-    submitted_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    submitted_at: Mapped[datetime] = mapped_column(UTCDateTime(), index=True)
     categories_json: Mapped[list[Any]] = mapped_column(JSON, default=list)
     authors_json: Mapped[list[Any]] = mapped_column(JSON, default=list)  # [{name, affiliations}]
     snapshot_id: Mapped[int | None] = mapped_column(ForeignKey("raw_snapshots.id"))
@@ -202,8 +223,8 @@ class JobPosting(Base):
     location: Mapped[str | None] = mapped_column(String(256))
     is_engineering: Mapped[bool] = mapped_column(default=False)
     is_hardware: Mapped[bool] = mapped_column(default=False)
-    first_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    last_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    first_seen_at: Mapped[datetime] = mapped_column(UTCDateTime())
+    last_seen_at: Mapped[datetime] = mapped_column(UTCDateTime())
     snapshot_id: Mapped[int | None] = mapped_column(ForeignKey("raw_snapshots.id"))
 
 
@@ -217,7 +238,7 @@ class HNPost(Base):
     points: Mapped[int] = mapped_column(Integer, default=0)
     num_comments: Mapped[int] = mapped_column(Integer, default=0)
     author: Mapped[str | None] = mapped_column(String(64))
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    created_at: Mapped[datetime] = mapped_column(UTCDateTime(), index=True)
     snapshot_id: Mapped[int | None] = mapped_column(ForeignKey("raw_snapshots.id"))
 
 
@@ -256,7 +277,7 @@ class Discovery(Base):
     row_id: Mapped[int] = mapped_column(Integer, index=True)
     sector: Mapped[str] = mapped_column(String(32), index=True)
     query: Mapped[str] = mapped_column(Text)
-    discovered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    discovered_at: Mapped[datetime] = mapped_column(UTCDateTime())
 
 
 class EntityCandidate(Base):
@@ -274,8 +295,8 @@ class EntityCandidate(Base):
     decided_by: Mapped[str | None] = mapped_column(String(32))  # llm | human
     confidence: Mapped[float | None] = mapped_column(Float)
     rationale: Mapped[str | None] = mapped_column(Text)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    decided_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(UTCDateTime())
+    decided_at: Mapped[datetime | None] = mapped_column(UTCDateTime())
 
 
 class Feature(Base):
@@ -301,7 +322,7 @@ class Memo(Base):
     __tablename__ = "memos"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     company_id: Mapped[int] = mapped_column(ForeignKey("companies.id"), index=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(UTCDateTime())
     version: Mapped[int] = mapped_column(Integer, default=1)
     body_md: Mapped[str] = mapped_column(Text)
     claims_json: Mapped[list[Any]] = mapped_column(JSON, default=list)
@@ -324,7 +345,7 @@ class AgentRun(Base):
     agent: Mapped[str] = mapped_column(String(32), index=True)
     model: Mapped[str] = mapped_column(String(64))
     prompt_version: Mapped[str] = mapped_column(String(32))
-    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    started_at: Mapped[datetime] = mapped_column(UTCDateTime(), index=True)
     latency_ms: Mapped[int | None] = mapped_column(Integer)
     input_tokens: Mapped[int | None] = mapped_column(Integer)
     output_tokens: Mapped[int | None] = mapped_column(Integer)
@@ -341,7 +362,7 @@ class FeedbackRow(Base):
     company_id: Mapped[int] = mapped_column(ForeignKey("companies.id"), index=True)
     user_label: Mapped[str] = mapped_column(String(64))
     verdict: Mapped[int] = mapped_column(Integer)  # +1 | -1
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(UTCDateTime())
 
 
 class PipelineItem(Base):
@@ -350,7 +371,7 @@ class PipelineItem(Base):
     company_id: Mapped[int] = mapped_column(ForeignKey("companies.id"), unique=True)
     stage: Mapped[str] = mapped_column(String(16))
     owner: Mapped[str | None] = mapped_column(String(64))
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    updated_at: Mapped[datetime] = mapped_column(UTCDateTime())
     notes: Mapped[str | None] = mapped_column(Text)
 
 
@@ -377,7 +398,19 @@ class PortfolioFact(Base):
 class CostLog(Base):
     __tablename__ = "cost_log"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    at: Mapped[datetime] = mapped_column(UTCDateTime(), index=True)
     agent: Mapped[str] = mapped_column(String(32))
     usd: Mapped[float] = mapped_column(Float)
     cumulative_usd: Mapped[float] = mapped_column(Float)
+
+
+class CollectionCheckpoint(Base):
+    """A finished unit of collection work (a source, sector, and date range, or one GitHub
+    search window). Long batch jobs skip keys found here, so a rerun resumes where it stopped."""
+
+    __tablename__ = "collection_checkpoints"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    key: Mapped[str] = mapped_column(String(512), unique=True)
+    status: Mapped[str] = mapped_column(String(16))  # done | split
+    result_json: Mapped[Any] = mapped_column(JSON, nullable=True)
+    completed_at: Mapped[datetime] = mapped_column(UTCDateTime())

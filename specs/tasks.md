@@ -24,7 +24,7 @@ News and USAspending collectors.
 ## Phase 2: entity resolution, features, scoring, explainability
 
 - [x] Deterministic, fuzzy, and LLM-ready entity resolution; review queue (`radar review`)
-- [ ] 100 hand-labeled entity pairs; precision gate (moved to Phase 4: needs the full collection)
+- [x] 100 hand-labeled entity pairs; precision gate (moved to Phase 4: needs the full collection)
 - [x] Point-in-time feature builder (`as_of`) for all six feature groups, with evidence
 - [x] Thesis classifier (embeddings plus cues, 117 labels); gate measured in Phase 4 with the LLM judge
 - [x] Percentile normalization within sector and date; weighted score; `explain.py`
@@ -49,22 +49,32 @@ supported on first draft; spend to date $0.063.
 
 ## Phase 4: backtest and eval gates (stop and review with Mohamed)
 
-- [ ] `eval/backtest/rounds.csv` with sourced announcement dates; exclusions with reasons
-- [ ] Multi-year collection; 100 hand-labeled entity pairs from it
-- [ ] Name-free universe per window from thesis queries; query audit log
-- [ ] Features at T minus 30 and T minus 90; coverage, rank, recall@25, recall@100, lead time
-- [ ] Baseline and lift (see BUILD_CONTRACT D5)
-- [ ] `docs/backtest-report.md` with limitations
-- [ ] All eval gates computed
-- [ ] **Stop. Show Mohamed the results.** Apply any approved corrective run and log it
+- [x] `eval/backtest/rounds.csv` with sourced announcement dates; exclusions with reasons
+- [x] Multi-year collection (resumable, checkpointed); 100 hand-labeled entity pairs from it
+- [x] Name-free universe per window from thesis queries; query audit log (passed)
+- [x] Features at T minus 30 and T minus 90; coverage, rank, recall@25, recall@100, lead time
+- [x] Baseline and lift (see BUILD_CONTRACT D5)
+- [x] Second backtest requested by Mohamed: Form D outcomes for the top 100 against random and stars, with a like-for-like control
+- [x] `docs/backtest-report.md` with limitations
+- [x] All eval gates computed (claim citation precision waits on Mohamed's 40-claim spot-check)
+- [x] **Stop. Show Mohamed the results.** Corrective run approved (thesis labels v2, entity resolver v2), applied, and logged
+- [x] Commit
+
+Verified: 2026-11-03. 61 tests passing; ruff and mypy clean; corrective run fingerprint
+b5c9630306afa959. Portfolio test 0 of 12; Form D lift like for like 1.65x at 6 months and 1.13x
+at 12 months, both intervals include 1. Gates: thesis 0.900, entity 0.984, leakage pass, spend
+$0.31; claims pending.
 
 ## Phase 5: dashboard, deploy, cron, digest, audio, docs, README
 
-- [ ] Next.js dashboard (eight pages), access code middleware, disclaimer footer
+- [x] Next.js dashboard (eight pages), access code middleware, disclaimer footer (local; verified 2026-11-03)
 - [ ] Vercel deploy with Neon Postgres
 - [ ] GitHub Actions weekly cron (Monday 13:00 UTC)
 - [ ] Resend digest and ElevenLabs audio briefing
-- [ ] Screenshots (phone and desktop), docs 00 to 09, architecture diagram
+- [ ] Screenshots (phone and desktop: done 2026-11-03), docs 00 to 09, architecture diagram
+- [x] Portfolio Stats data and LP update draft (`portfolio/`)
+- [ ] Private signals intake (warm intros and notes) and Live Picks
+- [ ] Offline `make demo`
 - [ ] README; push public
 
 ## Phase 6: application documents

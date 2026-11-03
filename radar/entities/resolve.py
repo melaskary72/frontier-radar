@@ -20,6 +20,7 @@ from collections import defaultdict
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from functools import cache
 from urllib.parse import urlparse
 
 from rapidfuzz import fuzz
@@ -80,6 +81,33 @@ def strict_name(name: str) -> str:
 def loose_name(name: str) -> str:
     toks = [t for t in _tokens(name) if t not in LOOSE_SUFFIXES]
     return " ".join(toks) or strict_name(name)
+
+
+# Words that describe a field rather than name a company, on top of LOOSE_SUFFIXES.
+FIELD_WORDS = {"open", "source", "opensource", "and", "of", "for", "project", "team", "solutions",
+               "innovations", "research", "engineering", "services", "international", "global"}
+
+
+@cache
+def thesis_vocabulary() -> frozenset[str]:
+    """Every token of every sector keyword, title term, and award keyword in config/thesis.yaml."""
+    from radar.config import thesis
+
+    words: set[str] = set()
+    for sec in thesis().sectors.values():
+        for phrase in [*sec.keywords, *sec.title_terms, *sec.sbir_keywords]:
+            words.update(_tokens(phrase))
+    return frozenset(words)
+
+
+def has_distinctive_core(name: str) -> bool:
+    """True when the loose name keeps a token that is not a suffix, a field word, or thesis
+    vocabulary, and is long enough to be unlikely to collide. A name made only of field words
+    ("Command and Control", "Additive Manufacturing", "Open Source") names a field, not a company."""
+    generic = LOOSE_SUFFIXES | FIELD_WORDS | thesis_vocabulary()
+    toks = loose_name(name).split()
+    core = [t for t in toks if t not in generic]
+    return bool(core) and (len(toks) >= 2 or len(toks[0]) >= 8)
 
 
 def normalize_domain(url_or_host: str | None) -> str | None:
@@ -179,16 +207,21 @@ class Mention:
         return " ".join(bits)
 
 
+SQL_CHUNK = 10_000
+
+
 def _sectors(session: Session, table: str, ids: Iterable[int]) -> dict[int, list[str]]:
     out: dict[int, list[str]] = defaultdict(list)
     ids = list(ids)
     if not ids:
         return out
-    for row_id, sector in session.execute(
-        select(Discovery.row_id, Discovery.sector).where(Discovery.table_name == table,
-                                                         Discovery.row_id.in_(ids))
-    ):
-        out[row_id].append(sector)
+    # Chunked: SQLite caps bound variables at 32,766, and the backtest has 200K+ repositories.
+    for i in range(0, len(ids), SQL_CHUNK):
+        for row_id, sector in session.execute(
+            select(Discovery.row_id, Discovery.sector).where(Discovery.table_name == table,
+                                                             Discovery.row_id.in_(ids[i:i + SQL_CHUNK]))
+        ):
+            out[row_id].append(sector)
     return out
 
 
@@ -351,7 +384,7 @@ def compare(a: Mention, b: Mention) -> Decision | None:
         return None
     if conflicting_domains:
         return Decision(a, b, score, "separate", "fuzzy", 0.9, "similar names, different domains or accounts")
-    if score >= AUTO_MERGE and distinctive(a.name) and distinctive(b.name):
+    if score >= AUTO_MERGE and has_distinctive_core(a.name) and has_distinctive_core(b.name):
         return Decision(a, b, score, "merge", "fuzzy", score / 100, f"fuzzy {score:.0f} on '{la}' vs '{lb}'")
     return Decision(a, b, score, "ambiguous", "fuzzy", score / 100, f"fuzzy {score:.0f} on '{la}' vs '{lb}'")
 
@@ -453,11 +486,24 @@ def resolve(session: Session, *, judge: Judge | None = None,
 
     session.execute(delete(Edge).where(Edge.src_type == "company", Edge.method != "human"))
     existing = {c.entity_key: c for c in session.scalars(select(Company))}
-    produced: set[str] = set()
-    n_edges = 0
+    plans: list[tuple[str, list[Mention]]] = []
     for members in clusters.values():
         members.sort(key=lambda m: ({"github": 0, "hn": 1, "award": 2, "filing": 3}[m.source], m.key))
-        key = _entity_key(members)
+        plans.append((_entity_key(members), members))
+    # A split or a new merge can move a domain or GitHub org to a different company row. Release
+    # identifiers held by any other row before inserting, or the unique constraint fires before
+    # stale rows are retired below.
+    claimed_domain = {dom: k for k, ms in plans if (dom := next((m.domain for m in ms if m.domain), None))}
+    claimed_org = {org: k for k, ms in plans if (org := next((m.github_login for m in ms if m.github_login), None))}
+    for c in existing.values():
+        if c.domain and claimed_domain.get(c.domain) != c.entity_key:
+            c.domain = None
+        if c.github_org and claimed_org.get(c.github_org) != c.entity_key:
+            c.github_org = None
+    session.flush()
+    produced: set[str] = set()
+    n_edges = 0
+    for key, members in plans:
         produced.add(key)
         primary = members[0]
         sectors = [s for m in members for s in m.sectors]

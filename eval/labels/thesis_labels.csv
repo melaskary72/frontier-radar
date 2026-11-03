@@ -1,42 +1,42 @@
 id,source,text,label,labeled_by,note
-1,repo,AI AI - ML - QC at Kronos fusion energy,1,claude-code (rubric v1),
-2,repo,chiplet fno,1,claude-code (rubric v1),
+1,repo,AI AI - ML - QC at Kronos fusion energy,0,"mohamed (adjudicated judge disagreement, 2026-11-02)","v1 label 1, changed by Mohamed adjudication 2026-11-02"
+2,repo,chiplet fno,0,"mohamed (adjudicated judge disagreement, 2026-11-02)","v1 label 1, changed by Mohamed adjudication 2026-11-02"
 3,repo,"orbital sentinel A real-time space traffic monitoring, conjunction analysis, and collision-avoidance simulation platform built with .NET cesiumjs conjunction-detection gis orbital-mechanics satellite-tracking spacetech",1,claude-code (rubric v1),
 4,repo,IHP Open ADK Assembly-level Design Kit for heterogeneous chiplet integration.,1,claude-code (rubric v1),
 5,repo,"vhdl cookbook A github page with common VHDL templates, ready to be copied and used in your projects. asic code-snippets digital-design electronics finite-state-machine fpga fpga-development fpga-programming hardware-description-language hdl rtl simulation testbench vhdl vhdl-examples vhdl-te",0,claude-code (rubric v1),
 6,repo,MyNotes,0,claude-code (rubric v1),
-7,repo,"Sea fusion energy water hub An integrated OC-OTEC and LTTD concept for renewable electricity and freshwater production, using Agatti Island as a case study.",0,claude-code (rubric v1),concept case study
-8,repo,data driven geothermal transfer learning,1,claude-code (rubric v1),
+7,repo,"Sea fusion energy water hub An integrated OC-OTEC and LTTD concept for renewable electricity and freshwater production, using Agatti Island as a case study.",1,"mohamed (adjudicated judge disagreement, 2026-11-02)","concept case study; v1 label 0, changed by Mohamed adjudication 2026-11-02"
+8,repo,data driven geothermal transfer learning,0,"mohamed (adjudicated judge disagreement, 2026-11-02)","v1 label 1, changed by Mohamed adjudication 2026-11-02"
 9,repo,riscv sim A minimal educational RISC-V (RV32I) simulator,0,claude-code (rubric v1),
-10,repo,"CD Nozzle CFD Step 0 CFD investigation of compressible flow through a 2D axisymmetric converging-diverging nozzle using ANSYS Fluent. Includes geometry development, mesh generation, solver setup, flow-field analysis, centerline data extraction, and engineering interpretation of near-choking",0,claude-code (rubric v1),
+10,repo,"CD Nozzle CFD Step 0 CFD investigation of compressible flow through a 2D axisymmetric converging-diverging nozzle using ANSYS Fluent. Includes geometry development, mesh generation, solver setup, flow-field analysis, centerline data extraction, and engineering interpretation of near-choking",1,"mohamed (spot-check, 2026-11-02)","v1 label 0, changed by Mohamed spot-check 2026-11-02"
 11,repo,"ex_drone BEAM-native drone control for Elixir and Erlang. Fly, monitor, simulate, and coordinate programmable drones using supervised processes, telemetry, missions, and swarm APIs. autonomous beam crazyflie distributed-systems drone drones elixir erlang mavlink mission-planning otp px4 robo",1,claude-code (rubric v1),
 12,repo,LiDAR GS SLAM [ECCV 2026] Real-Time LiDAR Gaussian Splatting SLAM via Geometry-Aware Covariance Coupling,1,claude-code (rubric v1),
-13,repo,HCP enhanced DeepONet Hard Constraint Projection enhanced neural operator with hybrid sampling for chiplet thermal analysis (Microelectronics Reliability 2026) chiplet deeponet neural-operator physics-informed-neural-networks pytorch thermal-analysis,1,claude-code (rubric v1),
+13,repo,HCP enhanced DeepONet Hard Constraint Projection enhanced neural operator with hybrid sampling for chiplet thermal analysis (Microelectronics Reliability 2026) chiplet deeponet neural-operator physics-informed-neural-networks pytorch thermal-analysis,1,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
 14,repo,"kicad agentic studio AI-powered electronics design studio, the Cursor for KiCad",1,claude-code (rubric v1),
 15,repo,aems 2026 stellarator workshop Stellarator design workshop for AEMS 2026 course,0,claude-code (rubric v1),
 16,repo,EON2026 Materials for the 6th joint field course of the EarthObservationNetwork,0,claude-code (rubric v1),
 17,repo,AURA SATTRACK Real-Time 3D GNSS Satellite Constellation Tracker & Distance Visualizer,0,claude-code (rubric v1),
-18,repo,hls generator Agent skill for AMD/Xilinx Vitis HLS generation and FPGA design workflows. agent-skill codex-skill eda fpga hardware-generation hls vitis-hls,1,claude-code (rubric v1),
-19,repo,Chain SLAM,1,claude-code (rubric v1),
+18,repo,hls generator Agent skill for AMD/Xilinx Vitis HLS generation and FPGA design workflows. agent-skill codex-skill eda fpga hardware-generation hls vitis-hls,1,"mohamed (adjudicated judge disagreement, 2026-11-02)",
+19,repo,Chain SLAM,0,"mohamed (adjudicated judge disagreement, 2026-11-02)","v1 label 1, changed by Mohamed adjudication 2026-11-02"
 20,repo,"HumanoidPose Official code for ""Vision as Proprioception: Estimating Humanoid Robot Pose from Video"" 3d-vision computer-vision embodied-ai humanoid-robot robot-learning robot-perception robot-pose",1,claude-code (rubric v1),
 21,repo,grid exporter Grid Exporter：グリッド選択をコード埋め込み形式や標準入力形式で出力するWebツールです。 atcoder code-generator competitive-programming cpp github-pages grid grid-editor python rust web-tool,0,claude-code (rubric v1),
-22,repo,"sar yeild predictionn A modular, production-grade agricultural forecasting platform that integrates Sentinel-1 Synthetic Aperture Radar (SAR) imagery and meteorological covariates to predict crop yield targets.",0,claude-code (rubric v1),"EO application (crop yield), not EO capability"
+22,repo,"sar yeild predictionn A modular, production-grade agricultural forecasting platform that integrates Sentinel-1 Synthetic Aperture Radar (SAR) imagery and meteorological covariates to predict crop yield targets.",0,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,"EO application (crop yield), not EO capability"
 23,repo,bldc esc A custom STM32 motor controller for BLDC and PMSM motors.,1,claude-code (rubric v1),
 24,repo,"mjlab_microban Reinforcement Learning (RL) environments for the Microban platform, a 30cm open-source and affordable humanoid robot. diy humanoid-robot open-source reinforcement-learning robotics",1,claude-code (rubric v1),
 25,repo,Look4Sat rPi Independent Raspberry Pi port of the Android app Look4Sat by rt-bishop. Cleanly track satellite passes on Raspberry Pi displays; touch screen compatible. amateur-radio amsat ham-radio raspberry-pi rpi satellite satellite-prediction satellite-tracking satellites sdr tle-data,0,claude-code (rubric v1),
 26,repo,"fpga hft trading system FPGA HFT trading system with inline AI inference, transformer attention, Avellaneda-Stoikov market making, and full-stack SmartNIC. 19 SystemVerilog modules targeting AMD Alveo UL3524 at 644 MHz. Sub-50ns tick-to-trade WITH neural network in the critical path. amd-alv",0,claude-code (rubric v1),"FPGA for trading: fintech, not thesis"
-27,repo,AOI_Terminal_Inspection Learning project - AOI_Terminal_Inspection aoi batam cpk learning-project machine-vision modbus-tcp opencv pyside6 stm32f103,0,claude-code (rubric v1),
+27,repo,AOI_Terminal_Inspection Learning project - AOI_Terminal_Inspection aoi batam cpk learning-project machine-vision modbus-tcp opencv pyside6 stm32f103,0,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
 28,repo,"EARTH_OBSERVATION_SATELLITE A Earth Observation Satellite with a actuator set of Reaction Wheels, Variable Speed Control Moment Gyros and Magnetorquers.",1,claude-code (rubric v1),
 29,repo,"LocoVLA LocoVLA - Learn robot control, RL and VLA on a wheeled biped (Upkie + MuJoCo). 58-lesson open course: classical control, state estimation, reinforcement learning, vision-language-action, C++/ROS2 deployment. bipedal-robot control-systems embodied-ai imitation-learning locomotion mujo",0,claude-code (rubric v1),course material
-30,repo,"aircraft engine Educational aircraft engine simulator: physics-based CFM56-7B26 turbofan, Lycoming O-360 piston and PT6A-114A turboprop models in Rust/WebAssembly, with cockpit instruments, lessons, fault injection and flight-log replay aerospace aircraft-engine aviation cfm56 education flig",0,claude-code (rubric v1),
-31,repo,"home energy manager Desktop app for monitoring and controlling GivEnergy solar inverters over your local network, no cloud account needed battery energy-monitoring givenergy home-automation inverter modbus solar tauri",0,claude-code (rubric v1),
-32,repo,"Intro to HPC Bootcamp 2025 Fusion Energy Workloads Intro to HPC Bootcamp 2025: power consumption, TOP500 energy efficiency, and fusion workload energy metrics with a 4.8 MW job scheduler",0,claude-code (rubric v1),
+30,repo,"aircraft engine Educational aircraft engine simulator: physics-based CFM56-7B26 turbofan, Lycoming O-360 piston and PT6A-114A turboprop models in Rust/WebAssembly, with cockpit instruments, lessons, fault injection and flight-log replay aerospace aircraft-engine aviation cfm56 education flig",0,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
+31,repo,"home energy manager Desktop app for monitoring and controlling GivEnergy solar inverters over your local network, no cloud account needed battery energy-monitoring givenergy home-automation inverter modbus solar tauri",0,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
+32,repo,"Intro to HPC Bootcamp 2025 Fusion Energy Workloads Intro to HPC Bootcamp 2025: power consumption, TOP500 energy efficiency, and fusion workload energy metrics with a 4.8 MW job scheduler",0,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
 33,repo,"fluidSender Modern web-based GCode sender for FluidNC (ESP32 CNC firmware), real-time machine control, job management, and firmware configuration via USB or WiFi atc cnc cnc-controller docker docker-compose esp32 fluidnc gcode gcode-sender nuxtjs rust typescript vue",1,claude-code (rubric v1),
 34,repo,"Aspire 2026 vectric aspire download cnc software windows, Vectric Aspire for Windows 11 & 10. Direct download, install steps and setup guide. aspire aspire-2026 aspire-vcarve-toolpaths-pc cnc-software complete-version download full-installer software toolpath toolpaths vcarve vectric vectri",0,claude-code (rubric v1),
 35,repo,"constellation sim Simulator of a Walker Delta 24/3/1 satellite constellation over Southeast Asia: revisit analysis, plus centralised vs decentralised (auction) tasking under satellite failures. Python, numpy, matplotlib.",0,claude-code (rubric v1),
-36,repo,"sparrow studio Interactive browser demo of the sparrow irregular nesting algorithm, running on your device. 2d browser cnc dxf fabric garment laser-cutting nesting optimization svg textile true-shape-nesting web webassembly",1,claude-code (rubric v1),
+36,repo,"sparrow studio Interactive browser demo of the sparrow irregular nesting algorithm, running on your device. 2d browser cnc dxf fabric garment laser-cutting nesting optimization svg textile true-shape-nesting web webassembly",1,"mohamed (adjudicated judge disagreement, 2026-11-02)",
 37,repo,"5010 3DOF Foc kinematic chain Reusable STM32H723 control stack for a 3-DOF serial FOC kinematic chain: CAN actuators, dual encoders, safety state machine, UART control, Cartesian IK trajectories, and ROS 2/RViz monitoring.",1,claude-code (rubric v1),
-38,repo,"AeroSpace Satellite Constellation Orbital Debris Risk Low Earth Orbit constellation conjunction analysis, collision probability modeling, and delta-V budget optimization.",0,claude-code (rubric v1),
+38,repo,"AeroSpace Satellite Constellation Orbital Debris Risk Low Earth Orbit constellation conjunction analysis, collision probability modeling, and delta-V budget optimization.",1,"mohamed (adjudicated judge disagreement, 2026-11-02)","v1 label 0, changed by Mohamed adjudication 2026-11-02"
 39,repo,g1 motion imitation DeepMimic-style imitation of LAFAN1 human motion capture on the Unitree G1 with PPO in JAX/MJX on a 6 GB laptop GPU. Gait within 2 to 7% of the human on four metrics; limitations stated. humanoid imitation-learning jax mjx mujoco reinforcement-learning,1,claude-code (rubric v1),
 40,repo,"image filter accelerator Hardware-accelerated spatial image filtering on Pynq-Z2 (Zynq-7000). Up to 357× speedup over software. VHDL accelerator with AXI4-Stream, DMA, and configurable 9×9 filter kernels. axi fpga hardware-accelerator image-processing pynq-z2 vhdl xilinx zynq",0,claude-code (rubric v1),student FPGA project
 41,repo,ppo vs pid spacecraft attitude Simulation study comparing tuned PD/PID and PPO reinforcement-learning controllers for spacecraft attitude control attitude-control control-systems pid-control ppo reinforcement-learning spacecraft stable-baselines3,0,claude-code (rubric v1),
@@ -55,64 +55,64 @@ id,source,text,label,labeled_by,note
 54,repo,"ULEV BLDC PROPULSION Simulation and evaluation of the propulsion system of the electric vehicle Hualkana II for the Shell Eco-Marathon, usign a Brushless DC Motor (BLDC) and a custom Electronic Speed Controller (ESC). This project is the background of the accepted paper ""Energy Savings in U",0,claude-code (rubric v1),
 55,repo,BC04 APP 4-Asic BTC Miner,0,claude-code (rubric v1),
 56,repo,BirdWatch What kind of bird is on that street lamp? axon drones flock flock-camera flock-cameras flock-finder glasses gunshot-detection meta raven remote-id remoteid shotspotter,0,claude-code (rubric v1),
-57,repo,"cml The Common Model Library. CML provides a collection of generic, verified, validated, and reusable C++ models of spacecraft that are compatible with NASA's Trick Simulation Environment. aerospace-engineering cpp modeling-and-simulation nasa orbital-mechanics spacecraft",1,claude-code (rubric v1),
+57,repo,"cml The Common Model Library. CML provides a collection of generic, verified, validated, and reusable C++ models of spacecraft that are compatible with NASA's Trick Simulation Environment. aerospace-engineering cpp modeling-and-simulation nasa orbital-mechanics spacecraft",1,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
 58,repo,"killinchu Counter-UAS reference at /elite. Tracks, fusion, ROE, BFT, DSSE per interdiction. Public synthetic, no public effector. Λ = Conjecture 1. agentic-ai airgap airspace apache-license compliance counter-uas defense-tech doctrine-v11 drone dsse governance governed-ai lambda-conjecture-",1,claude-code (rubric v1),
 59,repo,"SchoolPulse AI Suite of edge-AI tools and a web dashboard that help schools cut water, food, and energy waste by detecting leaks, sorting compost, and visualizing consumption in one conclusive dashboard. acoustic-detection binary-classificaiton deep-learning edge-ai embedded-ml predictive-ma",0,claude-code (rubric v1),
-60,repo,"Electronic Warfare Electronic Warfare (EW) is the use of the electromagnetic spectrum to detect, protect against, disrupt, or manage electronic systems such as radar, communication, and navigation systems.",0,claude-code (rubric v1),
+60,repo,"Electronic Warfare Electronic Warfare (EW) is the use of the electromagnetic spectrum to detect, protect against, disrupt, or manage electronic systems such as radar, communication, and navigation systems.",0,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
 61,repo,"geothermal_engineering_project real geothermal data analysis with Python, performed engineering calculations, plotted the results and explained what those results mean.",0,claude-code (rubric v1),
-62,repo,"Microduck kissqy 🦆 Microduck 飞特 HD1910 机器人鸭复刻：单脚独立实机、现成动作模型、中文中控、自制 HAT/IMU 与三步教程。正常复刻无需训练。Feetech HD1910 Microduck replica: one-legged balance, ready-to-use models, Chinese console, custom HAT/IMU & 3-step build guides. No training required. 3d-printing bipedal-robots diy-robot feetech hd19",0,claude-code (rubric v1),
-63,repo,"tinyua A lightweight, from-scratch OPC UA client stack for .NET 8, zero dependency on the OPC Foundation SDK. Implements the full binary protocol: encoding, 4 security policies, message chunking, secure channels, subscriptions, and a Fluent API for connecting to industrial OPC UA servers. a",1,claude-code (rubric v1),
+62,repo,"Microduck kissqy 🦆 Microduck 飞特 HD1910 机器人鸭复刻：单脚独立实机、现成动作模型、中文中控、自制 HAT/IMU 与三步教程。正常复刻无需训练。Feetech HD1910 Microduck replica: one-legged balance, ready-to-use models, Chinese console, custom HAT/IMU & 3-step build guides. No training required. 3d-printing bipedal-robots diy-robot feetech hd19",1,"mohamed (adjudicated judge disagreement, 2026-11-02)","v1 label 0, changed by Mohamed adjudication 2026-11-02"
+63,repo,"tinyua A lightweight, from-scratch OPC UA client stack for .NET 8, zero dependency on the OPC Foundation SDK. Implements the full binary protocol: encoding, 4 security policies, message chunking, secure channels, subscriptions, and a Fluent API for connecting to industrial OPC UA servers. a",1,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
 64,repo,HINT HINT: Human-Intent Inception for Long-Horizon Robot Manipulation,1,claude-code (rubric v1),
-65,repo,"PlasmaX PlasmaX is a real-time fusion reactor monitoring and AI-based instability prediction system. It simulates plasma dynamics, monitors multi-sensor data streams, and uses an intelligent risk engine to detect and predict system instability. Built as a research-grade control room interfac",0,claude-code (rubric v1),"simulation demo, not a system"
-66,repo,"cupboard cad Design cupboards, kitchens, TV walls, crockery units and dressing tables in 3D and get the factory process sheet, nesting, CNC drilling, DXF and quote, in the browser. MIT. cad cnc furniture interior-design modular-kitchen nesting threejs wardrobe webgl woodworking",1,claude-code (rubric v1),factory process software for furniture CNC
+65,repo,"PlasmaX PlasmaX is a real-time fusion reactor monitoring and AI-based instability prediction system. It simulates plasma dynamics, monitors multi-sensor data streams, and uses an intelligent risk engine to detect and predict system instability. Built as a research-grade control room interfac",1,"mohamed (adjudicated judge disagreement, 2026-11-02)","simulation demo, not a system; v1 label 0, changed by Mohamed adjudication 2026-11-02"
+66,repo,"cupboard cad Design cupboards, kitchens, TV walls, crockery units and dressing tables in 3D and get the factory process sheet, nesting, CNC drilling, DXF and quote, in the browser. MIT. cad cnc furniture interior-design modular-kitchen nesting threejs wardrobe webgl woodworking",1,"mohamed (adjudicated judge disagreement, 2026-11-02)",factory process software for furniture CNC
 67,repo,"Uncrewed_Aircraft_Water_Sampler The firmware runs on an Arduino Nano ESP32 (ESP32-S3), controlling alternating servos via a FrSky X8R 2.4 GHz RC receiver to operate a water sampler for HAB environmental monitoring. A reed switch gives positional servo feedback, while two DS18B20 sensors and",0,claude-code (rubric v1),
 68,repo,"Marstek Venus Firmware Reverse Engineering Static reverse-engineering of Marstek Venus D/E firmware (Control/EMS, Micro-Inverter/VNS, BMS) with Ghidra, complete Modbus TCP & RS485 register map, protocol notes and Python scan tools balkonkraftwerk battery-storage bms cortex-m4 embedded energ",0,claude-code (rubric v1),
 69,repo,"xtce rs Parse XTCE and decode CCSDS telemetry in Rust, differential-tested packet-for-packet against the Python reference, ~100x faster ccsds cubesat ground-segment parser rust satellite smallsat space spacecraft telemetry xtce",1,claude-code (rubric v1),
-70,repo,"opensource eda tools installer Automated installer for open-source ASIC design tools (Yosys, OpenROAD, Sky130, OpenLane) on Linux and windows",0,claude-code (rubric v1),
+70,repo,"opensource eda tools installer Automated installer for open-source ASIC design tools (Yosys, OpenROAD, Sky130, OpenLane) on Linux and windows",1,"mohamed (adjudicated judge disagreement, 2026-11-02)","v1 label 0, changed by Mohamed adjudication 2026-11-02"
 71,hn,Show HN: Modern Robotics Registry – mapping the new robotics ecosystem,0,claude-code (rubric v1),
-72,hn,Show HN: Nurb – Agentic CAD for 3D printing,1,claude-code (rubric v1),
-73,hn,"Show HN: TLS Radar – Independent SSL/TLS Monitoring, Web and CLI and Claude",0,claude-code (rubric v1),
+72,hn,Show HN: Nurb – Agentic CAD for 3D printing,1,"mohamed (adjudicated judge disagreement, 2026-11-02)",
+73,hn,"Show HN: TLS Radar – Independent SSL/TLS Monitoring, Web and CLI and Claude",0,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
 74,hn,Show HN: Keychron macOS Battery Life and Controls,0,claude-code (rubric v1),
-75,hn,Show HN: Multi-FPGA Usable Newbie Chips,1,claude-code (rubric v1),
+75,hn,Show HN: Multi-FPGA Usable Newbie Chips,1,"mohamed (adjudicated judge disagreement, 2026-11-02)",
 76,hn,Show HN: Codex Reset Radar – tracking when Codex usage limits reset,0,claude-code (rubric v1),
-77,hn,Show HN: A spacecraft block diagram editor,1,claude-code (rubric v1),
+77,hn,Show HN: A spacecraft block diagram editor,1,"mohamed (adjudicated judge disagreement, 2026-11-02)",
 78,hn,Show HN: CLI and MCP for model fusion via harnesses,0,claude-code (rubric v1),
-79,hn,Show HN: Playground for Designing Buildable Robotics,1,claude-code (rubric v1),
+79,hn,Show HN: Playground for Designing Buildable Robotics,1,"mohamed (adjudicated judge disagreement, 2026-11-02)",
 80,hn,Show HN: Europe Robotics Map – An open source map of robotics companies,0,claude-code (rubric v1),
 81,hn,Show HN: AI Guided 3D atomic orbital simulation,0,claude-code (rubric v1),
 82,hn,Show HN: Strim – a Swift/MLX model server for coding agents on Apple Silicon,0,claude-code (rubric v1),
-83,hn,Show HN: Sonny OS – An async Rust microkernel replacing ROS 2/DDS with Zenoh,1,claude-code (rubric v1),
+83,hn,Show HN: Sonny OS – An async Rust microkernel replacing ROS 2/DDS with Zenoh,1,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
 84,hn,Show HN: Quintile – keyboard-only window grids for Mac,0,claude-code (rubric v1),
-85,hn,Show HN: CuMetal – Run CUDA Programs on Apple Silicon via Metal,0,claude-code (rubric v1),
+85,hn,Show HN: CuMetal – Run CUDA Programs on Apple Silicon via Metal,1,"mohamed (adjudicated judge disagreement, 2026-11-02)","v1 label 0, changed by Mohamed adjudication 2026-11-02"
 86,hn,Show HN: Prompt Fusion Using Dags and OpenRouter,0,claude-code (rubric v1),
 87,hn,Show HN: LEGO website rebuilt around a scalable grid and custom rendering engine,0,claude-code (rubric v1),
 88,hn,Show HN: AI-Native Accelerator that helps builders make something people want,0,claude-code (rubric v1),
-89,hn,Show HN: Git for Robots In The Future,1,claude-code (rubric v1),
-90,hn,SHOW HN: Beta TPMS Screening for Additive Manufacturing (Describe Your Part),1,claude-code (rubric v1),
-91,hn,"Show HN: Cerebellum – small model on the robot, big model for what it can't undo",1,claude-code (rubric v1),
+89,hn,Show HN: Git for Robots In The Future,0,"mohamed (adjudicated judge disagreement, 2026-11-02)","v1 label 1, changed by Mohamed adjudication 2026-11-02"
+90,hn,SHOW HN: Beta TPMS Screening for Additive Manufacturing (Describe Your Part),1,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
+91,hn,"Show HN: Cerebellum – small model on the robot, big model for what it can't undo",1,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
 92,hn,Show HN: LiveWorldTrends – Real-time 3D globe of global trends and crisis radar,0,claude-code (rubric v1),
 93,hn,"Show HN: Race Radar – HYROX ticket alerts, run day to day by an AI CEO",0,claude-code (rubric v1),
 94,hn,Launch HN: Hebbian Robotics (YC S26) – Build scalable robotics data pipelines,1,claude-code (rubric v1),
-95,hn,Show HN: Data enrichment with AI for Pandas DataFrame,0,claude-code (rubric v1),
+95,hn,Show HN: Data enrichment with AI for Pandas DataFrame,0,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
 96,award,"UAV SOLUTIONS, INC. PROCUREMENT OF COST EFFECTIVE FIXED WING UAS SYSTEMS, SUB-SYSTEMS AND SUPPORT FOR COUNTER UAS AND STRIKE APPLICATIONS.",1,claude-code (rubric v1),
-97,award,PRACTICON INC 4571995157!COMPOSI-TIGHT 3D FUSION WEDGE REFILL EXT,0,claude-code (rubric v1),dental supply matched 'fusion'
+97,award,PRACTICON INC 4571995157!COMPOSI-TIGHT 3D FUSION WEDGE REFILL EXT,0,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,dental supply matched 'fusion'
 98,award,6966624 CANADA INC PTKM-1R TRAINING,0,claude-code (rubric v1),
-99,award,SARCOS GROUP LC CLOSED LOOP UBIQUITOUS TASKING & CONTROL OF HETEROGENEOUS EXPLORING SENSORS (CLUTCHES)-DEVELOP METHODS THAT AUTONOMOUSLY CONTROL A HETEROGENEOUS SENSING NETWORK FOR IMPROVED SENSOR DATA FUSION AND EXPLOITATION OF THE MULTIPLE SENSOR DATA STREAMS.,1,claude-code (rubric v1),
+99,award,SARCOS GROUP LC CLOSED LOOP UBIQUITOUS TASKING & CONTROL OF HETEROGENEOUS EXPLORING SENSORS (CLUTCHES)-DEVELOP METHODS THAT AUTONOMOUSLY CONTROL A HETEROGENEOUS SENSING NETWORK FOR IMPROVED SENSOR DATA FUSION AND EXPLOITATION OF THE MULTIPLE SENSOR DATA STREAMS.,1,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
 100,award,DRONESHIELD LLC COUNTER-SMALL UNMANNED AIRCRAFT SYSTEM (C-SUAS) SOLUTION TO EQUIP FOUR (4) FIXED-SITE ZONES AND SIX (6) MOBILE INFANTRY SQUAD VEHICLES (ISVS).,1,claude-code (rubric v1),
-101,award,PRACTICON INC 4571807623!COMPOSI-TIGHT 3D FUSION MATRIX DELUXE KI,0,claude-code (rubric v1),
-102,award,DOVE MEDICAL SUPPLY LLC 4572047733!FUSION MULTIPLE-USE EARPLUGS - SMALL,0,claude-code (rubric v1),earplugs matched 'fusion'
+101,award,PRACTICON INC 4571807623!COMPOSI-TIGHT 3D FUSION MATRIX DELUXE KI,0,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
+102,award,DOVE MEDICAL SUPPLY LLC 4572047733!FUSION MULTIPLE-USE EARPLUGS - SMALL,0,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,earplugs matched 'fusion'
 103,award,PHYSICAL SCIENCES INC. PROPULSION PATHFINDER AND HYPERSONIC MISSIONS,1,claude-code (rubric v1),
 104,award,"OMNIPOWER, INC OMNIPOWER, INC. NEW AWARD CONTROL NUMBER: 3500-1505 DC-GRIDS (DE-FOA-0003499) PROJECT TITLE: OMNI-TERMINAL: POWER ELECTRONICS AND AI ENABLED OPEN SOURCE MT-HVDC DESCRIPTION: THE OMNI-TERMINAL PROJECT ESTABLISHES AMERICAS GLOBAL ENERGY DOMINANCE BY INTRODUCING A NEW BEST P",1,claude-code (rubric v1),
 106,award,"MVATION WORLDWIDE, INC. THE 453RD ELECTRONIC WARFARE SQUADRON (EWS) REQUIRES THE PURCHASE OF ONE CISCO UNIFIED COMPUTING SYSTEM (UCS) ARTIFICIAL INTELLIGENCE (AI) RACK SERVER (3 GPUS) AND ALL ASSOCIATED COMPONENTS.",0,claude-code (rubric v1),
-107,award,"AIRGILITY, INC UAS SUPPLIES; FFP",1,claude-code (rubric v1),
+107,award,"AIRGILITY, INC UAS SUPPLIES; FFP",1,"mohamed (adjudicated judge disagreement, 2026-11-02)",
 108,award,SHIELD AI INC V-BAT VTOL UNMANNED AIRCRAFT,1,claude-code (rubric v1),
-109,award,"AVARINT, LLC COUNTER-HYPERSONIC / AIRCRAFT AND COMMUNICATIONS-C3 (CHAC) / TASK ORDER 13 DIGITAL INTEGRATED AIR DEFENSE SYSTEM (DIADS) FISCAL YEAR (FY) 26 NAVY CYBER SUSTAINMENT.",0,claude-code (rubric v1),
+109,award,"AVARINT, LLC COUNTER-HYPERSONIC / AIRCRAFT AND COMMUNICATIONS-C3 (CHAC) / TASK ORDER 13 DIGITAL INTEGRATED AIR DEFENSE SYSTEM (DIADS) FISCAL YEAR (FY) 26 NAVY CYBER SUSTAINMENT.",1,"mohamed (adjudicated judge disagreement, 2026-11-02)","v1 label 0, changed by Mohamed adjudication 2026-11-02"
 110,award,PACIFIC IC SOURCE PROCURE HARDWARE IN SUPPORT OF ELECTRONIC WARFARE (EW) AND ELECTRONIC ATTACK (EA) COMMUNICATION JAMMING AIRBORNE AND GROUND-BASED SYSTEMS.,0,claude-code (rubric v1),reseller procurement
-112,award,SCITEC INNOVATIONS LLC ABMS CBC2 TRACKER FUSION,1,claude-code (rubric v1),
+112,award,SCITEC INNOVATIONS LLC ABMS CBC2 TRACKER FUSION,1,"mohamed (adjudicated judge disagreement, 2026-11-02)",
 113,award,"XCIMER ENERGY, INC. XCIMER ENERGY, INC. - NEW AWARD CONTROL NUMBER 3387-1573 VISION OPEN 2024 PROJECT TITLE: ''HYBRID PUMPED EXCIMER LASER (HYPER-LASER)'' A THREE-YEAR PROGRAM TO PURSUE A NEW, MORE EFFICIENT APPROACH TO PUMPING THE KRYPTON-FLUORIDE (KRF, 248 NM) EXCIMER LASER, WHICH IS BEI",1,claude-code (rubric v1),
-114,award,"RCAM TECHNOLOGIES INC A VERSATILE ADDITIVE MANUFACTURING PLATFORM FOR FABRICATING LOW-COST, CONCRETE OFFSHORE WIND SUPPORT STRUCTURES IN AMERICAN PORTS",1,claude-code (rubric v1),
+114,award,"RCAM TECHNOLOGIES INC A VERSATILE ADDITIVE MANUFACTURING PLATFORM FOR FABRICATING LOW-COST, CONCRETE OFFSHORE WIND SUPPORT STRUCTURES IN AMERICAN PORTS",1,claude-code (rubric v1); confirmed by Mohamed spot-check 2026-11-02,
 115,award,"AEROVIRONMENT, INC ACC/A3J-MIPR-TACP ACC HURRICANE ORDER",0,claude-code (rubric v1),
-116,award,DARKHIVE INC. SMALL UNMANNED AIRCRAFT SYSTEMS MOTOR ASSEMBLY LINES AND BULK RAW MATERIALS SUPPLIES,1,claude-code (rubric v1),
+116,award,DARKHIVE INC. SMALL UNMANNED AIRCRAFT SYSTEMS MOTOR ASSEMBLY LINES AND BULK RAW MATERIALS SUPPLIES,1,"mohamed (adjudicated judge disagreement, 2026-11-02)",
 117,award,"FORTIUS METALS, INC. REACTIVE ADDITIVE WIRE FOR HYPERSONIC INCONEL DEFENSE ENGINEERING",1,claude-code (rubric v1),
 119,award,"AMERICAN ELECTRONIC WARFARE ASSOCIATES, INCORPORATED LABOR PARKING LOT",0,claude-code (rubric v1),
 120,award,GHOST ROBOTICS CORPORATION 1 YEAR VISION 60 WARRANTY PACKAGE FOR TWO (2) SECURITY FORCES GHOST ROBOTICS QUADRUPEDAL UNMANNED GROUND VEHICLES.,1,claude-code (rubric v1),robot vendor; text names quadruped UGVs

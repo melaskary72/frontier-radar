@@ -78,7 +78,7 @@ def score_companies(session: Session, companies: Iterable[Company], as_of: date,
         evidence[c.id] = {k: [e.as_dict() for e in v.evidence] for k, v in vals.items() if v.evidence}
 
     if thesis is None:
-        texts = [company_text(session, c) for c in companies]
+        texts = [company_text(session, c, as_of) for c in companies]
         thesis = {c.id: pm for c, pm in zip(companies, thesis_probability(texts, judge), strict=True)}
     for c in companies:
         p, method = thesis[c.id]

@@ -1,0 +1,810 @@
+{
+ "generated": "2026-11-02",
+ "code_fingerprint": "b5c9630306afa959",
+ "protocol": {
+  "offsets_days": [
+   90,
+   30
+  ],
+  "lookback_days": 365,
+  "enrich_top": 60,
+  "score_top": 600,
+  "pit_only": true,
+  "agents": false,
+  "baseline": "total GitHub stars as fetched (hindsight-advantaged; BUILD_CONTRACT D5)"
+ },
+ "headline": {
+  "n_companies": 5,
+  "t_minus_90": {
+   "coverage_in_universe": 0,
+   "passed_thesis": 0,
+   "recall_at_25": 0.0,
+   "recall_at_100": 0.0,
+   "baseline_recall_at_100": 0.0,
+   "random_expected_recall_at_100": 0.0067,
+   "median_universe": 55128,
+   "median_in_thesis": 16119
+  },
+  "t_minus_30": {
+   "coverage_in_universe": 0,
+   "passed_thesis": 0,
+   "recall_at_25": 0.0,
+   "recall_at_100": 0.0,
+   "baseline_recall_at_100": 0.0,
+   "random_expected_recall_at_100": 0.0054,
+   "median_universe": 66336,
+   "median_in_thesis": 20120
+  },
+  "median_lead_days_top100": null,
+  "companies_found_top100": 0
+ },
+ "secondary": {
+  "n_companies": 4,
+  "t_minus_90": {
+   "coverage_in_universe": 0,
+   "passed_thesis": 0,
+   "recall_at_25": 0.0,
+   "recall_at_100": 0.0,
+   "baseline_recall_at_100": 0.0,
+   "random_expected_recall_at_100": 0.007,
+   "median_universe": 61772.0,
+   "median_in_thesis": 18483.0
+  },
+  "t_minus_30": {
+   "coverage_in_universe": 0,
+   "passed_thesis": 0,
+   "recall_at_25": 0.0,
+   "recall_at_100": 0.0,
+   "baseline_recall_at_100": 0.0,
+   "random_expected_recall_at_100": 0.0059,
+   "median_universe": 73086.0,
+   "median_in_thesis": 23061.0
+  },
+  "median_lead_days_top100": null,
+  "companies_found_top100": 0
+ },
+ "sensitivity_low_confidence_dates": {
+  "n_companies": 3,
+  "t_minus_90": {
+   "coverage_in_universe": 0,
+   "passed_thesis": 0,
+   "recall_at_25": 0.0,
+   "recall_at_100": 0.0,
+   "baseline_recall_at_100": 0.0,
+   "random_expected_recall_at_100": 0.0149,
+   "median_universe": 25230,
+   "median_in_thesis": 6584
+  },
+  "t_minus_30": {
+   "coverage_in_universe": 0,
+   "passed_thesis": 0,
+   "recall_at_25": 0.0,
+   "recall_at_100": 0.0,
+   "baseline_recall_at_100": 0.0,
+   "random_expected_recall_at_100": 0.0141,
+   "median_universe": 26418,
+   "median_in_thesis": 6899
+  },
+  "median_lead_days_top100": null,
+  "companies_found_top100": 0
+ },
+ "rows": [
+  {
+   "company": "Efference",
+   "set": "primary",
+   "included": false,
+   "date_confidence": "low",
+   "announced_on": "2025-08-01",
+   "offset_days": 90,
+   "cutoff": "2025-05-03",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 29069,
+   "in_thesis_size": 7518
+  },
+  {
+   "company": "Efference",
+   "set": "primary",
+   "included": false,
+   "date_confidence": "low",
+   "announced_on": "2025-08-01",
+   "offset_days": 30,
+   "cutoff": "2025-07-02",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 32160,
+   "in_thesis_size": 8306
+  },
+  {
+   "company": "Westmag",
+   "set": "primary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2026-06-02",
+   "offset_days": 90,
+   "cutoff": "2026-03-04",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 55128,
+   "in_thesis_size": 16119
+  },
+  {
+   "company": "Westmag",
+   "set": "primary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2026-06-02",
+   "offset_days": 30,
+   "cutoff": "2026-05-03",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 66336,
+   "in_thesis_size": 20120
+  },
+  {
+   "company": "Trajectory",
+   "set": "primary",
+   "included": true,
+   "date_confidence": "medium",
+   "announced_on": "2026-05-28",
+   "offset_days": 90,
+   "cutoff": "2026-02-27",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 54322,
+   "in_thesis_size": 15829
+  },
+  {
+   "company": "Trajectory",
+   "set": "primary",
+   "included": true,
+   "date_confidence": "medium",
+   "announced_on": "2026-05-28",
+   "offset_days": 30,
+   "cutoff": "2026-04-28",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 65487,
+   "in_thesis_size": 19784
+  },
+  {
+   "company": "Merge",
+   "set": "primary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2026-01-15",
+   "offset_days": 90,
+   "cutoff": "2025-10-17",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 39421,
+   "in_thesis_size": 10219
+  },
+  {
+   "company": "Merge",
+   "set": "primary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2026-01-15",
+   "offset_days": 30,
+   "cutoff": "2025-12-16",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 45617,
+   "in_thesis_size": 12502
+  },
+  {
+   "company": "Aeon",
+   "set": "primary",
+   "included": false,
+   "date_confidence": "low",
+   "announced_on": "2025-03-13",
+   "offset_days": 90,
+   "cutoff": "2024-12-13",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 25230,
+   "in_thesis_size": 6584
+  },
+  {
+   "company": "Aeon",
+   "set": "primary",
+   "included": false,
+   "date_confidence": "low",
+   "announced_on": "2025-03-13",
+   "offset_days": 30,
+   "cutoff": "2025-02-11",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 26418,
+   "in_thesis_size": 6899
+  },
+  {
+   "company": "Enigma",
+   "set": "primary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2026-07-27",
+   "offset_days": 90,
+   "cutoff": "2026-04-28",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 65487,
+   "in_thesis_size": 19784
+  },
+  {
+   "company": "Enigma",
+   "set": "primary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2026-07-27",
+   "offset_days": 30,
+   "cutoff": "2026-06-27",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 77800,
+   "in_thesis_size": 24544
+  },
+  {
+   "company": "General Galactic",
+   "set": "primary",
+   "included": false,
+   "date_confidence": "low",
+   "announced_on": "2024-11-12",
+   "offset_days": 90,
+   "cutoff": "2024-08-14",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 24066,
+   "in_thesis_size": 6213
+  },
+  {
+   "company": "General Galactic",
+   "set": "primary",
+   "included": false,
+   "date_confidence": "low",
+   "announced_on": "2024-11-12",
+   "offset_days": 30,
+   "cutoff": "2024-10-13",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 24443,
+   "in_thesis_size": 6350
+  },
+  {
+   "company": "Orbital",
+   "set": "primary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2026-06-09",
+   "offset_days": 90,
+   "cutoff": "2026-03-11",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 56328,
+   "in_thesis_size": 16556
+  },
+  {
+   "company": "Orbital",
+   "set": "primary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2026-06-09",
+   "offset_days": 30,
+   "cutoff": "2026-05-10",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 67672,
+   "in_thesis_size": 20617
+  },
+  {
+   "company": "Catalyst",
+   "set": "secondary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2026-10-08",
+   "offset_days": 90,
+   "cutoff": "2026-07-10",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 81039,
+   "in_thesis_size": 25751
+  },
+  {
+   "company": "Catalyst",
+   "set": "secondary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2026-10-08",
+   "offset_days": 30,
+   "cutoff": "2026-09-08",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 96617,
+   "in_thesis_size": 32114
+  },
+  {
+   "company": "Natural",
+   "set": "secondary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2025-10-23",
+   "offset_days": 90,
+   "cutoff": "2025-07-25",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 33418,
+   "in_thesis_size": 8629
+  },
+  {
+   "company": "Natural",
+   "set": "secondary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2025-10-23",
+   "offset_days": 30,
+   "cutoff": "2025-09-23",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 37578,
+   "in_thesis_size": 9774
+  },
+  {
+   "company": "Melius",
+   "set": "secondary",
+   "included": true,
+   "date_confidence": "medium",
+   "announced_on": "2026-10-06",
+   "offset_days": 90,
+   "cutoff": "2026-07-08",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 80538,
+   "in_thesis_size": 25543
+  },
+  {
+   "company": "Melius",
+   "set": "secondary",
+   "included": true,
+   "date_confidence": "medium",
+   "announced_on": "2026-10-06",
+   "offset_days": 30,
+   "cutoff": "2026-09-06",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 95924,
+   "in_thesis_size": 31854
+  },
+  {
+   "company": "Pensive",
+   "set": "secondary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2026-02-27",
+   "offset_days": 90,
+   "cutoff": "2025-11-29",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 43006,
+   "in_thesis_size": 11423
+  },
+  {
+   "company": "Pensive",
+   "set": "secondary",
+   "included": true,
+   "date_confidence": "high",
+   "announced_on": "2026-02-27",
+   "offset_days": 30,
+   "cutoff": "2026-01-28",
+   "matched_company_ids": [],
+   "ever_collected": false,
+   "in_universe": false,
+   "passed_thesis": false,
+   "enriched": false,
+   "rank": null,
+   "baseline_rank": null,
+   "universe_size": 50248,
+   "in_thesis_size": 14268
+  }
+ ],
+ "cutoffs": {
+  "2024-08-14": {
+   "universe": 24066,
+   "in_thesis": 6213,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 48,
+    "openalex": 0,
+    "edgar": 12
+   },
+   "seconds": 554.3
+  },
+  "2024-10-13": {
+   "universe": 24443,
+   "in_thesis": 6350,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 30,
+    "openalex": 0,
+    "edgar": 4
+   },
+   "seconds": 218.0
+  },
+  "2024-12-13": {
+   "universe": 25230,
+   "in_thesis": 6584,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 24,
+    "openalex": 0,
+    "edgar": 0
+   },
+   "seconds": 218.7
+  },
+  "2025-02-11": {
+   "universe": 26418,
+   "in_thesis": 6899,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 56,
+    "openalex": 0,
+    "edgar": 2
+   },
+   "seconds": 238.7
+  },
+  "2025-05-03": {
+   "universe": 29069,
+   "in_thesis": 7518,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 58,
+    "openalex": 0,
+    "edgar": 8
+   },
+   "seconds": 297.9
+  },
+  "2025-07-02": {
+   "universe": 32160,
+   "in_thesis": 8306,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 55,
+    "openalex": 0,
+    "edgar": 2
+   },
+   "seconds": 277.1
+  },
+  "2025-07-25": {
+   "universe": 33418,
+   "in_thesis": 8629,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 22,
+    "openalex": 0,
+    "edgar": 0
+   },
+   "seconds": 200.8
+  },
+  "2025-09-23": {
+   "universe": 37578,
+   "in_thesis": 9774,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 56,
+    "openalex": 0,
+    "edgar": 6
+   },
+   "seconds": 315.6
+  },
+  "2025-10-17": {
+   "universe": 39421,
+   "in_thesis": 10219,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 47,
+    "openalex": 0,
+    "edgar": 2
+   },
+   "seconds": 231.8
+  },
+  "2025-11-29": {
+   "universe": 43006,
+   "in_thesis": 11423,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 37,
+    "openalex": 0,
+    "edgar": 0
+   },
+   "seconds": 285.2
+  },
+  "2025-12-16": {
+   "universe": 45617,
+   "in_thesis": 12502,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 20,
+    "openalex": 0,
+    "edgar": 0
+   },
+   "seconds": 220.9
+  },
+  "2026-01-28": {
+   "universe": 50248,
+   "in_thesis": 14268,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 45,
+    "openalex": 0,
+    "edgar": 3
+   },
+   "seconds": 313.7
+  },
+  "2026-02-27": {
+   "universe": 54322,
+   "in_thesis": 15829,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 76,
+    "openalex": 0,
+    "edgar": 4
+   },
+   "seconds": 323.2
+  },
+  "2026-03-04": {
+   "universe": 55128,
+   "in_thesis": 16119,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 28,
+    "openalex": 0,
+    "edgar": 0
+   },
+   "seconds": 189.5
+  },
+  "2026-03-11": {
+   "universe": 56328,
+   "in_thesis": 16556,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 24,
+    "openalex": 0,
+    "edgar": 0
+   },
+   "seconds": 199.9
+  },
+  "2026-04-28": {
+   "universe": 65487,
+   "in_thesis": 19784,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 88,
+    "openalex": 0,
+    "edgar": 6
+   },
+   "seconds": 465.7
+  },
+  "2026-05-03": {
+   "universe": 66336,
+   "in_thesis": 20120,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 38,
+    "openalex": 0,
+    "edgar": 1
+   },
+   "seconds": 199.9
+  },
+  "2026-05-10": {
+   "universe": 67672,
+   "in_thesis": 20617,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 60,
+    "openalex": 0,
+    "edgar": 2
+   },
+   "seconds": 232.2
+  },
+  "2026-06-27": {
+   "universe": 77800,
+   "in_thesis": 24544,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 96,
+    "openalex": 0,
+    "edgar": 4
+   },
+   "seconds": 547.2
+  },
+  "2026-07-08": {
+   "universe": 80538,
+   "in_thesis": 25543,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 37,
+    "openalex": 0,
+    "edgar": 0
+   },
+   "seconds": 280.5
+  },
+  "2026-07-10": {
+   "universe": 81039,
+   "in_thesis": 25751,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 37,
+    "openalex": 0,
+    "edgar": 0
+   },
+   "seconds": 200.5
+  },
+  "2026-09-06": {
+   "universe": 95924,
+   "in_thesis": 31854,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 113,
+    "openalex": 0,
+    "edgar": 2
+   },
+   "seconds": 741.2
+  },
+  "2026-09-08": {
+   "universe": 96617,
+   "in_thesis": 32114,
+   "enriched": 60,
+   "ranks": 600,
+   "requests": {
+    "github": 85,
+    "openalex": 0,
+    "edgar": 1
+   },
+   "seconds": 229.8
+  }
+ },
+ "query_audit": {
+  "distinct_queries": 593,
+  "queries_naming_a_target": [],
+  "companies_without_discovery_row": 0,
+  "passed": true
+ },
+ "runtime_seconds": 7019
+}

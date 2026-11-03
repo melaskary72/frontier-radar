@@ -3,6 +3,9 @@
 Guarantees, in order:
 1. Polite pacing: a minimum interval between requests per source (config/sources.yaml).
 2. Retry with exponential backoff on 429, 5xx, and transport errors; honours Retry-After.
+   HTTP errors stop after 6 attempts. Network errors (DNS failure, dropped connection,
+   timeout) keep retrying with backoff capped at 5 minutes until RADAR_NETWORK_PATIENCE_S
+   (default 900 seconds) has passed, so a short outage cannot kill a long batch job.
 3. Caching: every response is written to raw_snapshots (fetched_at, SHA-256) and reused
    while fresh, so reruns cost nothing and every derived row has provenance.
 4. Offline mode (RADAR_OFFLINE=1): never touches the network; cache or fixture only.
@@ -28,7 +31,6 @@ from tenacity import (
     RetryCallState,
     retry,
     retry_if_exception,
-    stop_after_attempt,
     wait_exponential_jitter,
 )
 
@@ -76,13 +78,40 @@ def _is_retryable(exc: BaseException) -> bool:
     return isinstance(exc, RetryableStatus | httpx.TransportError)
 
 
+HTTP_ATTEMPTS = 6
+
+
+def network_patience() -> float:
+    """Seconds to keep retrying one request through network errors (read per call)."""
+    return float(os.environ.get("RADAR_NETWORK_PATIENCE_S", "900"))
+
+
+def _last_exc(state: RetryCallState) -> BaseException | None:
+    return state.outcome.exception() if state.outcome else None
+
+
+def _stop(state: RetryCallState) -> bool:
+    if isinstance(_last_exc(state), httpx.TransportError):
+        return (state.seconds_since_start or 0.0) >= network_patience()
+    return state.attempt_number >= HTTP_ATTEMPTS
+
+
 def _wait_with_retry_after(state: RetryCallState) -> float:
-    exc = state.outcome.exception() if state.outcome else None
+    exc = _last_exc(state)
     if isinstance(exc, RetryableStatus):
         ra = exc.response.headers.get("retry-after")
         if ra and ra.isdigit():
             return min(float(ra), 120.0)
+    if isinstance(exc, httpx.TransportError):
+        return wait_exponential_jitter(initial=5, max=300)(state)
     return wait_exponential_jitter(initial=5, max=120)(state)
+
+
+def _log_retry(state: RetryCallState) -> None:
+    exc = _last_exc(state)
+    wait = state.next_action.sleep if state.next_action else 0.0
+    log.warning("attempt %d failed (%s: %s); retrying in %.0fs", state.attempt_number,
+                type(exc).__name__, exc, wait)
 
 
 def full_url(url: str, params: dict[str, Any] | None) -> str:
@@ -169,7 +198,8 @@ class HttpCollector:
     @retry(
         retry=retry_if_exception(_is_retryable),
         wait=_wait_with_retry_after,
-        stop=stop_after_attempt(6),
+        stop=_stop,
+        before_sleep=_log_retry,
         reraise=True,
     )
     def _send(self, method: str, url: str, body: Any, headers: dict[str, str]) -> httpx.Response:
