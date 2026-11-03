@@ -161,6 +161,20 @@ def seed_company(session: Session) -> Company:
     return c
 
 
+def substantive_analysis() -> dict[str, list[dict[str, Any]]]:
+    def a(text: str) -> dict[str, Any]:
+        return {"text": text, "kind": "analysis", "citations": []}
+    return {
+        "Technology": [a("Keeping a small turbine engine reliable under repeated thermal cycling is the hard problem here."),
+                       a("The approach looks like a standard design packaged for a smaller airframe, not a new cycle.")],
+        "Why now": [a("Cheaper additive manufacturing of hot-section parts makes small production runs economical today."),
+                    a("Defense buyers now fund small attritable aircraft that need low-cost propulsion at volume.")],
+        "Risks": [a("Engine durability under real duty cycles could fall short of what buyers require for fielding."),
+                  a("Larger engine makers could offer a cheaper derivative and close the market within a few years."),
+                  a("The public record names no team, so it is unclear who could certify an engine for flight.")],
+    }
+
+
 def test_memo_pipeline_removes_unsupported_claims(session: Session) -> None:
     c = seed_company(session)
     sid = session.scalars(select(RawSnapshot.id)).one()
@@ -175,7 +189,7 @@ def test_memo_pipeline_removes_unsupported_claims(session: Session) -> None:
         {"text": "The launch drew 400 comments.", "kind": "fact", "citations": [sid]},
         {"text": "Kestrel raised a seed round.", "kind": "fact", "citations": []},
     ]
-    sections["Risks"] = [{"text": "Engine durability is the main risk.", "kind": "analysis", "citations": []}]
+    sections.update(substantive_analysis())
     draft = {"sections": [sec(h, s) for h, s in sections.items()], "founder_call_questions": [f"Q{i}?" for i in range(9)]}
     verdicts = {"verdicts": [
         {"claim_id": 1, "verdict": "supported", "note": "points match", "rewrite": ""},
@@ -196,3 +210,65 @@ def test_memo_pipeline_removes_unsupported_claims(session: Session) -> None:
     verifier_prompt = client.calls[1]["messages"][0]["content"]
     assert "Signals timeline" not in verifier_prompt and "founder" not in verifier_prompt.lower()
     assert {cl.verdict for cl in session.scalars(select(Claim))} == {"supported", "removed:unsupported", "partial"}
+
+
+def test_repeated_facts_are_published_once(session: Session) -> None:
+    """Spot-check finding: a memo stated the same creation date in two sections."""
+    c = seed_company(session)
+    sid = session.scalars(select(RawSnapshot.id)).one()
+    sections: dict[str, list[dict[str, Any]]] = {h: [] for h in SECTIONS}
+    fact = {"text": "Kestrel launched on Hacker News with 120 points.", "kind": "fact", "citations": [sid]}
+    sections["Snapshot"] = [fact]
+    sections["Signals timeline"] = [dict(fact, text="Kestrel launched on Hacker News with 120 points!")]
+    sections.update(substantive_analysis())
+    draft = {"sections": [{"heading": h, "sentences": v} for h, v in sections.items()],
+             "founder_call_questions": [f"Q{i}?" for i in range(9)]}
+    verdicts = {"verdicts": [{"claim_id": 1, "verdict": "supported", "note": "ok", "rewrite": ""}]}
+    client = FakeClient(response(draft, model="claude-sonnet-5-5"), response(verdicts, model="claude-sonnet-5-5"))
+    pub = write_memo(session, c, date(2026, 10, 1), client=client)
+    assert pub.memo.body_md.count("120 points") == 1
+    assert pub.summary["duplicates_dropped"] == 1 and pub.summary["checked"] == 1
+
+
+def test_analysis_is_marked_and_cannot_smuggle_numbers(session: Session) -> None:
+    c = seed_company(session)
+    sid = session.scalars(select(RawSnapshot.id)).one()
+    sections: dict[str, list[dict[str, Any]]] = {h: [] for h in SECTIONS}
+    sections["Snapshot"] = [{"text": "Kestrel launched on Hacker News with 120 points.", "kind": "fact", "citations": [sid]}]
+    sections.update(substantive_analysis())
+    sections["Market"] = [{"text": "The market for these engines is worth 900 million dollars every year.",
+                           "kind": "analysis", "citations": []}]
+    draft = {"sections": [{"heading": h, "sentences": v} for h, v in sections.items()],
+             "founder_call_questions": [f"Q{i}?" for i in range(9)]}
+    verdicts = {"verdicts": [{"claim_id": 1, "verdict": "supported", "note": "ok", "rewrite": ""}]}
+    client = FakeClient(response(draft, model="claude-sonnet-5-5"), response(verdicts, model="claude-sonnet-5-5"))
+    pub = write_memo(session, c, date(2026, 10, 1), client=client)
+    body = pub.memo.body_md
+    assert "900 million" not in body and pub.summary["analysis_with_new_numbers_dropped"] == 1
+    tech = body.split("## Technology")[1].split("## ")[0]
+    assert "_Analysis:_ Keeping a small turbine engine" in tech
+
+
+def test_thin_analysis_fails_the_structure_check() -> None:
+    from radar.agents.research import ResearchAgent, ResearchInput
+
+    sections = [{"heading": h, "sentences": []} for h in SECTIONS]
+    draft = MemoDraft.model_validate({"sections": sections, "founder_call_questions": [f"Q{i}?" for i in range(9)]})
+    problems = ResearchAgent.check(None, ResearchInput("x", None, date(2026, 1, 1), []), draft)  # type: ignore[arg-type]
+    assert any("Risks needs at least 3" in p for p in problems)
+    assert any("Why now needs at least 2" in p for p in problems)
+
+
+def test_fact_contained_in_an_earlier_fact_is_dropped() -> None:
+    """Spot-check #8/#25 pattern: the timeline restated a date already in the snapshot."""
+    from radar.agents.research import dedupe
+
+    def fact(text: str) -> dict[str, Any]:
+        return {"text": text, "kind": "fact", "citations": [13]}
+    sections = [{"heading": h, "sentences": []} for h in SECTIONS]
+    sections[0]["sentences"] = [fact("The repository was created on 2026-09-19 and had 178 stars as of 2026-11-02.")]
+    sections[5]["sentences"] = [fact("The repository was created on 2026-09-19."),
+                                fact("Three releases were published between 2026-10-07 and 2026-10-22.")]
+    draft = MemoDraft.model_validate({"sections": sections, "founder_call_questions": []})
+    assert dedupe(draft) == 1
+    assert [s.text for s in draft.sections[5].sentences] == ["Three releases were published between 2026-10-07 and 2026-10-22."]

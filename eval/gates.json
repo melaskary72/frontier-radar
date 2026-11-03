@@ -1,17 +1,17 @@
 {
- "generated": "2026-11-02",
+ "generated": "2026-11-03",
  "gates": {
   "claim_citation_precision": {
-   "value": null,
+   "value": 1.0,
    "target": ">= 0.95 supported (published claims, human spot-check of 40)",
-   "status": "pending",
+   "status": "pass",
    "method": "verifier checks every claim; Mohamed adjudicates 40 random published claims",
    "memos": 4,
    "claims_checked": 75,
    "first_draft_supported_rate": 0.88,
    "rewritten": 7,
    "removed": 2,
-   "spotcheck_status": "awaiting Mohamed"
+   "spotcheck_status": "complete"
   },
   "thesis_classifier_accuracy": {
    "value": 0.9,

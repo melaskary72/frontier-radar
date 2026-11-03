@@ -189,7 +189,11 @@ def main() -> None:
         lines += ["## Eval gates at the time of this report", "", "| Gate | Value | Target | Status |", "|---|---|---|---|"]
         for k, g in gates.items():
             lines.append(f"| {k.replace('_', ' ')} | {g['value']} | {g['target']} | {g['status']} |")
-        lines.append("")
+        lines += ["", "What the claim gate measures: whether each published factual sentence says what its cited "
+                  "source says (Mohamed checked 40 at random, all supported). It does not measure the quality of a "
+                  "memo's analysis. The 40 sampled claims were mostly metadata (dates, counts, file lists), which is "
+                  "the easiest kind of claim to cite correctly. Judgment in memos is kept in paragraphs marked "
+                  "Analysis, which carry no citations and are not covered by this gate.", ""]
 
     analysis = HERE / "analysis.md"
     lines += [analysis.read_text().strip() if analysis.exists() else "## Analysis\n\n_Pending review._", "", "---", "", FOOTER, ""]

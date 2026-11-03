@@ -1,7 +1,9 @@
 """Research Agent (Sonnet) and the memo pipeline: draft, verify, publish.
 
     evidence pack -> Research Agent draft (structured sentences with citations)
-    -> uncited facts and citations to unknown ids are dropped before verification
+    -> uncited facts, citations to unknown ids, and repeated facts are dropped before verification
+    -> analysis sentences carrying numbers that appear in no evidence item are dropped (they
+       would be uncited facts in disguise)
     -> Verifier Agent judges every cited fact against its excerpts only
     -> supported: kept; partial: replaced by the verifier's rewrite when the rewrite passes
        the strict heuristic against the same excerpts, otherwise removed; unsupported: removed
@@ -11,6 +13,7 @@
 from __future__ import annotations
 
 import logging
+import re
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
 from typing import Literal
@@ -26,8 +29,17 @@ from radar.store.models import Claim, Company, Memo
 
 log = logging.getLogger(__name__)
 
-SECTIONS = ["Snapshot", "Team", "Technology", "Market and why now", "Signals timeline", "Risks", "Open questions"]
-Heading = Literal["Snapshot", "Team", "Technology", "Market and why now", "Signals timeline", "Risks", "Open questions"]
+SECTIONS = ["Snapshot", "Team", "Technology", "Why now", "Market", "Signals timeline", "Risks", "Open questions"]
+Heading = Literal["Snapshot", "Team", "Technology", "Why now", "Market", "Signals timeline", "Risks", "Open questions"]
+# Minimum analysis sentences per section (research.v2): judgment, not just metadata.
+MIN_ANALYSIS = {"Technology": 2, "Why now": 2, "Risks": 3}
+MIN_ANALYSIS_WORDS = 10
+ANALYSIS_MARK = "_Analysis:_"
+NUMBER = re.compile(r"\d[\d,.]*\d|\d")
+
+
+def normalize(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
 
 
 class Sentence(BaseModel):
@@ -56,7 +68,7 @@ class ResearchInput:
 
 class ResearchAgent(Agent[ResearchInput, MemoDraft]):
     name = "research"
-    prompt_file = "research.v1.md"
+    prompt_file = "research.v3.md"
     output_model = MemoDraft
 
     def build_user(self, inp: ResearchInput) -> str:
@@ -74,6 +86,12 @@ class ResearchAgent(Agent[ResearchInput, MemoDraft]):
             problems.append(f"sections must be exactly, in order: {SECTIONS}; got {headings}")
         if not 8 <= len(out.founder_call_questions) <= 10:
             problems.append(f"need 8 to 10 founder_call_questions, got {len(out.founder_call_questions)}")
+        for sec in out.sections:
+            need = MIN_ANALYSIS.get(sec.heading, 0)
+            got = [x for x in sec.sentences if x.kind == "analysis" and len(x.text.split()) >= MIN_ANALYSIS_WORDS]
+            if len(got) < need:
+                problems.append(f"{sec.heading} needs at least {need} substantive analysis sentences "
+                                f"(10 or more words each), got {len(got)}")
         return problems
 
     def fallback(self, inp: ResearchInput) -> MemoDraft:
@@ -87,6 +105,8 @@ class ResearchAgent(Agent[ResearchInput, MemoDraft]):
             by_heading[heading].append(Sentence(text=f"{e.kind}: {e.excerpt[:220]}", kind="fact", citations=[e.id]))
         by_heading["Risks"].append(Sentence(text="Automated draft without model review; risks not assessed.",
                                             kind="analysis", citations=[]))
+        by_heading["Why now"].append(Sentence(text="Automated draft without model review; timing not assessed.",
+                                              kind="analysis", citations=[]))
         by_heading["Open questions"].append(Sentence(text="Team, funding, and customers are not established by public evidence.",
                                                      kind="analysis", citations=[]))
         qs = ["What is the core technical bottleneck you are solving, and how do you measure progress on it?",
@@ -114,6 +134,9 @@ def write_memo(session: Session, company: Company, as_of: date, *, client: objec
     research = ResearchAgent(session, client=client)
     draft = research.run(ResearchInput(company.name, company.sector, as_of, evidence))
 
+    dupes = dedupe(draft.output)
+    smuggled = drop_unsupported_numbers(draft.output, " ".join(excerpts.values()))
+
     # Number every cited fact; drop uncited facts and unknown citations before verification.
     to_check: list[ClaimToCheck] = []
     pre_removed = 0
@@ -136,7 +159,8 @@ def write_memo(session: Session, company: Company, as_of: date, *, client: objec
     session.add(memo)
     session.flush()
 
-    counts = {"supported": 0, "rewritten": 0, "removed_partial": 0, "unsupported": 0, "uncited_dropped": pre_removed}
+    counts = {"supported": 0, "rewritten": 0, "removed_partial": 0, "unsupported": 0, "uncited_dropped": pre_removed,
+              "duplicates_dropped": dupes, "analysis_with_new_numbers_dropped": smuggled}
     published: dict[str, str] = {}  # sentence text -> published text ("" when removed)
     claims: list[Claim] = []
     for c in to_check:
@@ -179,20 +203,72 @@ def write_memo(session: Session, company: Company, as_of: date, *, client: objec
     return PublishedMemo(memo, claims, memo.verifier_summary_json)
 
 
+def dedupe(draft: MemoDraft) -> int:
+    """Drop repeated sentences anywhere in the memo, keeping the first. A sentence repeats when
+    its normalized text matches an earlier one, or, for facts, when an earlier fact citing the
+    same sources already contains every word of it ("created on 2026-09-19" inside "created on
+    2026-09-19 and had 178 stars")."""
+    seen: set[str] = set()
+    earlier_facts: list[tuple[frozenset[int], set[str]]] = []
+    dropped = 0
+    for sec in draft.sections:
+        kept = []
+        for sent in sec.sentences:
+            norm = normalize(sent.text)
+            key = f"{sent.kind}:{norm}"
+            words = set(norm.split())
+            cites = frozenset(sent.citations)
+            contained = sent.kind == "fact" and any(
+                cites <= prev_cites and words <= prev_words for prev_cites, prev_words in earlier_facts)
+            if key in seen or contained:
+                dropped += 1
+                continue
+            seen.add(key)
+            if sent.kind == "fact":
+                earlier_facts.append((cites, words))
+            kept.append(sent)
+        sec.sentences = kept
+    return dropped
+
+
+def drop_unsupported_numbers(draft: MemoDraft, evidence_text: str) -> int:
+    """Analysis may not carry numbers or dates absent from every evidence item."""
+    src = evidence_text.replace(",", "")
+    dropped = 0
+    for sec in draft.sections:
+        kept = []
+        for sent in sec.sentences:
+            nums = [n.replace(",", "") for n in NUMBER.findall(sent.text)] if sent.kind == "analysis" else []
+            if any(n not in src for n in nums):
+                dropped += 1
+                continue
+            kept.append(sent)
+        sec.sentences = kept
+    return dropped
+
+
 def render(company: Company, as_of: date, draft: MemoDraft, published: dict[str, str],
            excerpts: dict[int, str]) -> str:
+    """Cited facts first, then the section's analysis as its own paragraph marked
+    `_Analysis:_`, so a reader (and the dashboard exporter) never mistakes judgment for fact."""
     lines = [f"# {company.name}", "", f"_First-look memo as of {as_of}. Public data only. "
-             "Every factual sentence links to its source; a separate verifier removed unsupported claims._", ""]
+             "Every factual sentence links to its source; a separate verifier removed unsupported claims. "
+             "Paragraphs marked Analysis are the research agent's judgment, not cited fact._", ""]
     for s in draft.sections:
-        out = []
+        facts, analysis = [], []
         for sent in s.sentences:
             if sent.kind == "analysis":
-                out.append(sent.text)
+                analysis.append(sent.text.strip())
                 continue
             text = published.get(sent.text, "")
             if text:
                 marks = "".join(f" [c:{c}]" for c in sent.citations if c in excerpts)
-                out.append(text.rstrip() + marks)
-        lines += [f"## {s.heading}", "", " ".join(out) if out else "_Nothing in the public record survived verification._", ""]
+                facts.append(text.rstrip() + marks)
+        body = []
+        if facts:
+            body.append(" ".join(facts))
+        if analysis:
+            body.append(f"{ANALYSIS_MARK} " + " ".join(analysis))
+        lines += [f"## {s.heading}", "", "\n\n".join(body) if body else "_Nothing in the public record survived verification._", ""]
     lines += ["## Founder-call questions", ""] + [f"{i}. {q}" for i, q in enumerate(draft.founder_call_questions, 1)]
     return "\n".join(lines) + "\n"

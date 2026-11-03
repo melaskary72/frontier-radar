@@ -26,7 +26,7 @@ export type Snapshot = {
   id: number; source: string; url: string; fetched_at: string; sha256: string; http_status: number;
   kind: string; title: string; link: string; excerpt: string;
 };
-export type Sentence = { text: string; citations: number[]; claim_id: number | null; verdict: string | null; note: string | null; break?: boolean };
+export type Sentence = { text: string; kind?: "fact" | "analysis"; citations: number[]; claim_id: number | null; verdict: string | null; note: string | null; break?: boolean };
 export type Memo = {
   id: number; version: number; created_at: string; intro: string;
   sections: { heading: string; sentences: Sentence[] }[];

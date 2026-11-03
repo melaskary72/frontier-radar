@@ -20,6 +20,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from radar.agents.evidence import EvidenceItem, evidence_pack
+from radar.agents.research import ANALYSIS_MARK
 from radar.collectors.common import clean_text
 from radar.config import REPO_ROOT, weights
 from radar.scoring.explain import explain
@@ -129,7 +130,11 @@ def _memo(session: Session, memo: Memo, items: dict[int, EvidenceItem]) -> dict[
             continue
         sentences: list[dict[str, Any]] = []
         for para in [p for p in text.strip().split("\n\n") if p.strip()]:
-            parts = CITE.split(para.strip())
+            para = para.strip()
+            kind = "fact"
+            if para.startswith(ANALYSIS_MARK):  # research.v2 marks judgment paragraphs
+                kind, para = "analysis", para[len(ANALYSIS_MARK):].strip()
+            parts = CITE.split(para)
             for i in range(0, len(parts), 2):
                 chunk = parts[i].strip()
                 marks = parts[i + 1] if i + 1 < len(parts) else ""
@@ -139,7 +144,7 @@ def _memo(session: Session, memo: Memo, items: dict[int, EvidenceItem]) -> dict[
                     cited = ids if j == len(pieces) - 1 else []
                     claim = by_published.get(re.sub(r"\s+", " ", piece).strip()) if cited else None
                     sentences.append({
-                        "text": piece, "citations": cited,
+                        "text": piece, "citations": cited, "kind": kind,
                         "claim_id": claim.get("id") if claim else None,
                         "verdict": claim.get("verdict") if claim else None,
                         "note": _t(claim.get("note")) if claim and claim.get("note") else None,

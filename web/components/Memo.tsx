@@ -30,7 +30,8 @@ export default function Memo({ memo }: { memo: MemoT }) {
         <section key={sec.heading}>
           <h3 style={{ marginTop: 18 }}>{sec.heading}</h3>
           {splitParas(sec.sentences).map((para, i) => (
-            <p key={i}>
+            <p key={i} className={para[0]?.kind === "analysis" ? "analysis" : undefined}>
+              {para[0]?.kind === "analysis" && <span className="analysis-tag" title="The research agent's judgment, not a cited fact">Analysis</span>}
               {para.map((s, j) => (
                 <span key={j} className="sent">
                   {s.text}

@@ -33,7 +33,7 @@ def _seed(session: Session) -> None:
     session.add(Score(company_id=company.id, as_of=date(2026, 11, 1), total=0.5, rank=1, breakdown_json={
         "groups": {"technical_depth": 0.2, "momentum": 0.3}, "percentiles": {"repo_quality": 0.8}}))
     body = (f"# Acme\n\n_First-look memo._\n\n## Snapshot\n\nAcme has one repository, acme/arm. [c:{snap.id}] "
-            f"It is early.\n\n## Founder-call questions\n\n1. Who builds it?\n2. Who buys it?\n")
+            f"It is early.\n\n_Analysis:_ Cheap arms make data collection the bottleneck.\n\n## Founder-call questions\n\n1. Who builds it?\n2. Who buys it?\n")
     session.add(Memo(company_id=company.id, created_at=datetime(2026, 11, 1, tzinfo=UTC), version=1, body_md=body,
                      claims_json=[{"id": 1, "text": "Acme has one repository.", "published": "Acme has one repository, acme/arm.",
                                    "citations": [snap.id], "verdict": "supported"}],
@@ -61,6 +61,8 @@ def test_export_writes_dashboard_json(session: Session, tmp_path: Path) -> None:
     assert [s["heading"] for s in memo["sections"]] == ["Snapshot"]
     cited = [s for s in memo["sections"][0]["sentences"] if s["citations"]]
     assert cited and cited[0]["claim_id"] == 1 and cited[0]["verdict"] == "supported"
+    kinds = {s["text"]: s.get("kind") for s in memo["sections"][0]["sentences"] if s["text"]}
+    assert kinds["Cheap arms make data collection the bottleneck."] == "analysis" and cited[0]["kind"] == "fact"
     snap = memo["snapshots"][str(cited[0]["citations"][0])]
     assert snap["sha256"] and snap["fetched_at"] and "acme/arm" in snap["excerpt"]
     assert memo["founder_call_questions"] == ["Who builds it?", "Who buys it?"]

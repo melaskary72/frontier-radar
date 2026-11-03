@@ -201,3 +201,7 @@ dl.kv dd { margin: 0; word-break: break-all; }
 }
 
 .nowrap td, .nowrap th { white-space: nowrap; }
+
+/* research.v2 memos: judgment is visually separate from cited fact */
+.memo p.analysis { border-left: 3px solid var(--gold); padding: 2px 0 2px 12px; background: var(--gold-wash); border-radius: 0 6px 6px 0; }
+.analysis-tag { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold); margin-right: 8px; }

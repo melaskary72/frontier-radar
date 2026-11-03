@@ -2,6 +2,28 @@
 
 Newest first. Every corrective run, deviation, and gate change is recorded here.
 
+## 2026-11-03: Claim gate closed; memo quality (research.v2 and v3)
+
+- Claim citation gate: Mohamed marked all 40 sampled published claims supported (1.0 against
+  a 0.95 target). He found one duplicate (claims 8 and 25 state the same creation date). The
+  report now says what this gate measures: factual citation accuracy on mostly metadata
+  claims, not the quality of a memo's analysis.
+- Memo publish rules: repeated sentences are dropped before verification, including a fact
+  whose words are already contained in an earlier fact citing the same sources. Analysis
+  sentences carrying numbers that appear in no evidence item are dropped. Both counted in the
+  memo's verifier summary. Tests in `tests/test_agents.py`.
+- Prompt research.v2: sections Snapshot, Team, Technology, Why now, Market, Signals timeline,
+  Risks, Open questions. Technology must name the hard technical problem and what is novel or
+  ordinary; Why now must say what changed recently; Risks must give specific technical,
+  commercial, and competition or team failure modes. The structure check rejects drafts with
+  fewer than 2, 2, and 3 substantive analysis sentences in those sections.
+- Prompt research.v3: the first v2 memo (Robonine) lost its Team section because the model
+  stated "no founders are named" as a cited fact, which the verifier rightly removed. v3 asks
+  for that as analysis. v2 is kept unchanged for traceability.
+- Rendering: each section prints cited facts first, then a paragraph marked `_Analysis:_`; the
+  dashboard shows analysis in a labeled gold block. Robonine memo v3: 11 facts checked, 10
+  supported, 1 rewritten to match its source, 1 duplicate dropped. Spend to date $0.41.
+
 ## 2026-11-03: Corrective run results and the Form D outcome backtest
 
 - Corrective run (labels v2, resolver v2), fingerprint `b5c9630306afa959`, 23 cutoffs, about

@@ -66,13 +66,15 @@ Primary companies found in the top 100 at any cutoff: 0 of 5. Median lead time: 
 
 | Gate | Value | Target | Status |
 |---|---|---|---|
-| claim citation precision | None | >= 0.95 supported (published claims, human spot-check of 40) | pending |
+| claim citation precision | 1.0 | >= 0.95 supported (published claims, human spot-check of 40) | pass |
 | thesis classifier accuracy | 0.9 | >= 0.85 | pass |
 | entity resolution precision | 0.984 | >= 0.90 precision | pass |
 | leakage test | pass | pass | pass |
 | total llm cost | 0.3094 | < $15.00 | pass |
 | weekly pipeline minutes | None | < 20 | pending |
 | offline demo | None | make demo on a fresh clone, no keys | pending |
+
+What the claim gate measures: whether each published factual sentence says what its cited source says (Mohamed checked 40 at random, all supported). It does not measure the quality of a memo's analysis. The 40 sampled claims were mostly metadata (dates, counts, file lists), which is the easiest kind of claim to cite correctly. Judgment in memos is kept in paragraphs marked Analysis, which carry no citations and are not covered by this gate.
 
 ## Analysis
 
