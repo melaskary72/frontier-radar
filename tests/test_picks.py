@@ -41,3 +41,12 @@ def test_selection_rules(session: Session, tmp_path) -> None:  # type: ignore[no
     assert skipped["no_company_website"] == 1
     jp, mp = write_picks(picks, AS_OF, skipped, "2026-11-02", tmp_path)
     assert "2027-05-04" in mp.read_text() and jp.exists()
+
+
+def test_model_prose_glitches_are_cleaned() -> None:
+    from radar.collectors.common import clean_model_prose, clean_text
+    from radar.picks import clean_why_now
+
+    assert clean_model_prose("created 2026-10-12 and\u5df3 reached 290 stars") == "created 2026-10-12 and reached 290 stars"
+    assert clean_why_now("1,145 stars (evidence 1, 2021). Strong signal.") == "1,145 stars. Strong signal."
+    assert clean_text("\u98de\u7279 HD1910") == "\u98de\u7279 HD1910"  # scraped CJK text is kept

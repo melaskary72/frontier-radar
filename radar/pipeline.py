@@ -22,6 +22,7 @@ from radar.agents.judges import entity_judge, thesis_judge
 from radar.agents.research import write_memo
 from radar.agents.sourcing import SourcingAgent, SourcingInput
 from radar.collectors.ats import ATSCollector
+from radar.collectors.common import clean_model_prose
 from radar.collectors.edgar import EdgarCollector
 from radar.collectors.github import GitHubCollector
 from radar.collectors.openalex import OpenAlexCollector
@@ -207,7 +208,7 @@ def _why_now(session: Session, scored: list[Scored], as_of: date) -> None:
                                     evidence_pack(session, company, as_of), ex.top_evidence))
         row = session.get(Score, (s.company_id, as_of))
         if row is not None:
-            row.breakdown_json = {**row.breakdown_json, "why_now": r.output.why_now,
+            row.breakdown_json = {**row.breakdown_json, "why_now": clean_model_prose(r.output.why_now),
                                   "why_now_evidence": r.output.evidence_ids, "why_now_confidence": r.output.confidence,
                                   "why_now_status": r.status, "top_evidence": ex.top_evidence}
     session.flush()

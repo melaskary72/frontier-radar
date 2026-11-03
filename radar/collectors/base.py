@@ -92,7 +92,10 @@ def _last_exc(state: RetryCallState) -> BaseException | None:
 
 def _stop(state: RetryCallState) -> bool:
     if isinstance(_last_exc(state), httpx.TransportError):
-        return (state.seconds_since_start or 0.0) >= network_patience()
+        # A collector can set network_patience_s: for company websites, a host that does not
+        # resolve is a dead site, not a network outage, so waiting 15 minutes would be wrong.
+        own = getattr(state.args[0], "network_patience_s", None) if state.args else None
+        return (state.seconds_since_start or 0.0) >= (own if own is not None else network_patience())
     return state.attempt_number >= HTTP_ATTEMPTS
 
 

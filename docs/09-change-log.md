@@ -2,6 +2,26 @@
 
 Newest first. Every corrective run, deviation, and gate change is recorded here.
 
+## 2026-11-03: Shipped (dashboard deployed, Live Picks, repo public)
+
+- Dashboard deployed to Vercel at https://frontier-radar-eight.vercel.app behind an access code
+  (middleware; every page and data file redirects without it). The Signals form refuses
+  submissions on the hosted site. `frontier-radar.vercel.app` belongs to an unrelated project.
+- Robonine false positive: the profile filter matched "research lab" inside "research
+  laboratories" (its customers). Academic markers now match whole words only; Robonine's
+  profile is a regression case; no other flagged profile changed. Today's run was rescored.
+- Website fetches give up after 20 seconds on network errors (a dead company domain had
+  triggered the 15-minute outage patience). Model-written why-now lines are cleaned of stray
+  CJK characters and leaked evidence references; scraped text is untouched. Tests added.
+- Live Picks 2026-11-03: companies with a live website, no labs or large companies, no Form D
+  since 2024-01-01. Mohamed excluded Rhoban, Tenstorrent, SvGrid, URML, Dream Machines
+  Robotics, reality-opened, OpenBMB, and TPT Solutions, each with a reason in
+  `picks/exclusions.csv`, and labeled Hebbian Robotics YC-backed with its source
+  (`picks/labels.csv`). The list stops at 8: below rank 40, candidates no longer met the
+  company-evidence and traction bar. Graded on 2027-05-04 and published either way.
+- README rewritten in three parts (the honest finding, what the system is for, Live Picks)
+  with phone screenshots and a Next list.
+
 ## 2026-11-03: Lab filter, homepages, private signals, analysis numbers, Live Picks
 
 - Lab and incumbent filter: the 2026-11-01 live top 30 was dominated by university groups

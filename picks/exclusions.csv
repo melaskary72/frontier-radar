@@ -1,2 +1,9 @@
 github_org,name,reason,decided_by,decided_on
 rhoban,Rhoban,"likely a university robotics team (University of Bordeaux), not a company",Mohamed El Askary,2026-11-03
+tenstorrent,Tenstorrent,"large, heavily funded chip company; not a seed-stage bet, and its Form D filings likely sit under another entity name",Mohamed El Askary,2026-11-03
+sv-grid,SvGrid,"off-thesis: a Svelte web data grid that the thesis classifier wrongly passed",Mohamed El Askary,2026-11-03
+urml-mars,URML,"reads as a standards and specification project, not a company",Mohamed El Askary,2026-11-03
+dream-machines-robotics,Dream-Machines-Robotics,"website is a personal domain; likely one person's project, not a company",Mohamed El Askary,2026-11-03
+reality-opened,reality-opened,"developer tool with no hardware and no company details; not clearly a company",Mohamed El Askary,2026-11-03
+openbmb,OpenBMB,"open-source community affiliated with Tsinghua University; its own why-now line finds no sign of a company",Mohamed El Askary,2026-11-03
+tpt-solutions,tpt-solutions,"open-source subdomain of a consultancy with near-zero traction (0 stars); not clearly a company building in the thesis",Mohamed El Askary,2026-11-03

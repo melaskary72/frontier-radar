@@ -27,7 +27,7 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from radar.collectors.common import clean_text
+from radar.collectors.common import clean_model_prose, clean_text
 from radar.collectors.github import GitHubCollector
 from radar.collectors.web import WebCollector
 from radar.config import REPO_ROOT
@@ -58,6 +58,8 @@ class Pick:
     why_now_source: str
     top_evidence: list[str] = field(default_factory=list)
     flags: list[str] = field(default_factory=list)  # for a person to rule on, never auto-dropped
+    label: str = ""          # a person's label with its source (picks/labels.csv), e.g. YC-backed
+    label_source: str = ""
 
 
 def formd_names(path: Path = FORMD_INDEX) -> tuple[set[str], str | None]:
@@ -105,6 +107,17 @@ EXCLUSIONS = OUT_DIR / "exclusions.csv"
 EVIDENCE_REF = re.compile(r"\s*\((?:evidence|source|sources|ids?)\b[^)]*\)", re.I)
 
 
+LABELS = OUT_DIR / "labels.csv"
+
+
+def load_labels(path: Path = LABELS) -> dict[str, tuple[str, str]]:
+    """Labels a person attached, each with a source URL (picks/labels.csv)."""
+    if not path.exists():
+        return {}
+    with open(path, newline="") as f:
+        return {r["github_org"].lower(): (r["label"], r["source_url"]) for r in csv.DictReader(f) if r.get("github_org")}
+
+
 def load_exclusions(path: Path = EXCLUSIONS) -> set[str]:
     """Companies a person ruled out (picks/exclusions.csv: github_org, name, reason, decided_by)."""
     if not path.exists():
@@ -120,7 +133,7 @@ def has_live_site(session: Session, domain: str) -> bool:
 
 def clean_why_now(text: str) -> str:
     """Strip evidence references the Sourcing Agent sometimes leaks into prose ("(evidence 1, 2021)")."""
-    return clean_text(EVIDENCE_REF.sub("", text)).strip()
+    return clean_model_prose(EVIDENCE_REF.sub("", text)).strip()
 
 
 def _is_company(c: Company) -> bool:
@@ -136,6 +149,7 @@ def select_picks(session: Session, as_of: date, n: int = 10, *, gh: GitHubCollec
     formd = formd if formd is not None else formd_names()[0]
     skipped = {"individual": 0, "lab_or_incumbent": 0, "has_form_d": 0, "no_company_website": 0, "excluded": 0}
     excluded = load_exclusions()
+    labels = load_labels()
     picks: list[Pick] = []
     for sc, c in rows:
         if len(picks) >= n:
@@ -172,8 +186,10 @@ def select_picks(session: Session, as_of: date, n: int = 10, *, gh: GitHubCollec
         if not line and why_now is not None:
             line, src = why_now(c, sc), "written for this list (Sourcing Agent)"
         top = [str(e.get("label", ""))[:140] for e in (bd.get("top_evidence") or [])[:3]]
+        label, label_src = labels.get((c.github_org or "").lower(), ("", ""))
         picks.append(Pick(len(picks) + 1, c.id, c.name, c.sector, c.github_org, domain, sc.rank,
-                          round(sc.total, 3), clean_why_now(line), src, top, site_flags(session, domain)))
+                          round(sc.total, 3), clean_why_now(line), src, top, site_flags(session, domain),
+                          label, label_src))
     return picks, skipped
 
 
@@ -196,7 +212,8 @@ def write_picks(picks: list[Pick], as_of: date, skipped: dict[str, int], formd_l
              "| # | Company | Sector | Radar rank | Why now | Flags |", "|---|---|---|---|---|---|"]
     for p in picks:
         ident = p.domain or (f"github.com/{p.github_org}" if p.github_org else "")
-        lines.append(f"| {p.n} | {p.name} ({ident}) | {p.sector or ''} | {p.radar_rank} | {p.why_now} | "
+        tag = f"**{p.label}** ([source]({p.label_source})). " if p.label else ""
+        lines.append(f"| {p.n} | {p.name} ({ident}) | {p.sector or ''} | {p.radar_rank} | {tag}{p.why_now} | "
                      f"{'; '.join(p.flags) or 'none'} |")
     mp = out_dir / f"{as_of.isoformat()}.md"
     mp.write_text("\n".join(lines) + "\n")

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from datetime import UTC, date, datetime
 from typing import Any
 
@@ -57,6 +58,16 @@ def clean_text(text: str | None) -> str:
     if not text:
         return ""
     return " ".join(text.replace(f" {EM_DASH} ", ", ").replace(EM_DASH, ", ").split())
+
+
+_STRAY_CJK = re.compile(r"(?<=[A-Za-z0-9 ,.])[\u3000-\u9fff\uac00-\ud7af](?=[A-Za-z0-9 ,.])")
+
+
+def clean_model_prose(text: str | None) -> str:
+    """For English text written by a model only: remove a lone CJK character between Latin
+    characters ("and\u5df3 reached"), a decoding glitch seen in a why-now line. Scraped text keeps
+    its CJK characters; this is never applied to source data."""
+    return clean_text(_STRAY_CJK.sub("", text or ""))
 
 
 def text_has_any(text: str, terms: list[str]) -> bool:

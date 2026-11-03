@@ -116,6 +116,7 @@ def pick_subpages(base: str, domain: str, links: list[tuple[str, str]]) -> dict[
 class WebCollector(HttpCollector):
     source = "web"
     default_ttl = timedelta(days=7)
+    network_patience_s = 20.0  # a dead or misspelled company domain is skipped, not waited on
 
     def __init__(self, *args, **kwargs) -> None:  # type: ignore[no-untyped-def]
         super().__init__(*args, **kwargs)

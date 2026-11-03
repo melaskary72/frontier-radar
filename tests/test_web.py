@@ -71,3 +71,23 @@ def test_team_lines_lead_the_evidence_excerpt(session: Session) -> None:
     team = next(i for i in items if i.kind == "Company website (team)")
     assert team.excerpt.startswith("Jane Doe, co-founder and CEO")
     assert items[0].kind == "Company website (team)"
+
+
+def test_dead_domain_is_skipped_quickly(session: Session, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """A company domain that does not resolve must not stall a run for the network patience."""
+    import time
+
+    from tenacity import wait_none
+
+    from radar.collectors.base import HttpCollector
+
+    monkeypatch.setattr(HttpCollector._send.retry, "wait", wait_none())  # type: ignore[attr-defined]
+    monkeypatch.setenv("RADAR_NETWORK_PATIENCE_S", "900")
+
+    def dead(request: httpx.Request) -> httpx.Response:
+        raise httpx.ConnectError("[Errno 8] nodename nor servname provided, or not known")
+    col = collector(session, dead)
+    col.network_patience_s = 0.0
+    t0 = time.monotonic()
+    assert col.collect_site("no-such-company.example") == []
+    assert time.monotonic() - t0 < 5

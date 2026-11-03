@@ -5,11 +5,11 @@
  "form_d_checked_through": "2026-11-02",
  "form_d_checked_from": "2024-01-01",
  "skipped": {
-  "individual": 1,
+  "individual": 2,
   "lab_or_incumbent": 0,
   "has_form_d": 0,
-  "no_company_website": 10,
-  "excluded": 1
+  "no_company_website": 23,
+  "excluded": 8
  },
  "picks": [
   {
@@ -28,7 +28,9 @@
     "Roboparty/rp_dexhand at 338b53f: tests=True, CI=True, license=True, README 4073 bytes",
     "120 of 404 code files are C, C++, Rust, CUDA, HDL, or robot description"
    ],
-   "flags": []
+   "flags": [],
+   "label": "",
+   "label_source": ""
   },
   {
    "n": 2,
@@ -49,7 +51,9 @@
    "flags": [
     "possible research group (home page): \"com Educational robots for Universities and Labs Robots SO-ARM102 kit SO-ARM101 Black & White kit Education For univers\"",
     "possible research group (about page): \"ne creates innovative educational robots for research laboratories, schools and universities\""
-   ]
+   ],
+   "label": "",
+   "label_source": ""
   },
   {
    "n": 3,
@@ -67,46 +71,12 @@
     "79 of 160 code files are C, C++, Rust, CUDA, HDL, or robot description",
     "thesis fit 0.61 (classifier)"
    ],
-   "flags": []
+   "flags": [],
+   "label": "",
+   "label_source": ""
   },
   {
    "n": 4,
-   "company_id": 2744,
-   "name": "tenstorrent",
-   "sector": "semiconductors",
-   "github_org": "tenstorrent",
-   "domain": "tenstorrent.com",
-   "radar_rank": 9,
-   "score": 0.531,
-   "why_now": "Tenstorrent's public GitHub activity spiked recently: tenstorrent/rv_tester (RISC-V CPU testbench, created 2026-06-04) drew 96 pull requests from outside contributors between 2026-07-14 and 2026-10-07 and 11 forks from 2026-07-20 to 2026-10-19. A newer repo, tenstorrent/tt-oca-manifest (created 2026-08-19, Open Chiplet Atlas boot manifest tooling with post-quantum signing), had 17 pull requests and 11 issues through 2026-10-27. The evidence shows engineering activity but no funding or product-revenue signal; the SEC Form D filings are from 2019 and 2021.",
-   "why_now_source": "scored run (Sourcing Agent)",
-   "top_evidence": [
-    "tenstorrent/rv_tester at 226b37d: tests=True, CI=True, license=True, README 5730 bytes",
-    "214 of 284 code files are C, C++, Rust, CUDA, HDL, or robot description",
-    "thesis fit 0.61 (classifier)"
-   ],
-   "flags": []
-  },
-  {
-   "n": 5,
-   "company_id": 13,
-   "name": "reality-opened",
-   "sector": "robotics",
-   "github_org": "reality-opened",
-   "domain": "open-reality.io",
-   "radar_rank": 11,
-   "score": 0.526,
-   "why_now": "Open Reality's repo was created 2026-09-01 and has reached 575 stars, with weekly star events of roughly 91 to 97 between 2026-10-13 and 2026-11-03, and it ships MCP tools for Claude, Codex, and Cursor. The evidence shows no hardware-adjacent files (0 of 289 code files), so the robotics link is a stated strategy rather than shipped hardware integration.",
-   "why_now_source": "scored run (Sourcing Agent)",
-   "top_evidence": [
-    "thesis fit 0.80 (llm)",
-    "reality-opened/openreality at f0e668c: tests=True, CI=True, license=True, README 11838 bytes",
-    "280 new stars in the 30 days before 2026-11-03 (reality-opened/openreality: 280)"
-   ],
-   "flags": []
-  },
-  {
-   "n": 6,
    "company_id": 3633,
    "name": "hakoniwalab",
    "sector": "defense",
@@ -121,28 +91,12 @@
     "hakoniwalab/athrill-target-riscv at 0d680ea: tests=True, CI=False, license=True, README 6251 bytes",
     "thesis fit 0.59 (classifier)"
    ],
-   "flags": []
+   "flags": [],
+   "label": "",
+   "label_source": ""
   },
   {
-   "n": 7,
-   "company_id": 186,
-   "name": "URML",
-   "sector": "defense",
-   "github_org": "urml-mars",
-   "domain": "urml.dev",
-   "radar_rank": 16,
-   "score": 0.497,
-   "why_now": "URML published a v0.4.0 public draft spec with a US-federal-aligned validator policy (NDAA \u00a7889, FCC Covered List effective 2025-12-23, EO 14307), and its repo was active through 2026-10-26 with 17 issues and 5 PRs from outside contributors since June 2026. Evidence of a real company is thin: the repo has 29 stars and 1 fork, and the project reads as an open standard effort with no disclosed funding or team.",
-   "why_now_source": "scored run (Sourcing Agent)",
-   "top_evidence": [
-    "thesis fit 0.67 (classifier)",
-    "URML-MARS/URML at 2e29c73: tests=True, CI=True, license=True, README 23946 bytes",
-    "4 of 472 code files are C, C++, Rust, CUDA, HDL, or robot description"
-   ],
-   "flags": []
-  },
-  {
-   "n": 8,
+   "n": 5,
    "company_id": 22,
    "name": "Hebbian Robotics",
    "sector": "robotics",
@@ -157,43 +111,72 @@
     "191 of 602 code files are C, C++, Rust, CUDA, HDL, or robot description",
     "Launch HN: Hebbian Robotics (YC S26) \u2013 Build scalable robotics data pipelines (46 points)"
    ],
-   "flags": []
+   "flags": [],
+   "label": "YC-backed (S26)",
+   "label_source": "https://news.ycombinator.com/item?id=49510632"
   },
   {
-   "n": 9,
-   "company_id": 249,
-   "name": "Dream-Machines-Robotics",
-   "sector": "robotics",
-   "github_org": "dream-machines-robotics",
-   "domain": "aurelarnold.xyz",
-   "radar_rank": 20,
-   "score": 0.487,
-   "why_now": "Dream Machines Robotics released vr-teleop-kit on 2026-06-19 for the TRLC-DK1 arm, and it reached 68 stars and 13 forks by 2026-11-02, with 10 forks dated between 2026-07-02 and 2026-10-10. The Dream-Gripper repo (created 2026-05-10, last pushed 2026-08-10) has 20 stars and 4 forks. Evidence is limited to GitHub activity from one developer-facing team, with no funding, customers, or federal signal, so this is an early technical signal rather than a proven company.",
-   "why_now_source": "scored run (Sourcing Agent)",
+   "n": 6,
+   "company_id": 2405,
+   "name": "factorysemantics",
+   "sector": "manufacturing",
+   "github_org": "factorysemantics",
+   "domain": "factorysemantics.com",
+   "radar_rank": 27,
+   "score": 0.461,
+   "why_now": "The open-source FactorySemantics MES repo was created 2026-09-07 and has 15 stars, 3 forks and 8 releases through 2026-10-26, with 217 pull requests from outside the owning org between 2026-09-07 and 2026-11-03. The company describes itself as early access with no real plant running it yet, and the only deployment is a simulated cutlery plant, so traction evidence is early and adoption is unproven.",
+   "why_now_source": "written for this list (Sourcing Agent)",
    "top_evidence": [
-    "thesis fit 0.72 (classifier)",
-    "7 of 25 code files are C, C++, Rust, CUDA, HDL, or robot description",
-    "Dream-Machines-Robotics/vr-teleop-kit at 8d37f3d: tests=False, CI=False, license=True, README 11607 bytes"
+    "factorysemantics/factorysemantics-mes at 5ca7ab5: tests=True, CI=True, license=True, README 21087 bytes",
+    "thesis fit 0.58 (classifier)",
+    "3 forks in the 30 days before 2026-11-03 (factorysemantics/factorysemantics-mes: 3)"
    ],
-   "flags": []
+   "flags": [],
+   "label": "",
+   "label_source": ""
   },
   {
-   "n": 10,
-   "company_id": 1543,
-   "name": "SvGrid",
-   "sector": "energy",
-   "github_org": "sv-grid",
-   "domain": "svgrid.com",
-   "radar_rank": 22,
-   "score": 0.479,
-   "why_now": "SvGrid is a Svelte 5 data grid with an MIT core and a paid enterprise pack, and its GitHub repo (sv-grid/sv-grid, created 2026-05-12) shows 18 releases from 2026-06-21 to 2026-10-30 and 185 stars. This is a software product, not an energy company, so the sector guess is wrong and the evidence is thin on commercial traction.",
-   "why_now_source": "scored run (Sourcing Agent)",
+   "n": 7,
+   "company_id": 696,
+   "name": "Voightxyz",
+   "sector": "defense",
+   "github_org": "voightxyz",
+   "domain": "voight.xyz",
+   "radar_rank": 33,
+   "score": 0.43,
+   "why_now": "Voight is an observability and debugging product for AI agents that is extending into physical systems; its public mavlink-bridge repo (created 2026-10-03) connects an AI agent flying ArduPilot over MAVLink to its tracing platform, and it had 10 stars by 2026-11-02, with 7 of those stars logged between 2026-10-04 and 2026-10-05. Evidence is thin: the repo is one month old with no forks, no hardware-adjacent files, and no federal awards or filings, so this is a software observability company with an early drone pilot rather than a proven defense business.",
+   "why_now_source": "written for this list (Sourcing Agent)",
    "top_evidence": [
-    "sv-grid/sv-grid at fee4a81: tests=True, CI=True, license=True, README 16380 bytes",
-    "thesis fit 0.61 (classifier)",
-    "Show HN: SvGrid \u2013 a Svelte 5 data grid an AI can drive to build a full app (1 points)"
+    "thesis fit 0.80 (llm)",
+    "Voightxyz/mavlink-bridge at de85aa2: tests=True, CI=True, license=True, README 10418 bytes",
+    "6 new stars in the 30 days before 2026-11-03 (Voightxyz/mavlink-bridge: 6)"
    ],
-   "flags": []
+   "flags": [],
+   "label": "",
+   "label_source": ""
+  },
+  {
+   "n": 8,
+   "company_id": 2788,
+   "name": "vyges-tools",
+   "sector": "semiconductors",
+   "github_org": "vyges-tools",
+   "domain": "vyges.com",
+   "radar_rank": 36,
+   "score": 0.419,
+   "why_now": "Vyges pushed a new Rust Loom engine repo, vyges-tools/sdc, created 2026-10-31 with its first release the same day and a commit on 2026-11-03. Its website claims 150+ reusable IPs and 20+ open tools, plus a taped-out Edge Sensor SoC on Sky130, though the GitHub traction is small (3 stars on vybox-eda, 0 on sdc).",
+   "why_now_source": "written for this list (Sourcing Agent)",
+   "top_evidence": [
+    "thesis fit 0.69 (classifier)",
+    "vyges-tools/sdc at 36be7ba: tests=True, CI=True, license=True, README 9731 bytes",
+    "6 of 6 code files are C, C++, Rust, CUDA, HDL, or robot description"
+   ],
+   "flags": [
+    "possible research group (home page): \"University & Research Labs Access open-source PDKs, standardized templates, and educationa\""
+   ],
+   "label": "",
+   "label_source": ""
   }
- ]
+ ],
+ "note": "Stopped at 8: after the exclusions, candidates below rank 40 no longer met the company-evidence and traction bar, so the list was not refilled further."
 }

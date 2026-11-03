@@ -68,14 +68,14 @@ $0.31; claims pending.
 ## Phase 5: dashboard, deploy, cron, digest, audio, docs, README
 
 - [x] Next.js dashboard (eight pages), access code middleware, disclaimer footer (local; verified 2026-11-03)
-- [ ] Vercel deploy with Neon Postgres
+- [x] Vercel deploy with access code (2026-11-03); Neon Postgres moved to Next
 - [ ] GitHub Actions weekly cron (Monday 13:00 UTC)
 - [ ] Resend digest and ElevenLabs audio briefing
 - [ ] Screenshots (phone and desktop: done 2026-11-03), docs 00 to 09, architecture diagram
 - [x] Portfolio Stats data and LP update draft (`portfolio/`)
-- [ ] Private signals intake (warm intros and notes) and Live Picks
+- [x] Private signals intake (warm intros and notes) and Live Picks (2026-11-03)
 - [ ] Offline `make demo`
-- [ ] README; push public
+- [x] README; push public (2026-11-03)
 
 ## Phase 6: application documents
 

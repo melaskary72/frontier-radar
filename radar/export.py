@@ -21,7 +21,7 @@ from sqlalchemy.orm import Session
 
 from radar.agents.evidence import EvidenceItem, evidence_pack
 from radar.agents.research import ANALYSIS_MARK
-from radar.collectors.common import clean_text
+from radar.collectors.common import clean_model_prose, clean_text
 from radar.config import REPO_ROOT, weights
 from radar.scoring.explain import explain
 from radar.scoring.features import load_company_data
@@ -87,7 +87,7 @@ def _why_now(session: Session, ranked: list[tuple[Score, Company]]) -> dict[int,
     for s, _c in ranked:
         b = s.breakdown_json or {}
         if b.get("why_now"):
-            out[s.company_id] = {"text": _t(b["why_now"]), "status": b.get("why_now_status", "ok")}
+            out[s.company_id] = {"text": clean_model_prose(_t(b["why_now"])), "status": b.get("why_now_status", "ok")}
     if out:
         return out
     runs = list(session.scalars(select(AgentRun).where(AgentRun.agent == "sourcing", AgentRun.status == "ok")
