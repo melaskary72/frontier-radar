@@ -110,6 +110,30 @@ def cmd_review(args: argparse.Namespace) -> None:
             print(f"{c.id:>5}  {c.score:5.1f}  {c.a_label[:50]:<50}  <>  {c.b_label[:50]:<50}  {c.rationale}")
 
 
+def cmd_export(args: argparse.Namespace) -> None:
+    """Write the dashboard JSON (web/public/data/) from a scored run database."""
+    from pathlib import Path
+
+    from radar.config import REPO_ROOT
+    from radar.export import OUT_DIR, export
+    from radar.store.db import make_engine
+
+    def url(path: str) -> str:
+        return path if "://" in path else f"sqlite:///{Path(path).resolve()}"
+
+    db = args.db or str(REPO_ROOT / "data" / "live.db")
+    extras = [p for p in (args.agent_db or [str(REPO_ROOT / "data" / "radar.db")]) if "://" in p or Path(p).exists()]
+    with session_scope(make_engine(url(db))) as s:
+        others = [(Path(p).stem, session_scope(make_engine(url(p)))) for p in extras]
+        sessions = [(label, cm.__enter__()) for label, cm in others]
+        try:
+            counts = export(s, Path(args.out) if args.out else OUT_DIR, extra_agent_sessions=sessions)
+        finally:
+            for _label, cm in others:
+                cm.__exit__(None, None, None)
+    log.info("exported %s", counts)
+
+
 def main(argv: list[str] | None = None) -> None:
     p = argparse.ArgumentParser(prog="radar")
     p.add_argument("-v", "--verbose", action="store_true")
@@ -136,6 +160,11 @@ def main(argv: list[str] | None = None) -> None:
     rv = sub.add_parser("review", help="list pending entity matches, or decide one")
     rv.add_argument("--decide", nargs=2, metavar=("ID", "Y_OR_N"))
     rv.set_defaults(func=cmd_review)
+    ex = sub.add_parser("export", help="write dashboard JSON from a scored run database")
+    ex.add_argument("--db", help="scored run database (default data/live.db)")
+    ex.add_argument("--agent-db", action="append", help="extra database whose agent runs to include (default data/radar.db)")
+    ex.add_argument("--out", help="output directory (default web/public/data)")
+    ex.set_defaults(func=cmd_export)
     args = p.parse_args(argv)
     logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO,
                         format="%(levelname)s %(name)s: %(message)s")

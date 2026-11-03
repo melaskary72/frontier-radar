@@ -1,0 +1,539 @@
+{
+ "title": "Portfolio update draft, quarter ending 2026-11-02",
+ "as_of": "2026-11-02",
+ "label": "Draft built from public proxies only. Not Anti Fund's actual marks or metrics.",
+ "companies_with_facts": 32,
+ "facts_used": 90,
+ "generator": "portfolio/lp_update.py (template, no LLM)",
+ "sections": {
+  "highlights": [
+   {
+    "text": "8 portfolio companies announced rounds in the last 12 months, $407.8M in total as reported in public press.",
+    "citations": [
+     {
+      "fact_id": 67,
+      "company": "Catalyst",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://www.wsgr.com/en/insights/wilson-sonsini-advises-catalyst-on-dollar30-million-seed-funding.html"
+     },
+     {
+      "fact_id": 69,
+      "company": "Melius",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://superpowerdaily.com/posts/melius-raises-25-million-to-automate-creative-production-with-ai-agents"
+     },
+     {
+      "fact_id": 65,
+      "company": "Enigma",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://techcrunch.com/2026/07/27/enigma-raises-70m-to-make-controlling-a-robot-as-easy-as-adjusting-the-volume/"
+     },
+     {
+      "fact_id": 66,
+      "company": "Orbital",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://payloadspace.com/orbital-raises-5m-pre-seed-to-build-odc-constellation/"
+     },
+     {
+      "fact_id": 62,
+      "company": "Westmag",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://theaiinsider.tech/2026/06/03/westmag-emerges-from-stealth-with-11-million-seed-in-funding-led-by-andreessen-horowitz-for-american-made-drone-motors-and-robot-actuators/"
+     },
+     {
+      "fact_id": 63,
+      "company": "Trajectory",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://pulse2.com/trajectory-raises-15-million-to-build-a-platform-for-continual-learning/"
+     },
+     {
+      "fact_id": 70,
+      "company": "Pensive",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://www.pensive.com/schools/blog/seed-funding/"
+     },
+     {
+      "fact_id": 64,
+      "company": "Merge",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://techcrunch.com/2026/01/15/openai-invests-in-sam-altmans-brain-computer-interface-startup-merge-labs/"
+     }
+    ]
+   },
+   {
+    "text": "Across the 24 companies with a verified public job board, 4,628 roles are open.",
+    "citations": [
+     {
+      "fact_id": 1,
+      "company": "Anduril",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://boards.greenhouse.io/andurilindustries"
+     },
+     {
+      "fact_id": 5,
+      "company": "OpenAI",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/openai"
+     },
+     {
+      "fact_id": 28,
+      "company": "Saronic",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/saronic"
+     },
+     {
+      "fact_id": 32,
+      "company": "Ramp",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/ramp"
+     },
+     {
+      "fact_id": 34,
+      "company": "ElevenLabs",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/elevenlabs"
+     },
+     {
+      "fact_id": 26,
+      "company": "General Matter",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://boards.greenhouse.io/generalmatter"
+     },
+     {
+      "fact_id": 15,
+      "company": "Etched",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/etched"
+     },
+     {
+      "fact_id": 9,
+      "company": "Cognition",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/cognition"
+     },
+     {
+      "fact_id": 30,
+      "company": "Helion",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/helion"
+     },
+     {
+      "fact_id": 13,
+      "company": "Physical Intelligence",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/physicalintelligence"
+     },
+     {
+      "fact_id": 88,
+      "company": "Whop",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/whop"
+     },
+     {
+      "fact_id": 19,
+      "company": "Modal",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/modal"
+     },
+     {
+      "fact_id": 83,
+      "company": "Polymarket",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/polymarket"
+     },
+     {
+      "fact_id": 82,
+      "company": "General Galactic",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://boards.greenhouse.io/generalgalactic"
+     },
+     {
+      "fact_id": 85,
+      "company": "WithCoverage",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://boards.greenhouse.io/withcoverage"
+     },
+     {
+      "fact_id": 89,
+      "company": "Monaco",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/monaco"
+     },
+     {
+      "fact_id": 80,
+      "company": "Westmag",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/westmag"
+     },
+     {
+      "fact_id": 81,
+      "company": "Aeon",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.lever.co/aeon"
+     },
+     {
+      "fact_id": 87,
+      "company": "Pensive",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/pensive"
+     },
+     {
+      "fact_id": 79,
+      "company": "Trajectory",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/trajectory"
+     },
+     {
+      "fact_id": 86,
+      "company": "Melius",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/melius"
+     },
+     {
+      "fact_id": 84,
+      "company": "Archive",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/archive"
+     },
+     {
+      "fact_id": 90,
+      "company": "Liquid",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/liquid"
+     },
+     {
+      "fact_id": 23,
+      "company": "Efference",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/efference"
+     }
+    ]
+   },
+   {
+    "text": "Highest web traffic ranks (Tranco): OpenAI at 130; Polymarket at 2,505; ElevenLabs at 3,257.",
+    "citations": [
+     {
+      "fact_id": 8,
+      "company": "OpenAI",
+      "fact_type": "tranco_rank",
+      "as_of": "2026-11-02",
+      "source_url": "https://tranco-list.eu/query?domain=openai.com"
+     },
+     {
+      "fact_id": 45,
+      "company": "Polymarket",
+      "fact_type": "tranco_rank",
+      "as_of": "2026-11-02",
+      "source_url": "https://tranco-list.eu/query?domain=polymarket.com"
+     },
+     {
+      "fact_id": 37,
+      "company": "ElevenLabs",
+      "fact_type": "tranco_rank",
+      "as_of": "2026-11-02",
+      "source_url": "https://tranco-list.eu/query?domain=elevenlabs.io"
+     }
+    ]
+   },
+   {
+    "text": "Most active public GitHub organizations in the last 90 days: OpenAI (58 repositories pushed); Modal (36 repositories pushed); Whop (21 repositories pushed).",
+    "citations": [
+     {
+      "fact_id": 7,
+      "company": "OpenAI",
+      "fact_type": "github_pushed_90d",
+      "as_of": "2026-11-02",
+      "source_url": "https://github.com/openai"
+     },
+     {
+      "fact_id": 21,
+      "company": "Modal",
+      "fact_type": "github_pushed_90d",
+      "as_of": "2026-11-02",
+      "source_url": "https://github.com/modal-labs"
+     },
+     {
+      "fact_id": 56,
+      "company": "Whop",
+      "fact_type": "github_pushed_90d",
+      "as_of": "2026-11-02",
+      "source_url": "https://github.com/whopio"
+     }
+    ]
+   }
+  ],
+  "new_rounds": [
+   {
+    "text": "Catalyst announced its $30M Seed on 2026-10-08.",
+    "citations": [
+     {
+      "fact_id": 67,
+      "company": "Catalyst",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://www.wsgr.com/en/insights/wilson-sonsini-advises-catalyst-on-dollar30-million-seed-funding.html"
+     }
+    ]
+   },
+   {
+    "text": "Melius announced its $20M Series A on 2026-10-06.",
+    "citations": [
+     {
+      "fact_id": 69,
+      "company": "Melius",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://superpowerdaily.com/posts/melius-raises-25-million-to-automate-creative-production-with-ai-agents"
+     }
+    ]
+   },
+   {
+    "text": "Enigma announced its $70M Seed on 2026-07-27.",
+    "citations": [
+     {
+      "fact_id": 65,
+      "company": "Enigma",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://techcrunch.com/2026/07/27/enigma-raises-70m-to-make-controlling-a-robot-as-easy-as-adjusting-the-volume/"
+     }
+    ]
+   },
+   {
+    "text": "Orbital announced its $5M Pre-Seed on 2026-06-09.",
+    "citations": [
+     {
+      "fact_id": 66,
+      "company": "Orbital",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://payloadspace.com/orbital-raises-5m-pre-seed-to-build-odc-constellation/"
+     }
+    ]
+   },
+   {
+    "text": "Westmag announced its $11M Seed on 2026-06-02.",
+    "citations": [
+     {
+      "fact_id": 62,
+      "company": "Westmag",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://theaiinsider.tech/2026/06/03/westmag-emerges-from-stealth-with-11-million-seed-in-funding-led-by-andreessen-horowitz-for-american-made-drone-motors-and-robot-actuators/"
+     }
+    ]
+   },
+   {
+    "text": "Trajectory announced its $15M Seed on 2026-05-28.",
+    "citations": [
+     {
+      "fact_id": 63,
+      "company": "Trajectory",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://pulse2.com/trajectory-raises-15-million-to-build-a-platform-for-continual-learning/"
+     }
+    ]
+   },
+   {
+    "text": "Pensive announced its $6.8M Seed on 2026-02-27.",
+    "citations": [
+     {
+      "fact_id": 70,
+      "company": "Pensive",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://www.pensive.com/schools/blog/seed-funding/"
+     }
+    ]
+   },
+   {
+    "text": "Merge announced its $250M Seed on 2026-01-15.",
+    "citations": [
+     {
+      "fact_id": 64,
+      "company": "Merge",
+      "fact_type": "press_round",
+      "as_of": "2026-11-02",
+      "source_url": "https://techcrunch.com/2026/01/15/openai-invests-in-sam-altmans-brain-computer-interface-startup-merge-labs/"
+     }
+    ]
+   },
+   {
+    "text": "Saronic Technologies, Inc. filed a Form D with the SEC (Securities and Exchange Commission) on 2026-04-09.",
+    "citations": [
+     {
+      "fact_id": 76,
+      "company": "Saronic",
+      "fact_type": "form_d_filing",
+      "as_of": "2026-11-02",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2033142/000089183626000030/"
+     }
+    ]
+   }
+  ],
+  "hiring_momentum": [
+   {
+    "text": "Anduril lists 2,560 open roles on its public board, 1,590 of them engineering.",
+    "citations": [
+     {
+      "fact_id": 1,
+      "company": "Anduril",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://boards.greenhouse.io/andurilindustries"
+     }
+    ]
+   },
+   {
+    "text": "OpenAI lists 805 open roles on its public board, 387 of them engineering.",
+    "citations": [
+     {
+      "fact_id": 5,
+      "company": "OpenAI",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/openai"
+     }
+    ]
+   },
+   {
+    "text": "Saronic lists 257 open roles on its public board, 122 of them engineering.",
+    "citations": [
+     {
+      "fact_id": 28,
+      "company": "Saronic",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/saronic"
+     }
+    ]
+   },
+   {
+    "text": "Ramp lists 170 open roles on its public board, 43 of them engineering.",
+    "citations": [
+     {
+      "fact_id": 32,
+      "company": "Ramp",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/ramp"
+     }
+    ]
+   },
+   {
+    "text": "ElevenLabs lists 146 open roles on its public board, 52 of them engineering.",
+    "citations": [
+     {
+      "fact_id": 34,
+      "company": "ElevenLabs",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/elevenlabs"
+     }
+    ]
+   },
+   {
+    "text": "General Matter lists 134 open roles on its public board, 68 of them engineering.",
+    "citations": [
+     {
+      "fact_id": 26,
+      "company": "General Matter",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://boards.greenhouse.io/generalmatter"
+     }
+    ]
+   },
+   {
+    "text": "Etched lists 122 open roles on its public board, 75 of them engineering.",
+    "citations": [
+     {
+      "fact_id": 15,
+      "company": "Etched",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/etched"
+     }
+    ]
+   },
+   {
+    "text": "Cognition lists 107 open roles on its public board, 38 of them engineering.",
+    "citations": [
+     {
+      "fact_id": 9,
+      "company": "Cognition",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/cognition"
+     }
+    ]
+   }
+  ],
+  "risks": [
+   {
+    "text": "Efference's public job board lists no open roles.",
+    "citations": [
+     {
+      "fact_id": 23,
+      "company": "Efference",
+      "fact_type": "open_roles",
+      "as_of": "2026-11-02",
+      "source_url": "https://jobs.ashbyhq.com/efference"
+     }
+    ]
+   },
+   {
+    "text": "Etched's public GitHub organization had no repository pushes in the last 90 days.",
+    "citations": [
+     {
+      "fact_id": 17,
+      "company": "Etched",
+      "fact_type": "github_pushed_90d",
+      "as_of": "2026-11-02",
+      "source_url": "https://github.com/etched-ai"
+     }
+    ]
+   }
+  ]
+ },
+ "section_titles": {
+  "highlights": "Highlights",
+  "new_rounds": "New rounds and filings",
+  "hiring_momentum": "Hiring momentum",
+  "risks": "Watch items"
+ },
+ "limits": "Public proxies cannot see revenue, burn, churn, or private rounds. A section with no sentences means no tracked fact supported one."
+}

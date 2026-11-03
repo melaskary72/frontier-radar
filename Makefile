@@ -3,7 +3,7 @@ SINCE ?= $(shell date -v-30d +%F 2>/dev/null || date -d '30 days ago' +%F)
 UV := uv run
 SHELL := /bin/bash
 
-.PHONY: help setup migrate collect score refit review test lint typecheck check-dashes fixtures ci
+.PHONY: help setup migrate collect score refit review test lint typecheck check-dashes fixtures ci export web-dev
 
 help:
 	@grep -E '^[a-z-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-14s %s\n", $$1, $$2}'
@@ -39,10 +39,17 @@ typecheck: ## mypy
 	$(UV) mypy radar
 
 check-dashes: ## house rule: no em dashes anywhere (also enforced by tests/test_style.py)
-	@! grep -rn "$$(printf '\342\200\224')" --exclude-dir={node_modules,.venv,.git,fixtures,data} --exclude=Anti_Fund_Master_Brief.md . || (echo "em dash found" && exit 1)
+	@! grep -rn "$$(printf '\342\200\224')" --exclude-dir={node_modules,.venv,.git,fixtures,data,.next,.next-build} --exclude=Anti_Fund_Master_Brief.md . || (echo "em dash found" && exit 1)
+	@! grep -rn "$$(printf '\342\200\224')" web/public/data || (echo "em dash found in dashboard data" && exit 1)
 	@echo "no em dashes"
 
 fixtures: ## re-record API cassettes from live sources (network required)
 	$(UV) python scripts/record_fixtures.py
 
 ci: lint typecheck test check-dashes ## everything CI runs
+
+export: ## write dashboard JSON (web/public/data/) from data/live.db
+	uv run radar export
+
+web-dev: export ## export data, then serve the dashboard at http://localhost:3000
+	cd web && npm install --no-audit --no-fund && npm run dev

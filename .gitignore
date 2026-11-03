@@ -20,12 +20,15 @@ __pycache__/
 # Local data
 data/*.db*
 data/cache/
+data/backtest_cutoffs/
 !data/.gitkeep
 
 # Node
 web/node_modules/
 web/.next/
+web/.next-build/
 web/.vercel/
+web/tsconfig.tsbuildinfo
 
 # OS
 .DS_Store
