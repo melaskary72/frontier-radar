@@ -5,7 +5,8 @@ export function middleware(req: NextRequest) {
   const code = process.env.ACCESS_CODE;
   if (!code) return NextResponse.next();
   const { pathname, searchParams } = req.nextUrl;
-  if (pathname.startsWith("/access") || pathname.startsWith("/_next") || pathname === "/favicon.ico") {
+  if (pathname.startsWith("/access") || pathname.startsWith("/_next") || pathname === "/favicon.ico" ||
+      pathname.startsWith("/icon") || pathname.startsWith("/apple-icon")) {
     return NextResponse.next();
   }
   const given = searchParams.get("code");

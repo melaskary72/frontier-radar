@@ -7,7 +7,7 @@ const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap
 const serif = Source_Serif_4({ subsets: ["latin"], variable: "--font-serif", display: "swap", weight: ["400", "600", "700"] });
 
 export const metadata: Metadata = {
-  title: { default: "Frontier Radar", template: "%s | Frontier Radar" },
+  title: { default: "Frontier Radar", template: "Frontier Radar | %s" },
   description: "Sourcing radar for frontier technology founders: robotics, defense, energy, space, manufacturing, semiconductors.",
   robots: { index: false, follow: false },
 };
