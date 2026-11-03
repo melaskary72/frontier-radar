@@ -9,8 +9,8 @@ export default function AboutPage() {
       <div className="card" style={{ maxWidth: 760 }}>
         <h2 style={{ marginTop: 0 }}>Mohamed El Askary</h2>
         <ul style={{ paddingLeft: 18 }}>
-          <li>Forward Deployed Engineer at Oscilar and founder of Vantage Systems, an operational intelligence platform with production agents.</li>
-          <li>Data science and analytics roles at GeoAct, Johnson and Johnson MedTech, Edwards Lifesciences, and the Egyptian Space Agency.</li>
+          <li>Senior Forward Deployed Engineer at Oscilar and founder of Vantage Systems, an operational intelligence platform with production agents.</li>
+          <li>Senior Data Scientist at GeoAct; data roles at Johnson and Johnson MedTech, Edwards Lifesciences, and the Egyptian Space Agency.</li>
           <li>U.S. Air Force, June 2021 to May 2024; commanded a squadron of 40; active Secret clearance.</li>
           <li>Competitive gymnast ranked 7th in the United States; national handstand record of 5 minutes 45 seconds, held since 2012.</li>
           <li>Chapman University: B.S. Data Science and B.S. Business Administration (Finance); MBA (Master of Business Administration) and MSBA (Master of Science in Business Analytics) expected 2027.</li>
